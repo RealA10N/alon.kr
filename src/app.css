@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+	@apply text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-900;
+}
+
 h1 {
 	@apply text-5xl;
 }
@@ -20,5 +24,5 @@ h3,
 h4,
 h5,
 h6 {
-	@apply font-bold;
+	@apply font-bold text-zinc-800 dark:text-zinc-200;
 }
