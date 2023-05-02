@@ -2,4 +2,6 @@
 	import '$src/app.css';
 </script>
 
-<slot />
+<main class="max-w-3xl p-12 m-auto">
+	<slot />
+</main>
