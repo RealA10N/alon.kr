@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-	@apply text-lg
+	@apply text-lg break-words
 		text-zinc-600 dark:text-zinc-400
 		bg-zinc-100 dark:bg-zinc-900;
 	font-family: 'Zilla Slab', serif;
@@ -37,4 +37,8 @@ h6 {
 
 p {
 	@apply mb-4;
+}
+
+a {
+	@apply relative underline decoration-zinc-600 dark:decoration-zinc-400 underline-offset-[3px];
 }
