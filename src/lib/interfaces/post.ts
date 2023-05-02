@@ -3,5 +3,4 @@ export interface Post {
     subtitle: string;
     url: string;
     published: Date;
-    tags: string[];
 }

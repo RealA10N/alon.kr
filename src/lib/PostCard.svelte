@@ -5,25 +5,20 @@
 </script>
 
 <div
-	class="relative shadow-sm border py-4 px-6 rounded-lg select-none
-        hover:scale-[1.0125] transition-transform
+	class="relative border p-6 my-4 rounded-lg select-none
+		shadow-sm hover:shadow-md hover:scale-[1.0125] transition-all
         border-zinc-300 dark:border-zinc-700
-		bg-zinc-50 dark:bg-zinc-800
-		"
+		bg-zinc-50 dark:bg-zinc-800"
 >
 	<div class="font-bold text-2xl text-zinc-800 dark:text-zinc-200">
 		{post.title}
+		<span class="font-light text-sm opacity-70 mt-1">
+			{moment(post.published).format('MMM Do YYYY')}
+		</span>
 	</div>
 
 	<div class="leading-5">
 		{post.subtitle}
-	</div>
-
-	<div class="font-light text-sm opacity-70 mt-1">
-		{moment(post.published).format('MMM Do YYYY')}
-		{#each post.tags as tag}
-			<span class="before:content-['·'] before:mx-1">{tag}</span>
-		{/each}
 	</div>
 
 	<!-- svelte-ignore a11y-missing-content -->
