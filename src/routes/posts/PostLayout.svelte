@@ -9,8 +9,10 @@
 <h1>
 	{title}
 	{#if subtitle}
-		<div class="font-light text-base">{subtitle}</div>
+		<div class="font-light text-sm opacity-50">{subtitle}</div>
 	{/if}
 </h1>
 
-<slot />
+<div class="text-justify">
+	<slot />
+</div>

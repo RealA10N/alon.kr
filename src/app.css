@@ -6,6 +6,11 @@ body {
 	@apply text-lg
 		text-zinc-600 dark:text-zinc-400
 		bg-zinc-100 dark:bg-zinc-900;
+	font-family: 'Zilla Slab', serif;
+}
+
+.katex {
+	font-size: 1.1em;
 }
 
 h1 {
@@ -28,4 +33,8 @@ h5,
 h6 {
 	@apply font-bold mt-6 mb-2
 		text-zinc-800 dark:text-zinc-200;
+}
+
+p {
+	@apply mb-4;
 }

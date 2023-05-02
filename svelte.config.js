@@ -1,6 +1,8 @@
 import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 import { mdsvex } from 'mdsvex';
+import rehypeKatexSvelte from 'rehype-katex-svelte';
+import remarkMath from 'remark-math';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -11,8 +13,10 @@ const config = {
 	preprocess: [
 		vitePreprocess(),
 		mdsvex({
+			remarkPlugins: [remarkMath],
+			rehypePlugins: [rehypeKatexSvelte],
 			extensions: ['.md', '.svx'],
-			layout: 'src/routes/posts/post.svelte'
+			layout: 'src/routes/posts/PostLayout.svelte'
 		})
 	],
 
