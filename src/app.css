@@ -42,3 +42,15 @@ p {
 a {
 	@apply relative underline decoration-zinc-600 dark:decoration-zinc-400 underline-offset-[3px];
 }
+
+.graph-link {
+	@apply stroke-2 stroke-zinc-600 dark:stroke-zinc-400;
+}
+
+.graph-node {
+	@apply cursor-pointer fill-zinc-100 dark:fill-zinc-900 stroke-2 stroke-zinc-600 dark:stroke-zinc-400;
+}
+
+.graph-node.graph-node-fixed {
+	@apply fill-orange-200 dark:fill-yellow-800;
+}
