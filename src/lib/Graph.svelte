@@ -78,24 +78,24 @@
 			.force('bounds', boundsForce)
 			.on('tick', tick);
 
-		const dragstart = () => {
+		function dragstart() {
 			d3.select(this).classed('graph-node-fixed', true);
-		};
+		}
 
-		const dragged = (event, d) => {
+		function dragged(event, d) {
 			d.fx = clamp(event.x, width);
 			d.fy = clamp(event.y, height);
 			simulation?.alpha(1).restart();
-		};
+		}
 
 		const drag = d3.drag().on('start', dragstart).on('drag', dragged);
 
-		const click = (event, d) => {
+		function click(event, d) {
 			delete d.fx;
 			delete d.fy;
 			d3.select(this).classed('graph-node-fixed', false);
 			simulation?.alpha(1).restart();
-		};
+		}
 
 		node.call(drag).on('click', click);
 	});
