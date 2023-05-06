@@ -18,7 +18,7 @@
 <h1>
 	{title}
 	{#if subtitle}
-		<div class="font-light text-sm opacity-50">{subtitle}</div>
+		<div class="font-medium tracking-wider text-sm italic">{subtitle}</div>
 	{/if}
 </h1>
 
