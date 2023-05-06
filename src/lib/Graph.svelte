@@ -42,7 +42,8 @@
 			.selectAll('.graph-link')
 			.data(edges)
 			.join('g')
-			.classed('graph-link', true);
+			.classed('graph-link', true)
+			.classed('graph-highlight', (e) => e.highlight ?? false);
 
 		const linkLine = linkGroup.append('line');
 
@@ -85,7 +86,7 @@
 		simulation = d3
 			.forceSimulation<Vertex, Edge>()
 			.nodes(vertices)
-			.force('charge', d3.forceManyBody().strength(-50))
+			.force('charge', d3.forceManyBody().strength(-80))
 			.force('center', d3.forceCenter())
 			.force(
 				'link',
