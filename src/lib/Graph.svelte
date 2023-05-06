@@ -50,7 +50,6 @@
 			.filter((d) => Boolean(d.weight))
 			.append('text')
 			.classed('graph-label', true)
-			.attr('dy', '.35em')
 			.text((d) => d.weight?.toString() ?? '');
 
 		const node = d3
@@ -74,7 +73,13 @@
 
 			linkText
 				?.attr('x', (d) => (d.source.x + d.target.x) / 2)
-				?.attr('y', (d) => (d.source.y + d.target.y) / 2);
+				?.attr('y', (d) => (d.source.y + d.target.y) / 2)
+				?.attr('dx', (d) =>
+					Math.abs(d.source.x - d.target.x) < Math.abs(d.source.y - d.target.y) ? '.35em' : '0'
+				)
+				?.attr('dy', (d) =>
+					Math.abs(d.source.y - d.target.y) < Math.abs(d.source.x - d.target.x) ? '-.35em' : '0'
+				);
 		};
 
 		simulation = d3
