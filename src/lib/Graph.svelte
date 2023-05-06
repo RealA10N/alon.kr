@@ -37,12 +37,21 @@
 	}
 
 	onMount(() => {
-		const link = d3
+		const linkGroup = d3
 			.select(svg)
 			.selectAll('.graph-link')
 			.data(edges)
-			.join('line')
+			.join('g')
 			.classed('graph-link', true);
+
+		const linkLine = linkGroup.append('line');
+
+		const linkText = linkGroup
+			.filter((d) => Boolean(d.weight))
+			.append('text')
+			.classed('graph-label', true)
+			.attr('dy', '.35em')
+			.text((d) => d.weight?.toString() ?? '');
 
 		const node = d3
 			.select(svg)
@@ -50,29 +59,34 @@
 			.data(vertices)
 			.join('g')
 			.classed('graph-node', true)
-			.classed('graph-node-fixed', (d) => d.fx !== undefined);
+			.classed('graph-node-fixed', (d) => d.fx !== undefined)
+			.classed('graph-highlight', (v) => v.highlight ?? false);
 
 		node.append('circle').attr('r', radius);
 
 		const tick = () => {
-			link
+			linkLine
 				?.attr('x1', (d) => d.source.x)
 				?.attr('y1', (d) => d.source.y)
 				?.attr('x2', (d) => d.target.x)
 				?.attr('y2', (d) => d.target.y);
 			node?.attr('transform', (d) => `translate(${d.x}, ${d.y})`);
+
+			linkText
+				?.attr('x', (d) => (d.source.x + d.target.x) / 2)
+				?.attr('y', (d) => (d.source.y + d.target.y) / 2);
 		};
 
 		simulation = d3
 			.forceSimulation<Vertex, Edge>()
 			.nodes(vertices)
-			.force('charge', d3.forceManyBody())
+			.force('charge', d3.forceManyBody().strength(-50))
 			.force('center', d3.forceCenter())
 			.force(
 				'link',
 				d3
 					.forceLink<Vertex, Edge>(edges)
-					.distance(radius * 3)
+					.distance((d) => (d.weight ? 60 : 30))
 					.id((d) => d.id)
 			)
 			.force('bounds', boundsForce)
