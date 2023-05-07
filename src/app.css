@@ -31,8 +31,7 @@ h3,
 h4,
 h5,
 h6 {
-	@apply font-bold mt-6 mb-2 text-left
-		text-zinc-800 dark:text-zinc-200;
+	@apply font-bold mt-6 text-left text-zinc-800 dark:text-zinc-200;
 }
 
 p {

@@ -15,12 +15,14 @@
 	<title>{title}</title>
 </svelte:head>
 
-<h1>
-	{title}
+<header class="mb-4">
+	<h1>
+		{title}
+	</h1>
 	{#if subtitle}
 		<div class="font-medium tracking-wider text-sm italic">{subtitle}</div>
 	{/if}
-</h1>
+</header>
 
 <div class="text-justify">
 	<slot />
