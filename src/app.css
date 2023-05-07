@@ -42,12 +42,28 @@ a {
 	@apply relative underline decoration-zinc-600 dark:decoration-zinc-400 underline-offset-[3px];
 }
 
+figure {
+	@apply my-4;
+}
+
+figcaption {
+	@apply text-sm italic text-center px-12;
+}
+
 .graph-link {
 	@apply stroke-2 stroke-zinc-600 dark:stroke-zinc-400;
 }
 
 .graph-node {
 	@apply cursor-pointer fill-zinc-100 dark:fill-zinc-900 stroke-2 stroke-zinc-600 dark:stroke-zinc-400;
+}
+
+figure {
+	@apply my-4;
+}
+
+figcaption {
+	@apply text-sm italic text-center px-12;
 }
 
 .graph-node.graph-node-fixed {
