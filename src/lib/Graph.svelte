@@ -83,8 +83,16 @@
 			linkText
 				?.attr('x', (d) => (d.source.x + d.target.x) / 2)
 				?.attr('y', (d) => (d.source.y + d.target.y) / 2)
-				?.attr('dx', (d) => `${(d.target.y - d.source.y) / lineLength(d)}em`)
-				?.attr('dy', (d) => `${(d.source.x - d.target.x) / lineLength(d)}em`);
+				?.attr(
+					'dx',
+					(d) =>
+						`${((d.source.x <= d.target.x ? 1 : -1) * (d.target.y - d.source.y)) / lineLength(d)}em`
+				)
+				?.attr(
+					'dy',
+					(d) =>
+						`${((d.source.x <= d.target.x ? 1 : -1) * (d.source.x - d.target.x)) / lineLength(d)}em`
+				);
 		};
 
 		simulation = d3
