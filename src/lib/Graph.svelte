@@ -7,7 +7,7 @@
 	export let height: number = 400;
 
 	export let radius = 12;
-	let padding = radius + 5;
+	let padding = 2 * radius;
 
 	export let edges: Edge[];
 	export let vertices: Vertex[];
@@ -26,6 +26,12 @@
 		const lo = -total / 2 + padding;
 		const hi = total / 2 - padding;
 		return x < lo ? lo : x > hi ? hi : x;
+	}
+
+	function lineLength(link: Edge) {
+		const dx = Math.abs(link.source.x - link.target.x);
+		const dy = Math.abs(link.source.y - link.target.y);
+		return Math.sqrt(dx * dx + dy * dy);
 	}
 
 	function boundsForce() {
@@ -51,7 +57,9 @@
 			.filter((d) => Boolean(d.weight))
 			.append('text')
 			.classed('graph-label', true)
-			.text((d) => d.weight?.toString() ?? '');
+			.text((d) => d.weight?.toString() ?? '')
+			.attr('text-anchor', 'middle') // horizontal alignment
+			.attr('dominant-baseline', 'middle'); // vertical alignment
 
 		const node = d3
 			.select(svg)
@@ -75,12 +83,8 @@
 			linkText
 				?.attr('x', (d) => (d.source.x + d.target.x) / 2)
 				?.attr('y', (d) => (d.source.y + d.target.y) / 2)
-				?.attr('dx', (d) =>
-					Math.abs(d.source.x - d.target.x) < Math.abs(d.source.y - d.target.y) ? '.35em' : '0'
-				)
-				?.attr('dy', (d) =>
-					Math.abs(d.source.y - d.target.y) < Math.abs(d.source.x - d.target.x) ? '-.35em' : '0'
-				);
+				?.attr('dx', (d) => `${(d.target.y - d.source.y) / lineLength(d)}em`)
+				?.attr('dy', (d) => `${(d.source.x - d.target.x) / lineLength(d)}em`);
 		};
 
 		simulation = d3
@@ -92,9 +96,10 @@
 				'link',
 				d3
 					.forceLink<Vertex, Edge>(edges)
-					.distance((d) => (d.weight ? 60 : 30))
+					.distance(radius * 10)
 					.id((d) => d.id)
 			)
+			.force('collide', d3.forceCollide(5 * radius))
 			.force('bounds', boundsForce)
 			.on('tick', tick);
 
