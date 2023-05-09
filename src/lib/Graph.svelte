@@ -15,6 +15,9 @@
 	export let edges: Edge[];
 	export let vertices: Vertex[];
 
+	type runOnTickFunc = { (): undefined };
+	export let runOnTick: runOnTickFunc | undefined;
+
 	// When one of the props updates, we "reheat" the simulation.
 	let simulation: d3.Simulation<Vertex, Edge> | undefined;
 	$: $$props, simulation?.alpha(1)?.restart();
@@ -115,6 +118,8 @@
 				.attr('dominant-baseline', 'middle'); // vertical alignment
 
 		const tick = () => {
+			runOnTick?.();
+
 			linkLine
 				?.attr('x1', (d) => d.source.x)
 				?.attr('y1', (d) => d.source.y)
