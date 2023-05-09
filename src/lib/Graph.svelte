@@ -11,6 +11,7 @@
 
 	export let vertexLabels: boolean = true;
 	export let gravity: boolean = true;
+	export let sticky: boolean = true;
 
 	export let edges: Edge[];
 	export let vertices: Vertex[];
@@ -65,7 +66,7 @@
 		simulation?.alpha(1).restart();
 	}
 
-	function initNoGravityDrag(node) {
+	function initRegularDrag(node) {
 		const drag = d3
 			.drag()
 			.on('start', startNodeSelection)
@@ -74,7 +75,7 @@
 		node.call(drag);
 	}
 
-	function initGravityDrag(node) {
+	function initStickyDrag(node) {
 		const drag = d3.drag().on('start', startNodeSelection).on('drag', dragNode);
 		node.call(drag).on('click', endNodeSelection);
 	}
@@ -146,12 +147,11 @@
 			.forceSimulation<Vertex, Edge>()
 			.nodes(vertices)
 			.force('center', d3.forceCenter())
-			.force('collide', d3.forceCollide(5 * radius))
+			.force('collide', d3.forceCollide(3 * radius))
 			.force('bounds', boundsForce)
 			.on('tick', tick);
 
-		if (gravity) {
-			// If simulation with gravity, add the gravity forces.
+		if (gravity)
 			simulation.force('charge', d3.forceManyBody().strength(-80)).force(
 				'link',
 				d3
@@ -159,10 +159,8 @@
 					.distance(radius * 10)
 					.id((d) => d.id)
 			);
-			initGravityDrag(node);
-		} else {
-			initNoGravityDrag(node);
-		}
+
+		(sticky ? initStickyDrag : initRegularDrag)(node);
 	});
 </script>
 
