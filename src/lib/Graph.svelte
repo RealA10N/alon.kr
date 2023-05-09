@@ -4,12 +4,13 @@
 	import type { Edge, Vertex } from '$lib/interfaces/graph';
 
 	export let width: number = 500;
-	export let height: number = 400;
+	export let height: number = 350;
 
 	export let radius = 12;
 	let padding = 2 * radius;
 
 	export let vertexLabels: boolean = true;
+	export let gravity: boolean = true;
 
 	export let edges: Edge[];
 	export let vertices: Vertex[];
@@ -42,6 +43,37 @@
 			d.x = clamp(d.x ?? 0, width);
 			d.y = clamp(d.y ?? 0, height);
 		}
+	}
+
+	function endNodeSelection(event, d) {
+		delete d.fx;
+		delete d.fy;
+		d3.select(this).classed('graph-node-fixed', false);
+		simulation?.alpha(1).restart();
+	}
+
+	function startNodeSelection() {
+		d3.select(this).classed('graph-node-fixed', true);
+	}
+
+	function dragNode(event, d) {
+		d.fx = clamp(event.x, width);
+		d.fy = clamp(event.y, height);
+		simulation?.alpha(1).restart();
+	}
+
+	function initNoGravityDrag(node) {
+		const drag = d3
+			.drag()
+			.on('start', startNodeSelection)
+			.on('drag', dragNode)
+			.on('end', endNodeSelection);
+		node.call(drag);
+	}
+
+	function initGravityDrag(node) {
+		const drag = d3.drag().on('start', startNodeSelection).on('drag', dragNode);
+		node.call(drag).on('click', endNodeSelection);
 	}
 
 	onMount(() => {
@@ -108,39 +140,24 @@
 		simulation = d3
 			.forceSimulation<Vertex, Edge>()
 			.nodes(vertices)
-			.force('charge', d3.forceManyBody().strength(-80))
 			.force('center', d3.forceCenter())
-			.force(
+			.force('collide', d3.forceCollide(5 * radius))
+			.force('bounds', boundsForce)
+			.on('tick', tick);
+
+		if (gravity) {
+			// If simulation with gravity, add the gravity forces.
+			simulation.force('charge', d3.forceManyBody().strength(-80)).force(
 				'link',
 				d3
 					.forceLink<Vertex, Edge>(edges)
 					.distance(radius * 10)
 					.id((d) => d.id)
-			)
-			.force('collide', d3.forceCollide(5 * radius))
-			.force('bounds', boundsForce)
-			.on('tick', tick);
-
-		function dragstart() {
-			d3.select(this).classed('graph-node-fixed', true);
+			);
+			initGravityDrag(node);
+		} else {
+			initNoGravityDrag(node);
 		}
-
-		function dragged(event, d) {
-			d.fx = clamp(event.x, width);
-			d.fy = clamp(event.y, height);
-			simulation?.alpha(1).restart();
-		}
-
-		const drag = d3.drag().on('start', dragstart).on('drag', dragged);
-
-		function click(event, d) {
-			delete d.fx;
-			delete d.fy;
-			d3.select(this).classed('graph-node-fixed', false);
-			simulation?.alpha(1).restart();
-		}
-
-		node.call(drag).on('click', click);
 	});
 </script>
 
