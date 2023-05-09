@@ -9,6 +9,8 @@
 	export let radius = 12;
 	let padding = 2 * radius;
 
+	export let vertexLabels: boolean = true;
+
 	export let edges: Edge[];
 	export let vertices: Vertex[];
 
@@ -71,6 +73,14 @@
 			.classed('graph-highlight', (v) => v.highlight ?? false);
 
 		node.append('circle').attr('r', radius);
+
+		if (vertexLabels)
+			node
+				.append('text')
+				.text((v) => v.id)
+				.classed('graph-label', true)
+				.attr('text-anchor', 'middle') // horizontal alignment
+				.attr('dominant-baseline', 'middle'); // vertical alignment
 
 		const tick = () => {
 			linkLine
