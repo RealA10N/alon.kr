@@ -52,11 +52,11 @@ button {
 }
 
 figure {
-	@apply my-4;
+	@apply my-2;
 }
 
 figcaption {
-	@apply text-sm italic text-center px-12;
+	@apply text-sm italic text-center px-12 max-w-2xl mx-auto my-2;
 }
 
 .graph-link {
