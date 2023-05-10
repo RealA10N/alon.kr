@@ -67,14 +67,47 @@ figcaption {
 	@apply cursor-pointer fill-zinc-100 dark:fill-zinc-900 stroke-2 stroke-zinc-600 dark:stroke-zinc-400;
 }
 
-figure {
+.graph-node.graph-node-fixed {
+	@apply fill-zinc-300 dark:fill-zinc-700;
+}
+
+.graph-highlight {
+	@apply stroke-[5px] stroke-red-500;
+}
+
+.graph-link.graph-highlight {
+	@apply opacity-100 stroke-red-500 fill-red-500;
+}
+
+.graph-label {
+	@apply stroke-none fill-zinc-800 dark:fill-zinc-200 select-none;
+}
+
+.graph-node > .graph-label {
+	@apply font-black text-sm;
+}
+
+.graph-highlight > .graph-label {
+	@apply fill-red-600;
+}
+
+li {
+	@apply ml-5 my-2;
+}
+
+li > p {
+	@apply inline;
+}
+
+ul,
+ol {
 	@apply my-4;
 }
 
-figcaption {
-	@apply text-sm italic text-center px-12;
+ul > li {
+	@apply list-disc;
 }
 
-.graph-node.graph-node-fixed {
-	@apply fill-orange-200 dark:fill-yellow-800;
+ol > li {
+	@apply list-decimal;
 }
