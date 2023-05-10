@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-	@apply text-lg break-words
+	@apply text-base sm:text-lg break-words
 		text-zinc-600 dark:text-zinc-400
 		bg-zinc-100 dark:bg-zinc-900;
 	font-family: 'Zilla Slab', serif;
