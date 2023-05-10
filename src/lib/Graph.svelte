@@ -10,6 +10,7 @@
 	let padding = 2 * radius;
 
 	export let vertexLabels: boolean = true;
+	export let edgeLabels: boolean = true;
 	export let gravity: boolean = true;
 	export let sticky: boolean = true;
 
@@ -113,7 +114,7 @@
 		if (vertexLabels)
 			node
 				.append('text')
-				.text((v) => v.id)
+				.text((v) => v.label ?? '')
 				.classed('graph-label', true)
 				.attr('text-anchor', 'middle') // horizontal alignment
 				.attr('dominant-baseline', 'middle'); // vertical alignment
