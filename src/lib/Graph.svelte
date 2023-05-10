@@ -17,7 +17,7 @@
 	export let edges: Edge[];
 	export let vertices: Vertex[];
 
-	type runOnTickFunc = { (): undefined };
+	type runOnTickFunc = { (): any };
 	export let runOnTick: runOnTickFunc | undefined;
 
 	// When one of the props updates, we "reheat" the simulation.
