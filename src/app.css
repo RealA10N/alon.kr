@@ -42,6 +42,15 @@ a {
 	@apply relative underline decoration-zinc-600 dark:decoration-zinc-400 underline-offset-[3px];
 }
 
+button {
+	@apply rounded-md px-2 m-1
+		text-zinc-700 dark:text-zinc-300
+		border border-zinc-800 dark:border-zinc-200
+		hover:bg-zinc-300 hover:dark:bg-zinc-700
+		hover:text-zinc-700 hover:dark:text-zinc-300
+		focus:scale-105 transition-all;
+}
+
 figure {
 	@apply my-4;
 }
