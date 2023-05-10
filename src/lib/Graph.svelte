@@ -18,7 +18,7 @@
 	export let vertices: Vertex[];
 
 	type runOnTickFunc = { (): any };
-	export let runOnTick: runOnTickFunc | undefined;
+	export let runOnTick: runOnTickFunc | undefined = undefined;
 
 	// When one of the props updates, we "reheat" the simulation.
 	let simulation: d3.Simulation<Vertex, Edge> | undefined;
@@ -92,13 +92,15 @@
 
 		const linkLine = linkGroup.append('line');
 
-		const linkText = linkGroup
-			.filter((d) => Boolean(d.weight))
-			.append('text')
-			.classed('graph-label', true)
-			.text((d) => d.weight?.toString() ?? '')
-			.attr('text-anchor', 'middle') // horizontal alignment
-			.attr('dominant-baseline', 'middle'); // vertical alignment
+		const linkText = edgeLabels
+			? linkGroup
+					.filter((d) => Boolean(d.weight))
+					.append('text')
+					.classed('graph-label', true)
+					.text((d) => d.weight?.toString() ?? '')
+					.attr('text-anchor', 'middle') // horizontal alignment
+					.attr('dominant-baseline', 'middle') // vertical alignment
+			: null;
 
 		const node = d3
 			.select(svg)

@@ -5,7 +5,7 @@
 </script>
 
 <figure bind:clientWidth={width} class="graph-container">
-	<Graph {width} {edges} {vertices} vertexLabels={false} gravity={true} />
+	<Graph {width} {edges} {vertices} vertexLabels={false} gravity={true} sticky={false} />
 	<figcaption>A weighted graph with his minimum spanning tree highlighted</figcaption>
 </figure>
 
