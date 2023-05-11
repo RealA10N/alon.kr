@@ -22,7 +22,7 @@
 
 	// When one of the props updates, we "reheat" the simulation.
 	let simulation: d3.Simulation<Vertex, Edge> | undefined;
-	$: $$props, simulation?.alpha(1)?.restart();
+	$: $$props, initSimulation();
 
 	// The svg tag is bounded to this variable.
 	let svg: SVGSVGElement;
@@ -81,71 +81,7 @@
 		node.call(drag).on('click', endNodeSelection);
 	}
 
-	onMount(() => {
-		const linkGroup = d3
-			.select(svg)
-			.selectAll('.graph-link')
-			.data(edges)
-			.join('g')
-			.classed('graph-link', true)
-			.classed('graph-highlight', (e) => e.highlight ?? false);
-
-		const linkLine = linkGroup.append('line');
-
-		const linkText = edgeLabels
-			? linkGroup
-					.filter((d) => Boolean(d.weight))
-					.append('text')
-					.classed('graph-label', true)
-					.text((d) => d.weight?.toString() ?? '')
-					.attr('text-anchor', 'middle') // horizontal alignment
-					.attr('dominant-baseline', 'middle') // vertical alignment
-			: null;
-
-		const node = d3
-			.select(svg)
-			.selectAll('.graph-node')
-			.data(vertices)
-			.join('g')
-			.classed('graph-node', true)
-			.classed('graph-node-fixed', (d) => d.fx !== undefined)
-			.classed('graph-highlight', (v) => v.highlight ?? false);
-
-		node.append('circle').attr('r', radius);
-
-		if (vertexLabels)
-			node
-				.append('text')
-				.text((v) => v.label ?? '')
-				.classed('graph-label', true)
-				.attr('text-anchor', 'middle') // horizontal alignment
-				.attr('dominant-baseline', 'middle'); // vertical alignment
-
-		const tick = () => {
-			runOnTick?.();
-
-			linkLine
-				?.attr('x1', (d) => d.source.x)
-				?.attr('y1', (d) => d.source.y)
-				?.attr('x2', (d) => d.target.x)
-				?.attr('y2', (d) => d.target.y);
-			node?.attr('transform', (d) => `translate(${d.x}, ${d.y})`);
-
-			linkText
-				?.attr('x', (d) => (d.source.x + d.target.x) / 2)
-				?.attr('y', (d) => (d.source.y + d.target.y) / 2)
-				?.attr(
-					'dx',
-					(d) =>
-						`${((d.source.x <= d.target.x ? 1 : -1) * (d.target.y - d.source.y)) / lineLength(d)}em`
-				)
-				?.attr(
-					'dy',
-					(d) =>
-						`${((d.source.x <= d.target.x ? 1 : -1) * (d.source.x - d.target.x)) / lineLength(d)}em`
-				);
-		};
-
+	function initSimulation() {
 		simulation = d3
 			.forceSimulation<Vertex, Edge>()
 			.nodes(vertices)
@@ -163,8 +99,82 @@
 					.id((d) => d.id)
 			);
 
+		tick();
+	}
+
+	function tick() {
+		runOnTick?.();
+
+		const link = d3
+			.select(svg)
+			.selectAll('.graph-link')
+			.data(edges)
+			.join((enter) => {
+				const g = enter.append('g').classed('graph-link', true);
+
+				g.append('line').classed('graph-line', true);
+
+				if (edgeLabels)
+					g.filter((d) => Boolean(d.weight))
+						.append('text')
+						.classed('graph-label', true)
+						.attr('text-anchor', 'middle') // horizontal alignment
+						.attr('dominant-baseline', 'middle'); // vertical alignment
+
+				return g;
+			})
+			.classed('graph-highlight', (e) => e.highlight ?? false);
+
+		const node = d3
+			.select(svg)
+			.selectAll('.graph-node')
+			.data(vertices)
+			.join((enter) => {
+				const g = enter
+					.append('g')
+					.classed('graph-node', true)
+					.classed('graph-node-fixed', (d) => d.fx !== undefined);
+				g.append('circle').attr('r', radius);
+
+				if (vertexLabels)
+					g.append('text')
+						.classed('graph-label', true)
+						.attr('text-anchor', 'middle') // horizontal alignment
+						.attr('dominant-baseline', 'middle'); // vertical alignment
+				return g;
+			});
+
+		node
+			.attr('transform', (d) => `translate(${d.x}, ${d.y})`)
+			.classed('graph-highlight', (v) => v.highlight ?? false);
+
+		node.select('graph-label').text((v) => v.label ?? '');
+
+		link
+			.select('.graph-line')
+			.attr('x1', (d) => d.source.x)
+			.attr('y1', (d) => d.source.y)
+			.attr('x2', (d) => d.target.x)
+			.attr('y2', (d) => d.target.y);
+
+		link
+			.select('.graph-label')
+			.text((d) => d.weight?.toString() ?? '')
+			.attr('x', (d) => (d.source.x + d.target.x) / 2)
+			.attr('y', (d) => (d.source.y + d.target.y) / 2)
+			.attr(
+				'dx',
+				(d) =>
+					`${((d.source.x <= d.target.x ? 1 : -1) * (d.target.y - d.source.y)) / lineLength(d)}em`
+			)
+			.attr(
+				'dy',
+				(d) =>
+					`${((d.source.x <= d.target.x ? 1 : -1) * (d.source.x - d.target.x)) / lineLength(d)}em`
+			);
+
 		(sticky ? initStickyDrag : initRegularDrag)(node);
-	});
+	}
 </script>
 
 <svg bind:this={svg} {width} {height} viewBox="{-width / 2} {-height / 2} {width} {height}" />
