@@ -25,8 +25,8 @@
 	let simulation: d3.Simulation<Vertex, Edge> | undefined;
 	$: $$props, initSimulation();
 
-	// The svg tag is bounded to this variable.
-	let svg: SVGSVGElement;
+	// The svg tags is bounded to this variable.
+	let graphNodes: SVGSVGElement, graphLinks: SVGSVGElement;
 
 	function clamp(x: number, total: number) {
 		// Ensures that x is in the range [-total/2, total/2].
@@ -107,7 +107,7 @@
 		runOnTick?.();
 
 		const link = d3
-			.select(svg)
+			.select(graphLinks)
 			.selectAll('.graph-link')
 			.data(edges)
 			.join((enter) => {
@@ -150,7 +150,7 @@
 			);
 
 		const node = d3
-			.select(svg)
+			.select(graphNodes)
 			.selectAll('.graph-node')
 			.data(vertices)
 			.join((enter) => {
@@ -179,4 +179,7 @@
 	}
 </script>
 
-<svg bind:this={svg} {width} {height} viewBox="{-width / 2} {-height / 2} {width} {height}" />
+<svg {width} {height} viewBox="{-width / 2} {-height / 2} {width} {height}">
+	<g class="graph-links" bind:this={graphLinks} />
+	<g class="graph-nodes" bind:this={graphNodes} />
+</svg>
