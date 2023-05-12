@@ -193,7 +193,7 @@
 		<button on:click={() => (edges = calculateTsp())}>Show TSP</button>
 		<button on:click={() => (edges = calculateMst())}>Show MST</button>
 		<button on:click={() => (edges = getMinPerfectMatching(filterOddVertices(calculateMst())))}
-			>Show Matching</button
+			>Show MPM</button
 		>
 	</div>
 	<figcaption>
