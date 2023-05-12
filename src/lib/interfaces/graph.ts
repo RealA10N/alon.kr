@@ -11,3 +11,9 @@ export interface Vertex extends SimulationNodeDatum {
 	label?: string | number;
 	highlight?: boolean;
 }
+
+export enum GraphMode {
+	static,
+	sticky,
+	regular
+}

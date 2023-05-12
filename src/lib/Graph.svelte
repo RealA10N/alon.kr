@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import * as d3 from 'd3';
 	import type { Edge, Vertex } from '$lib/interfaces/graph';
+	import { GraphMode } from '$lib/interfaces/graph';
 
 	export let width: number = 500;
 	export let height: number = 350;
@@ -11,8 +12,8 @@
 
 	export let vertexLabels: boolean = true;
 	export let edgeLabels: boolean = true;
+	export let mode: GraphMode = GraphMode.sticky;
 	export let gravity: boolean = true;
-	export let sticky: boolean = true;
 
 	export let edges: Edge[];
 	export let vertices: Vertex[];
@@ -98,9 +99,9 @@
 					.distance(radius * 10)
 					.id((d) => d.id)
 			);
-
-		tick();
 	}
+
+	onMount(initSimulation);
 
 	function tick() {
 		runOnTick?.();
@@ -124,6 +125,29 @@
 				return g;
 			})
 			.classed('graph-highlight', (e) => e.highlight ?? false);
+
+		link
+			.select('.graph-line')
+			.attr('x1', (d) => d.source.x)
+			.attr('y1', (d) => d.source.y)
+			.attr('x2', (d) => d.target.x)
+			.attr('y2', (d) => d.target.y);
+
+		link
+			.select('.graph-label')
+			.text((d) => d.weight?.toString() ?? '')
+			.attr('x', (d) => (d.source.x + d.target.x) / 2)
+			.attr('y', (d) => (d.source.y + d.target.y) / 2)
+			.attr(
+				'dx',
+				(d) =>
+					`${((d.source.x <= d.target.x ? 1 : -1) * (d.target.y - d.source.y)) / lineLength(d)}em`
+			)
+			.attr(
+				'dy',
+				(d) =>
+					`${((d.source.x <= d.target.x ? 1 : -1) * (d.source.x - d.target.x)) / lineLength(d)}em`
+			);
 
 		const node = d3
 			.select(svg)
@@ -150,30 +174,8 @@
 
 		node.select('graph-label').text((v) => v.label ?? '');
 
-		link
-			.select('.graph-line')
-			.attr('x1', (d) => d.source.x)
-			.attr('y1', (d) => d.source.y)
-			.attr('x2', (d) => d.target.x)
-			.attr('y2', (d) => d.target.y);
-
-		link
-			.select('.graph-label')
-			.text((d) => d.weight?.toString() ?? '')
-			.attr('x', (d) => (d.source.x + d.target.x) / 2)
-			.attr('y', (d) => (d.source.y + d.target.y) / 2)
-			.attr(
-				'dx',
-				(d) =>
-					`${((d.source.x <= d.target.x ? 1 : -1) * (d.target.y - d.source.y)) / lineLength(d)}em`
-			)
-			.attr(
-				'dy',
-				(d) =>
-					`${((d.source.x <= d.target.x ? 1 : -1) * (d.source.x - d.target.x)) / lineLength(d)}em`
-			);
-
-		(sticky ? initStickyDrag : initRegularDrag)(node);
+		if (mode == GraphMode.sticky) initStickyDrag(node);
+		if (mode == GraphMode.regular) initRegularDrag(node);
 	}
 </script>
 
