@@ -5,10 +5,10 @@
 	import { BinaryHeap } from 'structurae';
 	import blossom from 'edmonds-blossom-fixed';
 
-	const n = 30;
-
-	const initWidth = 650;
-	const initHeight = 350;
+	const n = 25,
+		maxWidth = 650,
+		height = 350;
+	let width: number; // bounded to the width of the svg
 
 	export let vertices: Vertex[] = [];
 	export let edges: Edge[] = [];
@@ -19,13 +19,14 @@
 
 	function randomInitNode(): Vertex {
 		return {
-			x: randomPosition(initWidth),
-			y: randomPosition(initHeight)
+			x: randomPosition(Math.min(maxWidth, width) - 100),
+			y: randomPosition(height)
 		} as Vertex;
 	}
 
 	export function randomizeNodes() {
 		vertices = Array.from({ length: n }, (_, i) => randomInitNode());
+		edges = [];
 	}
 
 	class EdgesMinQueue extends BinaryHeap<Edge> {}
@@ -65,26 +66,6 @@
 		return mstEdges;
 	}
 
-	function getNeighborsVertices(vertex: Vertex, graph: Edge[]): Vertex[] {
-		const sources = graph.filter((e) => e.source == vertex).map((e) => e.target as Vertex);
-		const targets = graph.filter((e) => e.target == vertex).map((e) => e.source as Vertex);
-		return [...sources, ...targets];
-	}
-
-	function dfs(graph: Edge[]): Vertex[] {
-		const traversal = new Array<Vertex>();
-		const stack = new Array<Vertex>(vertices[0]);
-
-		while (stack.length) {
-			const top = stack.pop();
-			if (traversal.includes(top)) continue;
-			traversal.push(top);
-			stack.push(...getNeighborsVertices(top, graph));
-		}
-
-		return traversal;
-	}
-
 	function filterOddVertices(graph: Edge[]): Vertex[] {
 		const counter = new Map<Vertex, number>();
 		for (const edge of graph) {
@@ -94,16 +75,12 @@
 			counter.set(t, (counter.get(t) ?? 0) + 1);
 		}
 
-		for (let v in vertices) {
-			vertices[v].highlight = Boolean(counter.get(vertices[v]) % 2);
-		}
-
 		return Array.from(counter.entries())
 			.filter(([v, k]) => k % 2 === 1)
 			.map(([v, k]) => v);
 	}
 
-	function getMinPerfectMatching(vertices: Vertex[]) {
+	function calculateMpm(vertices: Vertex[]): Edge[] {
 		const edges = [];
 		const k = vertices.length;
 		for (let i = 0; i < k; i++)
@@ -155,10 +132,10 @@
 		return tour.filter((value, index, array) => array.indexOf(value) === index);
 	}
 
-	export function calculateTsp() {
+	function calculateTsp() {
 		const mst = calculateMst();
 		const odds = filterOddVertices(mst);
-		const evenGraph = [...mst, ...getMinPerfectMatching(odds)];
+		const evenGraph = [...mst, ...calculateMpm(odds)];
 		const tour = eularianTour(evenGraph);
 		const edges: Edge[] = [];
 		for (let i = 0; i < tour.length; i++) {
@@ -167,7 +144,30 @@
 		return edges;
 	}
 
-	let width: number;
+	function showTsp() {
+		edges = calculateTsp();
+		highlightVertices([]);
+	}
+
+	function highlightVertices(toHighlight: Vertex[]) {
+		for (const v of vertices) v.highlight = toHighlight.includes(v);
+	}
+
+	function highlightEdges(toHighlight: Edge[]) {
+		for (const e of edges) e.highlight = toHighlight.includes(e);
+	}
+
+	function showMst() {
+		edges = calculateMst();
+		highlightVertices(filterOddVertices(edges));
+	}
+
+	function showMpm() {
+		const odds = filterOddVertices(calculateMst());
+		edges = calculateMpm(odds);
+		highlightVertices(odds);
+		highlightEdges(edges);
+	}
 
 	onMount(randomizeNodes);
 </script>
@@ -184,21 +184,14 @@
 		radius={5}
 	/>
 	<div class="text-center">
-		<button
-			on:click={() => {
-				randomizeNodes();
-				edges = calculateTsp();
-			}}>randomize</button
-		>
-		<button on:click={() => (edges = calculateTsp())}>Show TSP</button>
-		<button on:click={() => (edges = calculateMst())}>Show MST</button>
-		<button on:click={() => (edges = getMinPerfectMatching(filterOddVertices(calculateMst())))}
-			>Show MPM</button
-		>
+		<button on:click={randomizeNodes}>Randomize</button>
+		<button on:click={showTsp}>Approximated TSP</button>
+		<button on:click={showMst}>MST</button>
+		<button on:click={showMpm}>Matching</button>
 	</div>
 	<figcaption>
 		A demonstration of the TSP Problem: The distance between any two vertices is the Euclidean
-		distance between them. The highlighted cycle is an approximation of the optimal TSP cycle.
+		distance between them. Using Christofides' algorithm to calculate a 1.5-approximation.
 	</figcaption>
 </figure>
 
