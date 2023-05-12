@@ -169,6 +169,15 @@
 		highlightEdges(edges);
 	}
 
+	function showMstAndMpm() {
+		const mst = calculateMst();
+		highlightVertices(filterOddVertices(mst));
+		const odds = filterOddVertices(mst);
+		const mpm = calculateMpm(odds);
+		edges = [...mst, ...mpm];
+		highlightEdges(mpm);
+	}
+
 	onMount(randomizeNodes);
 </script>
 
@@ -183,15 +192,16 @@
 		mode={GraphMode.regular}
 		radius={5}
 	/>
-	<div class="text-center">
-		<button on:click={randomizeNodes}>Randomize</button>
-		<button on:click={showTsp}>Approximated TSP</button>
-		<button on:click={showMst}>MST</button>
-		<button on:click={showMpm}>Matching</button>
-	</div>
 	<figcaption>
-		A demonstration of the TSP Problem: The distance between any two vertices is the Euclidean
-		distance between them. Using Christofides' algorithm to calculate a 1.5-approximation.
+		<div class="text-center">
+			<button on:click={randomizeNodes}>Randomize</button>
+			<button on:click={showMst}>MST</button>
+			<button on:click={showMpm}>Matching</button>
+			<button on:click={showMstAndMpm}>MST & Matching</button>
+			<button on:click={showTsp}>Approximated TSP</button>
+		</div>
+		A demonstration of the TSP Problem: The distance between any two vertices is the Euclidean distance
+		between them. Using Christofides' algorithm to calculate a 1.5-approximation.
 	</figcaption>
 </figure>
 
