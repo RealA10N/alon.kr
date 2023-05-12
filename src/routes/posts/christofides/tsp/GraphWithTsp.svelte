@@ -19,7 +19,6 @@
 
 	function randomInitNode(): Vertex {
 		return {
-			id: 0,
 			x: randomPosition(initWidth),
 			y: randomPosition(initHeight)
 		} as Vertex;
