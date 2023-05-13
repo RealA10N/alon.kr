@@ -193,17 +193,17 @@
 		mode={GraphMode.regular}
 		radius={5}
 	/>
+	<div class="text-center mt-4 mb-2 text-sm px-8 max-w-2xl mx-auto">
+		<StepAnimation steps={[randomizeNodes, showMst, showMpm, showMstAndMpm, showTsp]} />
+		<button on:click={randomizeNodes}>Randomize Nodes</button>
+		<button on:click={showMst}>Show MST</button>
+		<button on:click={showMpm}>Show Matching</button>
+		<button on:click={showMstAndMpm}>Show MST & Matching</button>
+		<button on:click={showTsp}>Show Approximated TSP</button>
+	</div>
 	<figcaption>
-		<div class="text-center">
-			<StepAnimation steps={[randomizeNodes, showMst, showMpm, showMstAndMpm, showTsp]} />
-			<button on:click={randomizeNodes}>Randomize Nodes</button>
-			<button on:click={showMst}>Show MST</button>
-			<button on:click={showMpm}>Show Matching</button>
-			<button on:click={showMstAndMpm}>Show MST & Matching</button>
-			<button on:click={showTsp}>Show Approximated TSP</button>
-		</div>
-		A demonstration of the TSP Problem: The distance between any two vertices is the Euclidean distance
-		between them. Using Christofides' algorithm to calculate a 1.5-approximation.
+		A demonstration of the TSP Problem: The distance between any two vertices is the Euclidean
+		distance between them. Using Christofides' algorithm to calculate a 1.5-approximation.
 	</figcaption>
 </figure>
 
