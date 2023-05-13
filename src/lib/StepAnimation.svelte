@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	interface lambda {
-		(): void;
+	interface Step {
+		name: string;
+		func: () => void;
 	}
 
-	export let steps: lambda[];
+	export let steps: Step[];
 	export let playOnMount: boolean = true;
 	export let interval: number = 2000;
 
@@ -13,9 +14,9 @@
 	let timeout: ReturnType<typeof setTimeout> | undefined;
 
 	export const play = () => {
-		if (current === undefined) current = 0;
-		else current = (current + 1) % steps.length;
-		steps[current]();
+		if (timeout === undefined) current = 0;
+		else current = (current! + 1) % steps.length;
+		steps[current].func();
 		timeout = setTimeout(play, interval);
 	};
 
@@ -29,7 +30,25 @@
 		timeout === undefined ? play() : stop();
 	};
 
+	export const set = (stepIndex: number) => {
+		stop();
+		steps[stepIndex].func();
+		current = stepIndex;
+	};
+
 	if (playOnMount) onMount(play);
 </script>
 
-<button on:click={toggle}>{timeout === undefined ? 'Restart' : 'Stop'} Animation</button>
+<button on:click={toggle}>{timeout === undefined ? 'Restart' : 'Stop'} Animation</button
+>{#each steps as step, i}
+	<button class={current === i ? 'highlight-button' : ''} on:click={() => set(i)}>
+		{step.name}
+	</button>
+{/each}
+
+<style lang="postcss">
+	.highlight-button {
+		@apply bg-zinc-300 dark:bg-zinc-700
+		text-zinc-700 dark:text-zinc-300;
+	}
+</style>
