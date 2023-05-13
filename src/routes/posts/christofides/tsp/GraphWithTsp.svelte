@@ -4,6 +4,7 @@
 	import { GraphMode, type Edge, type Vertex } from '$src/lib/interfaces/graph';
 	import { BinaryHeap } from 'structurae';
 	import blossom from 'edmonds-blossom-fixed';
+	import StepAnimation from '$src/lib/StepAnimation.svelte';
 
 	const n = 25,
 		maxWidth = 650,
@@ -194,11 +195,12 @@
 	/>
 	<figcaption>
 		<div class="text-center">
-			<button on:click={randomizeNodes}>Randomize</button>
-			<button on:click={showMst}>MST</button>
-			<button on:click={showMpm}>Matching</button>
-			<button on:click={showMstAndMpm}>MST & Matching</button>
-			<button on:click={showTsp}>Approximated TSP</button>
+			<StepAnimation steps={[randomizeNodes, showMst, showMpm, showMstAndMpm, showTsp]} />
+			<button on:click={randomizeNodes}>Randomize Nodes</button>
+			<button on:click={showMst}>Show MST</button>
+			<button on:click={showMpm}>Show Matching</button>
+			<button on:click={showMstAndMpm}>Show MST & Matching</button>
+			<button on:click={showTsp}>Show Approximated TSP</button>
 		</div>
 		A demonstration of the TSP Problem: The distance between any two vertices is the Euclidean distance
 		between them. Using Christofides' algorithm to calculate a 1.5-approximation.
