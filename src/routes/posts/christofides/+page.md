@@ -177,6 +177,6 @@ Although the algorithm is much more complex (I did not even try to understand it
 
 ## References and further reading
 
-I was heavily inspired to write this post after a lecture about the topic of [Prof. Feldman Moran](https://cs.haifa.ac.il/~moranfe/) in the course Combinatorial Optimization in the University of Haifa, spring 2023.
+I was heavily inspired to write this post after a lecture about the topic of [Prof. Feldman Moran](https://cs.haifa.ac.il/~moranfe/) in the course Combinatorial Optimization in the University of Haifa, spring 2023. Proofreading was done by [Almog Ben Chen](https://www.youtube.com/@almogbenchen6282). Thanks!
 
 <ReferencesList {references}/>
