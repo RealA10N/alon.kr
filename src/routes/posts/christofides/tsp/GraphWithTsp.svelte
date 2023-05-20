@@ -193,13 +193,13 @@
 		mode={GraphMode.regular}
 		radius={5}
 	/>
-	<div class="text-center mt-4 mb-2 text-sm px-8 max-w-2xl mx-auto">
+	<div class="text-center mt-4 mb-2 text-sm px-12 max-w-2xl mx-auto">
 		<StepAnimation
 			steps={[
 				{ name: 'Randomize Nodes', func: randomizeNodes },
-				{ name: 'Show MST', func: showMst },
-				{ name: 'Show Matching', func: showMpm },
-				{ name: 'Show MST & Matching', func: showMstAndMpm },
+				// { name: 'Show MST', func: showMst },
+				// { name: 'Show MPM', func: showMpm },
+				// { name: 'Show MST & MPM', func: showMstAndMpm },
 				{ name: 'Show TSP Approximation', func: showTsp }
 			]}
 		/>
