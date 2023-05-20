@@ -32,15 +32,11 @@ Well, not exactly. In this article I will present the *Christofides Algorithm*<R
 
 2. The costs function $c$ satisfies the triangle inequality: $c(\alpha, \beta) + c(\beta, \gamma) \ge c(\alpha, \gamma)$ when $\alpha, \beta, \gamma$ are vertices $\in V$.
 
+Although it is not as general as the general TSP problem, the Metric TSP is still a very interesting problem with many applications. In fact, most of the applications I've listed in the introduction are actually cases where solving the Metric TSP is sufficient. For example, it is not difficult to prove that the following two distance functions between to points on a plane $p_1 = (x_1, y_1)$ and $p_2 = (x_2, y_2)$ satisfy the inequality:
 
-Although it is not as general as the general TSP problem, the Metric TSP is still a very interesting problem with many applications. In fact, most of the applications I've listed in the introduction are actually cases where solving the Metric TSP is sufficient. For example, it is not difficult to prove that the following two distance functions $d_1, d_2$ satisfy the triangle inequality:
+- The *Manhattan*<Ref references={references} title="Taxicab geometry" people="Wikipedia" url="https://en.wikipedia.org/wiki/Taxicab_geometry" /> distance: $|x_2-x_1| + |y_2-y_1|$
 
-$$
-\begin{gather*}
-d_1((x_1,y_1),(x_2,y_2)) =& |x_2-x_1| + |y_2-y_1|
-\\ d_2((x_1,y_1),(x_2,y_2)) =& \sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}
-\end{gather*}
-$$
+- The *Euclidian*<Ref references={references} title="Euclidean distance" people="Wikipedia" url="https://en.wikipedia.org/wiki/Euclidean_distance" /> distance: $\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$
 
 Throughout this article I may use the phrases *cost*, *weight* or *distance* of edges and groups of edges. All of them refer to the same function $c$. The cost of a collection of edges (cost of a path or a cycle) is defined by the sum of costs over all edges in the collection.
 
@@ -158,7 +154,7 @@ c(C^*) \ge c(C^*_U) = c(M_1) + c(M_2) \ge 2 \cdot c(J)
 $$
 Hence we get that $c(J) \le {c(C^*) \over 2}$. Since the algorithm yields an Eulerian cycle $C$ of edges $F$ of the MST $T$ joined with $J$, we get
 $$
-c(C) = c(F) + c(J) \le c(C^*) + {1\over 2} \cdot c(C^*) = 1.5 \cdot c(C^*)
+c(C) = c(F) + c(J) \le 1.5 \cdot c(C^*)
 $$
 Hence the algorithm yields a cycle $C$ which costs at most $1.5$ times the cost of the optimal TSP cycle $C^*$, meaning that the algorithm has an approximation factor of $1.5$ as required.
 
