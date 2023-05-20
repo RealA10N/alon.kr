@@ -13,6 +13,7 @@
 
 	export let vertices: Vertex[] = [];
 	export let edges: Edge[] = [];
+	export let allSteps: boolean = false;
 
 	function randomPosition(range: number) {
 		return Math.floor(Math.random() * range) - range / 2;
@@ -180,6 +181,19 @@
 	}
 
 	onMount(randomizeNodes);
+
+	let steps = allSteps
+		? [
+				{ name: 'Randomize Nodes', func: randomizeNodes },
+				{ name: 'Show MST', func: showMst },
+				{ name: 'Show MPM', func: showMpm },
+				{ name: 'Show MST & MPM', func: showMstAndMpm },
+				{ name: 'Show TSP Approximation', func: showTsp }
+		  ]
+		: [
+				{ name: 'Randomize Nodes', func: randomizeNodes },
+				{ name: 'Show TSP Approximation', func: showTsp }
+		  ];
 </script>
 
 <figure bind:clientWidth={width} class="graph-container">
@@ -194,15 +208,7 @@
 		radius={5}
 	/>
 	<div class="text-center mt-4 mb-2 text-sm px-12 max-w-2xl mx-auto">
-		<StepAnimation
-			steps={[
-				{ name: 'Randomize Nodes', func: randomizeNodes },
-				// { name: 'Show MST', func: showMst },
-				// { name: 'Show MPM', func: showMpm },
-				// { name: 'Show MST & MPM', func: showMstAndMpm },
-				{ name: 'Show TSP Approximation', func: showTsp }
-			]}
-		/>
+		<StepAnimation {steps} />
 	</div>
 	<figcaption>
 		A demonstration of the TSP Problem: The distance between any two vertices is the Euclidean
