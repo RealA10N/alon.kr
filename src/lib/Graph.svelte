@@ -162,6 +162,7 @@
 
 				if (vertexLabels)
 					g.append('text')
+						.text((d) => d.label)
 						.classed('graph-label', true)
 						.attr('text-anchor', 'middle') // horizontal alignment
 						.attr('dominant-baseline', 'middle'); // vertical alignment
