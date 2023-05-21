@@ -39,14 +39,13 @@
 			data-mapping="title"
 			data-strict="1"
 			data-reactions-enabled="1"
-			data-emit-metadata="0"
+			data-emit-metadata="1"
 			data-input-position="bottom"
 			data-theme="preferred_color_scheme"
 			data-lang="en"
 			data-loading="lazy"
 			crossorigin="anonymous"
 			async
-		>
-		</script>
+		></script>
 	</div>
 {/if}
