@@ -57,9 +57,6 @@ From now on, given a graph $G$ we will denote an optimal TSP Cycle of it with $C
 The cycle $C^*$ must visit every vertex at least once (by definition), so it must contain at least $n = |V|$ edges. On the other hand, if $C^*$ contains more then $n$ edges, then there exists a vertex which appears twice in $C^*$, and one of those appearances can be skipped, resulting in a shorter (or equally weighted) cycle. Hence, there must exist an optimal TSP cycle $C^*$ with exactly $n$ edges.
 
 ## Bounding TSP with MST
-<!--
-Before diving into Christofides' algorithm, we show an approximation using minimum spanning trees. To recall, a spanning tree of a connected graph $G=(V,E)$ is a tree $T=(V, F)$ where $F \subseteq E$. In words, it is a tree that *spans* all vertices of the original graph $G$. If we are provided with a cost function $c: E \to \R$ of the edges of the graph, we can then define the cost of a spanning tree by the sum of the costs of the edges of the tree. Then, a spanning tree $T$ is a minimum spanning tree (MST) of $G$ if the cost of $T$ is minimal across all valid spanning trees of $G$. Notice that it is possible that there are multiple minimum spanning trees for a given graph.
--->
 
 It turns out that the cost of the minimum spanning tree $T$ of a graph $G$ is actually a lower bound on $C^*$, meaning that $c(C^*) \ge c(T)$. This is because removing any edge $e$ from $C^*$ results in a tree whose edges are $C^* \setminus \{e\}$. This tree spans all vertices of the original graph, and thus is a spanning tree. By definition, the weight of $T$ is minimal across all spanning trees of $G$, and thus $c(C^* \setminus \{e\}) \ge c(T)$. From that we easily show that the cost of $C^*$ is at least $c(T)$:
 
