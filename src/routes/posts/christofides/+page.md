@@ -171,7 +171,7 @@ Well, remember that 1.5 is an *upper bound* on the approximation ratio. In pract
 
 ## Does a better approximation exists?
 
-Christofides published his paper in 1976, and for almost 50 years (!) it was the best known approximation algorithm for the Metric TSP problem. In 2020 however, a paper that consists of 90 pages was published with the following abstract: *"For some $\epsilon > 10^{36}$ we give a randomized $3/2 - \epsilon$ approximation algorithm for metric TSP."* <Ref references={references} title="A (Slightly) Improved Approximation Algorithm for Metric TSP" url="https://arxiv.org/pdf/2007.01409.pdf" people="Anna R. Karlin, Nathan Klein, Shayan Oveis Gharan"/>
+Christofides published his paper in 1976, and for almost 50 years (!) it was the best known approximation algorithm for the Metric TSP problem. In 2020 however, a paper that consists of 90 pages was published with the following abstract: *"For some $\epsilon > 10^{-36}$ we give a randomized $3/2 - \epsilon$ approximation algorithm for metric TSP."* <Ref references={references} title="A (Slightly) Improved Approximation Algorithm for Metric TSP" url="https://arxiv.org/pdf/2007.01409.pdf" people="Anna R. Karlin, Nathan Klein, Shayan Oveis Gharan"/>
 
 Although the algorithm is much more complex (I did not even try to understand it), and the approximation improvement is clearly not sufficient, it actually proves that $3/2$ is not the lower bound of the approximation factor. This gives hope that an efficient and elegant algorithm exists whose factor is a magnitude better then $1.5$, and we just haven't discovered it yet. The paper was published at [STOC'21](https://en.wikipedia.org/wiki/Symposium_on_Theory_of_Computing) and for this reason received the best paper award.
 
