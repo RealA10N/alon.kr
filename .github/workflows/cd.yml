@@ -49,3 +49,9 @@ jobs:
           slot-name: 'production'
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_6647682407e240d291167d681c298a6d }}
           images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_798998f839ab43a99357c160246d9eb5 }}/alon.kr:${{ github.sha }}'
+
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Google
+        run: curl http://www.google.com/ping?sitemap=https://alon.kr/sitemap.xml
