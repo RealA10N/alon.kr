@@ -2,7 +2,10 @@
 	import '$src/app.css';
 	import '@fontsource/zilla-slab';
 	import Header from '$lib/Header.svelte';
+	import LoadingBar from '$lib/LoadingBar.svelte';
 </script>
+
+<LoadingBar />
 
 <Header />
 
