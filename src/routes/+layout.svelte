@@ -9,6 +9,6 @@
 
 <Header />
 
-<main class="max-w-3xl px-12 m-auto">
+<main class="max-w-3xl px-6 m-auto">
 	<slot />
 </main>
