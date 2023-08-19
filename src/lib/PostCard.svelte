@@ -12,9 +12,14 @@
 >
 	<div class="font-bold text-xl sm:text-2xl text-zinc-800 dark:text-zinc-200">
 		{post.title}
-		<span class="invisible absolute sm:visible sm:relative font-light text-sm opacity-70 mt-1">
-			{moment(post.published).format('MMM Do YYYY')}
-		</span>
+		{#if post.published}
+			<span class="tag">
+				{moment(post.published).format('MMM Do YYYY')}
+			</span>
+		{/if}
+		{#each post.tags ?? [] as tag}
+			<span class="tag">{tag}</span>
+		{/each}
 	</div>
 
 	<div class="leading-5 text-base sm:text-lg">
@@ -24,3 +29,9 @@
 	<!-- svelte-ignore a11y-missing-content -->
 	<a href={post.url} class="absolute left-0 right-0 top-0 bottom-0" />
 </div>
+
+<style lang="postcss">
+	.tag {
+		@apply invisible absolute sm:visible sm:relative font-light text-sm opacity-70 mt-1 mr-1;
+	}
+</style>

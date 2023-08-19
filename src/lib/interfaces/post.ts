@@ -1,6 +1,7 @@
 export interface Post {
-    title: string;
-    subtitle: string;
-    url: string;
-    published: Date;
+  title: string;
+  subtitle: string;
+  url: string;
+  tags?: string[];
+  published?: Date;
 }

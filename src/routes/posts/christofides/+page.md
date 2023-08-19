@@ -1,7 +1,6 @@
 ---
 title: The Christofides Algorithm
-subtitle: "Approximating the Metric TSP Problem: An Introduction to Combinatorial Optimization"
-published: 2023-05-20
+subtitle: "Approximating the Metric TSP Problem: An Introduction to Combinatorial Optimization. #SoME3"
 ---
 
 <script>
@@ -64,7 +63,7 @@ $$
 c(C^*) \ge c(C^*) - c(e) = c(C^* \setminus \{e\}) \ge c(T)
 $$
 
-Unlike TSP, finding the MST of a graph is considered easy, and there are multiple efficient, popular algorithms that do that ([Prim's](https://en.wikipedia.org/wiki/Prim%27s_algorithm), [Kruskal's](https://en.wikipedia.org/wiki/Kruskal%27s_algorithm), [Borůvka's](https://en.wikipedia.org/wiki/Bor%C5%AFvka%27s_algorithm)). This is very promising! We now have a building block (MST) that we can easily compute, which resembles a TSP cycle very well and is guaranteed to have a lower cost than the optimal TSP. 
+Unlike TSP, finding the MST of a graph is considered easy, and there are multiple efficient, popular algorithms that do that ([Prim's](https://en.wikipedia.org/wiki/Prim%27s_algorithm), [Kruskal's](https://en.wikipedia.org/wiki/Kruskal%27s_algorithm), [Borůvka's](https://en.wikipedia.org/wiki/Bor%C5%AFvka%27s_algorithm)). This is very promising! We now have a building block (MST) that we can easily compute, which resembles a TSP cycle very well and is guaranteed to have a lower cost than the optimal TSP.
 
 <GraphWithMst/>
 
