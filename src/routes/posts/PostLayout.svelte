@@ -1,7 +1,14 @@
-<script lang="ts">
+<script>
 	import { browser } from '$app/environment';
-	export let title: string;
-	export let subtitle: string | undefined;
+	import { onMount } from 'svelte';
+
+	/** @type {string} */
+	export let title;
+
+	/** @type {string | undefined} */
+	export let subtitle;
+
+	onMount(() => {});
 </script>
 
 <svelte:head>
