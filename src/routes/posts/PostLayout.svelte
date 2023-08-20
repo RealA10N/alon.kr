@@ -6,22 +6,23 @@
 	export let title;
 
 	/** @type {string | undefined} */
-	export let subtitle;
+	export let description;
 
 	onMount(() => {});
 </script>
 
 <svelte:head>
-	<title>{title}</title>
+	<title>{title} - Alon Krymgand</title>
+	<meta name="description" content={description} />
+	<meta name="robots" content="index, follow" />
+	<meta property="og:title" content="{title} - Alon Krymgand" />
+	<meta property="og:description" content={description} />
+	<meta property="og:site_name" content="Alon Krymgand" />
 </svelte:head>
 
 <header class="mb-4">
-	<h1>
-		{title}
-	</h1>
-	{#if subtitle}
-		<div class="font-medium tracking-wider text-sm italic">{subtitle}</div>
-	{/if}
+	<h1>{title}</h1>
+	<div class="font-medium tracking-wider text-sm italic">{description}</div>
 </header>
 
 <div class="text-justify">

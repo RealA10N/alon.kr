@@ -1,6 +1,6 @@
 ---
 title: The Christofides Algorithm
-subtitle: "Approximating the Metric TSP Problem: An Introduction to Combinatorial Optimization. #SoME3"
+description: "Approximating the Metric TSP Problem: An Introduction to Combinatorial Optimization. #SoME3"
 ---
 
 <script>

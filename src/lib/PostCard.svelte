@@ -23,7 +23,7 @@
 	</div>
 
 	<div class="leading-5 text-base sm:text-lg">
-		{post.subtitle}
+		{post.description}
 	</div>
 
 	<!-- svelte-ignore a11y-missing-content -->
