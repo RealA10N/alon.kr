@@ -15,7 +15,7 @@
 	<title>{title} - Alon Krymgand</title>
 	<meta name="description" content={description} />
 	<meta name="robots" content="index, follow" />
-	<meta property="og:title" content="{title} - Alon Krymgand" />
+	<meta property="og:title" content={title} />
 	<meta property="og:description" content={description} />
 	<meta property="og:site_name" content="Alon Krymgand" />
 </svelte:head>
@@ -37,7 +37,7 @@
 			data-repo-id="R_kgDOJd7i1w"
 			data-category="General"
 			data-category-id="DIC_kwDOJd7i184CWSh5"
-			data-mapping="title"
+			data-mapping="og:title"
 			data-strict="1"
 			data-reactions-enabled="1"
 			data-emit-metadata="1"
