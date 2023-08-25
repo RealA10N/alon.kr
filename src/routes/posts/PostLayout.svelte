@@ -2,6 +2,8 @@
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
 
+	import Metadata from '$lib/Metadata.svelte';
+
 	/** @type {string} */
 	export let title;
 
@@ -11,14 +13,7 @@
 	onMount(() => {});
 </script>
 
-<svelte:head>
-	<title>{title} - Alon Krymgand</title>
-	<meta name="description" content={description} />
-	<meta name="robots" content="index, follow" />
-	<meta property="og:title" content={title} />
-	<meta property="og:description" content={description} />
-	<meta property="og:site_name" content="Alon Krymgand" />
-</svelte:head>
+<Metadata {title} {description} />
 
 <header class="mb-4">
 	<h1>{title}</h1>
@@ -37,7 +32,8 @@
 			data-repo-id="R_kgDOJd7i1w"
 			data-category="General"
 			data-category-id="DIC_kwDOJd7i184CWSh5"
-			data-mapping="og:title"
+			data-mapping="specific"
+			data-term={title}
 			data-strict="1"
 			data-reactions-enabled="1"
 			data-emit-metadata="1"
