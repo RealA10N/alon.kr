@@ -12,14 +12,9 @@
 >
 	<div class="font-bold text-xl sm:text-2xl text-zinc-800 dark:text-zinc-200">
 		{post.title}
-		{#if post.published}
-			<span class="tag">
-				{moment(post.published).format('MMM Do YYYY')}
-			</span>
-		{/if}
-		{#each post.tags ?? [] as tag}
-			<span class="tag">{tag}</span>
-		{/each}
+		<span class="tag">
+			{moment(post.published).fromNow()}
+		</span>
 	</div>
 
 	<div class="leading-5 text-base sm:text-lg">

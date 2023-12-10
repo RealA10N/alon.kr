@@ -3,5 +3,6 @@ export interface Post {
 	description: string;
 	url: string;
 	published: number;
+	length: number;
 	tags: string[];
 }
