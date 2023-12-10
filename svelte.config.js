@@ -1,24 +1,14 @@
+import mdsvexConfig from './mdsvex.config.js';
 import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 import { mdsvex } from 'mdsvex';
-import rehypeKatexSvelte from 'rehype-katex-svelte';
-import remarkMath from 'remark-math';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
 	// for more information about preprocessors
-	extensions: ['.svelte', '.md', '.svx'],
-
-	preprocess: [
-		vitePreprocess(),
-		mdsvex({
-			remarkPlugins: [remarkMath],
-			rehypePlugins: [rehypeKatexSvelte],
-			extensions: ['.md', '.svx'],
-			layout: 'src/routes/posts/PostLayout.svelte'
-		})
-	],
+	extensions: ['.svelte', ...mdsvexConfig.extensions],
+	preprocess: [vitePreprocess(), mdsvex(mdsvexConfig)],
 
 	kit: {
 		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.
