@@ -22,17 +22,9 @@
 		{description}
 	</div>
 	<ul class="tags-list flex flex-wrap my-1">
-		<li>
-			{moment(published).format('MMM Do YYYY')}
-		</li>
-		<li>
-			{length} min read
-		</li>
-		{#each tags as tag}
-			<li>
-				{tag}
-			</li>
-		{/each}
+		<li>{moment(published).format('MMM Do YYYY')}</li>
+		<li>{length} min read</li>
+		{#each tags as tag}<li>{tag}</li>{/each}
 	</ul>
 </header>
 
