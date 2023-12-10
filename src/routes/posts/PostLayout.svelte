@@ -16,7 +16,7 @@
 	<div class="font-medium tracking-wider text-sm italic">
 		{post.description}
 	</div>
-	<ul class="flex flex-wrap my-1">
+	<ul class="flex flex-wrap mt-1 gap-2">
 		{#each toTaglist(post, true) as tag}<li class="tag">{tag}</li>{/each}
 	</ul>
 </header>
