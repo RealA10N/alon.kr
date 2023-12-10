@@ -1,7 +1,7 @@
 ---
 title: The Christofides Algorithm
 description: "Approximating the Metric TSP Problem: An Introduction to Combinatorial Optimization."
-published: May 20, 2023
+published: 2023-05-20
 tags: ["#SoME3", "Algorithms", "Programming"]
 length: 13
 ---
