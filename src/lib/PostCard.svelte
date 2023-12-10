@@ -16,7 +16,7 @@
 	<div class="leading-5 text-base sm:text-lg">
 		<span class="mr-3">{post.description}</span>
 		<ul class="flex-wrap m-0 inline-flex gap-2 mt-1">
-			{#each toTaglist(post) as tag}<li class="tag opacity-70">{tag}</li>{/each}
+			{#each toTaglist(post) as tag}<li class="tag m-0 opacity-70">{tag}</li>{/each}
 		</ul>
 	</div>
 
