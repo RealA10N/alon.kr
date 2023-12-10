@@ -36,12 +36,12 @@
 	</ul>
 </header>
 
-<div class="text-justify">
+<article class="text-justify">
 	<slot />
-</div>
+</article>
 
 {#if browser}
-	<div class="my-10">
+	<footer class="my-10">
 		<script
 			src="https://giscus.app/client.js"
 			data-repo="reala10n/alon.kr"
@@ -60,7 +60,7 @@
 			crossorigin="anonymous"
 			async
 		></script>
-	</div>
+	</footer>
 {/if}
 
 <style lang="postcss">
