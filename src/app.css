@@ -51,6 +51,12 @@ button {
 		transition-colors;
 }
 
+button {
+	@apply tag
+		hover:bg-zinc-300 hover:dark:bg-zinc-700
+		transition-colors;
+}
+
 figure {
 	@apply my-2;
 }
@@ -110,4 +116,10 @@ ul > li {
 
 ol > li {
 	@apply list-decimal;
+}
+
+.tag {
+	@apply rounded-md px-2 text-sm list-none
+	text-zinc-800 dark:text-zinc-200
+	border border-zinc-800 dark:border-zinc-200;
 }

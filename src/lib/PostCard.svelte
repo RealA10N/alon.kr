@@ -1,6 +1,5 @@
 <script lang="ts">
-	import type { Post } from '$lib/interfaces/post';
-	import moment from 'moment';
+	import { type Post, toTaglist } from '$lib/interfaces/post';
 	export let post: Post;
 </script>
 
@@ -12,21 +11,15 @@
 >
 	<div class="font-bold text-xl sm:text-2xl text-zinc-800 dark:text-zinc-200">
 		{post.title}
-		<span class="tag">
-			{moment(post.published).fromNow()}
-		</span>
 	</div>
 
 	<div class="leading-5 text-base sm:text-lg">
-		{post.description}
+		<span class="mr-3">{post.description}</span>
+		<ul class="flex-wrap m-0 inline-flex gap-2 mt-1">
+			{#each toTaglist(post) as tag}<li class="tag opacity-70 m-0">{tag}</li>{/each}
+		</ul>
 	</div>
 
 	<!-- svelte-ignore a11y-missing-content -->
 	<a href={post.url} class="absolute left-0 right-0 top-0 bottom-0" />
 </div>
-
-<style lang="postcss">
-	.tag {
-		@apply invisible absolute sm:visible sm:relative font-light text-sm opacity-70 mt-1 mr-1;
-	}
-</style>

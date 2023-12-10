@@ -1,30 +1,23 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
-	import moment from 'moment';
 
 	import Metadata from '$lib/Metadata.svelte';
-
-	export let title: string;
-	export let description: string | undefined;
-	export let published: number;
-	export let length: number;
-	export let tags: string[];
+	import { type Post, toTaglist } from '$src/lib/interfaces/post';
+	export let post: Post;
 
 	onMount(() => {});
 </script>
 
-<Metadata {title} {description} />
+<Metadata title={post.title} description={post.description} />
 
-<header class="mb-4">
-	<h1>{title}</h1>
-	<div class="font-medium text-zinc-700 dark:text-zinc-300 tracking-wider text-sm italic">
-		{description}
+<header class="mb-4 text-zinc-700 dark:text-zinc-300">
+	<h1>{post.title}</h1>
+	<div class="font-medium tracking-wider text-sm italic">
+		{post.description}
 	</div>
-	<ul class="tags-list flex flex-wrap my-1">
-		<li>{moment(published).format('MMM Do YYYY')}</li>
-		<li>{length} min read</li>
-		{#each tags as tag}<li>{tag}</li>{/each}
+	<ul class="flex flex-wrap my-1">
+		{#each toTaglist(post, true) as tag}<li class="tag">{tag}</li>{/each}
 	</ul>
 </header>
 
@@ -41,7 +34,7 @@
 			data-category="General"
 			data-category-id="DIC_kwDOJd7i184CWSh5"
 			data-mapping="specific"
-			data-term={title}
+			data-term={post.title}
 			data-strict="1"
 			data-reactions-enabled="1"
 			data-emit-metadata="1"
@@ -54,12 +47,3 @@
 		></script>
 	</footer>
 {/if}
-
-<style lang="postcss">
-	.tags-list li {
-		@apply rounded-md px-2 mr-1 ml-0 my-1
-		text-sm list-none
-		text-zinc-700 dark:text-zinc-300
-		border border-zinc-800 dark:border-zinc-200;
-	}
-</style>

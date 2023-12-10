@@ -5,18 +5,8 @@
 
 <script>
 	import PostLayout from './PostLayout.svelte';
-	/** @type {string} */
-	export let title;
-	/** @type {string | undefined} */
-	export let description;
-	/** @type {number} */
-	export let published;
-	/** @type {number} */
-	export let length;
-	/** @type {string[]} */
-	export let tags;
 </script>
 
-<PostLayout {title} {description} {published} {length} {tags}>
+<PostLayout post={$$props}>
 	<slot />
 </PostLayout>

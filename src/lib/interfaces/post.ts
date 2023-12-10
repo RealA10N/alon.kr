@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export interface Post {
 	title: string;
 	description: string;
@@ -6,3 +8,15 @@ export interface Post {
 	length: number;
 	tags: string[];
 }
+
+function formatDuration(dateUnix: number, specific: boolean) {
+	const date = moment(dateUnix);
+	const duration = moment.duration(moment().diff(date));
+	return duration.months() >= 11 || specific ? date.format('MMM Do YYYY') : date.fromNow();
+}
+
+export const toTaglist = (post: Post, specific: boolean = false): string[] => [
+	formatDuration(post.published, specific),
+	`${post.length} min read`,
+	...post.tags
+];
