@@ -48,11 +48,11 @@
 
 <style lang="postcss">
 	span {
-		@apply invisible sm:visible 
+		@apply invisible sm:visible duration-300
 			transition-opacity opacity-0 absolute left-0 py-2;
 	}
 	.init {
-		@apply opacity-75 duration-1000 delay-1000;
+		@apply opacity-75 duration-500 delay-[1500ms];
 	}
 
 	.string {

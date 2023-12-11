@@ -16,7 +16,7 @@
 	$: pi = calcpi(pattern);
 
 	let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
-	let stop: () => void;
+	let stop: () => undefined;
 
 	const init = () => {
 		clearTimeout(timeout);
@@ -38,8 +38,8 @@
 	const next = () => {
 		if (state.shift + state.focus + 1 >= state.text.length) return reset();
 		if (timeout) clearTimeout(timeout), reveal();
+		timeout = setTimeout(reveal, 750);
 		advance();
-		timeout = setTimeout(reveal, 1000);
 	};
 
 	const compare = () => state.focus < 0 || text[state.focus + state.shift] === pattern[state.focus];
@@ -57,8 +57,9 @@
 	};
 
 	const reveal = () => {
-		clearMarks();
 		const cmp = compare();
+		timeout = undefined;
+		clearMarks();
 
 		if (state.pattern[state.focus])
 			state.pattern[state.focus].mode = cmp ? LetterMode.Matching : LetterMode.NotMatching;
@@ -98,7 +99,7 @@
 </script>
 
 <Kmp {state} />
-<StepAnimationUnbounded {next} {reset} bind:stop interval={2000} />
+<StepAnimationUnbounded {next} {reset} bind:stop interval={1500} playOnMount={false} />
 
 <div>
 	<label for="text">Text:</label>

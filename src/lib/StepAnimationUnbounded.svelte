@@ -6,30 +6,19 @@
 
 	let timeout: ReturnType<typeof setTimeout> | undefined;
 
-	export const play = () => {
-		timeout = setTimeout(playTimeout, interval);
-	};
-
-	const playTimeout = () => {
-		next();
-		timeout = setTimeout(playTimeout, interval);
-	};
+	export const play = () => (next(), (timeout = setTimeout(play, interval)));
+	export const stop = () => (clearTimeout(timeout), (timeout = undefined));
 
 	export let next: () => void;
 	export let reset: () => void;
-
-	export const stop = () => {
-		clearTimeout(timeout);
-		timeout = undefined;
-	};
 
 	export const toggle = () => {
 		timeout === undefined ? play() : stop();
 	};
 
-	if (playOnMount) onMount(play);
+	if (playOnMount) onMount(() => setTimeout(play, interval));
 </script>
 
 <button on:click={toggle}>{timeout === undefined ? 'Play' : 'Pause'}</button>
 <button on:click={() => (stop(), next())}>Next</button>
-<button on:click={reset}>Reset</button>
+<button on:click={() => (stop(), reset())}>Reset</button>
