@@ -1,17 +1,19 @@
-export interface StringMatchingState {
+export interface LetterState {
 	text: string;
-	pattern: string;
-	shift: number;
-	comparing: number;
-	highlight?: number;
-	mark?: {
-		text?: number[];
-		pattern?: number[];
-	};
+	mode: LetterMode;
+	highlight?: boolean;
 }
 
-export enum StringCompare {
-	NotCompared = 'not-compared',
+export interface StringMatchingState {
+	text: LetterState[];
+	pattern: LetterState[];
+	shift: number; // how much to shift the pattern (index in text)
+	focus: number; // index of pattern to be at the center of the view
+}
+
+export enum LetterMode {
+	Regular = 'regular',
 	Matching = 'matching',
-	NotMatching = 'not-matching'
+	NotMatching = 'not-matching',
+	Marked = 'marked'
 }

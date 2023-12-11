@@ -1,22 +1,18 @@
 <script lang="ts">
-	import { StringCompare } from '$lib/interfaces/stringMatching';
-	export let char: string;
-	export let matching: StringCompare = StringCompare.NotCompared;
-	export let highlight: boolean = false;
-	export let mark: boolean = false;
+	import type { LetterState } from '$lib/interfaces/stringMatching';
+	export let state: LetterState;
 </script>
 
 <div
 	style="width: 40px; height: 40px;"
-	class:highlight
-	class:mark
+	class:highlight={state.highlight}
 	class="inline-flex justify-center items-center
 			border-2 text-center align-text-bottom m-[2px]
-			shadow-sm rounded-md {matching} transition-all
+			shadow-sm rounded-md transition-all {state.mode}
 			border-zinc-300 dark:border-zinc-700
 			text-zinc-800 dark:text-zinc-200"
 >
-	<span class="text-center">{char}</span>
+	<span class="text-center">{state.text}</span>
 </div>
 
 <style lang="postcss">
@@ -34,7 +30,7 @@
 		!border-zinc-600 dark:!border-zinc-200;
 	}
 
-	.mark {
+	.marked {
 		@apply border-yellow-400 bg-yellow-200 dark:border-yellow-600 dark:bg-yellow-800;
 	}
 </style>
