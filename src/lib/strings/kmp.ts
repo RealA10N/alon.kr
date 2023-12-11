@@ -1,4 +1,4 @@
-export const pi = (pattern: string): number[] => {
+export const calcpi = (pattern: string): number[] => {
 	const pi: number[] = [0];
 	let k = 0;
 
