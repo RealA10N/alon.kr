@@ -33,14 +33,14 @@
 <FullWidth>
 	<div class="relative" style="right: calc(-50vw + {$comperingShift}px);">
 		<span class:init class="-translate-x-14">Text</span>
-		<div class="relative whitespace-nowrap my-2 w-fit" style="right: {$shift}px">
+		<div class="string" style="right: {$shift}px">
 			{#each state.text as char, idx}
 				<LetterBox {char} highlight={idx === state.highlight} />
 			{/each}
 		</div>
 
 		<span class:init class="-translate-x-20">Pattern</span>
-		<div class="relative whitespace-nowrap my-2 w-fit">
+		<div class="string">
 			{#each state.pattern as char, idx}
 				<LetterBox
 					{char}
@@ -58,5 +58,9 @@
 	}
 	.init {
 		@apply opacity-75 duration-1000 delay-1000;
+	}
+
+	.string {
+		@apply relative whitespace-nowrap my-2 w-fit;
 	}
 </style>
