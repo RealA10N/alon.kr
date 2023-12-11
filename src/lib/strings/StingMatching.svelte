@@ -43,7 +43,11 @@
 		<span class:init class="-translate-x-14">Text</span>
 		<div class="string" style="right: {$shift}px">
 			{#each state.text as char, idx}
-				<LetterBox {char} highlight={idx === state.highlight} />
+				<LetterBox
+					{char}
+					highlight={idx === state.highlight}
+					mark={state.mark?.text?.includes(idx)}
+				/>
 			{/each}
 		</div>
 
@@ -54,6 +58,7 @@
 					{char}
 					matching={compareList[idx]}
 					highlight={idx + state.shift === state.highlight}
+					mark={state.mark?.pattern?.includes(idx)}
 				/>
 			{/each}
 		</div>

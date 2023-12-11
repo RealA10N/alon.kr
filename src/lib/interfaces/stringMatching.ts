@@ -4,6 +4,10 @@ export interface StringMatchingState {
 	shift: number;
 	comparing: number;
 	highlight?: number;
+	mark?: {
+		text?: number[];
+		pattern?: number[];
+	};
 }
 
 export enum StringCompare {
