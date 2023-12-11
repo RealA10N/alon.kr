@@ -12,7 +12,14 @@
 		easing: cubicInOut
 	});
 
-	$: $shift = state.shift * (40 + 4); // 40px width+ 4px margin
+	const comperingShift = tweened(0, {
+		duration: 150,
+		easing: cubicInOut
+	});
+
+	const pixelShift = 40 + 4; // 40px width+ 4px margin
+	$: $shift = state.shift * pixelShift;
+	$: $comperingShift = state.comparing * pixelShift;
 
 	const compareTextToPattern = (idx: number) =>
 		state.pattern[idx] === state.text[idx + state.shift]
@@ -20,19 +27,20 @@
 			: StringCompare.NotMatching;
 
 	$: compareList = Array.from({ length: state.comparing }, (_, i) => compareTextToPattern(i));
-
-	let patternWidth: number;
+	$: init = state.comparing === 0 && state.shift === 0;
 </script>
 
 <FullWidth>
-	<div class="relative" style="right: calc(-50vw + {patternWidth / 2}px);">
+	<div class="relative" style="right: calc(-50vw + {$comperingShift}px);">
+		<span class:init class="-translate-x-14">Text</span>
 		<div class="relative whitespace-nowrap my-2 w-fit" style="right: {$shift}px">
 			{#each state.text as char, idx}
 				<LetterBox {char} highlight={idx === state.highlight} />
 			{/each}
 		</div>
 
-		<div class="my-2 w-fit" bind:clientWidth={patternWidth}>
+		<span class:init class="-translate-x-20">Pattern</span>
+		<div class="my-2 w-fit">
 			{#each state.pattern as char, idx}
 				<LetterBox
 					{char}
@@ -43,3 +51,12 @@
 		</div>
 	</div>
 </FullWidth>
+
+<style lang="postcss">
+	span {
+		@apply transition-opacity opacity-0 absolute left-0 py-2;
+	}
+	.init {
+		@apply opacity-75 duration-1000 delay-1000;
+	}
+</style>
