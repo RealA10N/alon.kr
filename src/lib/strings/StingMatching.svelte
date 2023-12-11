@@ -40,7 +40,7 @@
 		</div>
 
 		<span class:init class="-translate-x-20">Pattern</span>
-		<div class="my-2 w-fit">
+		<div class="relative whitespace-nowrap my-2 w-fit">
 			{#each state.pattern as char, idx}
 				<LetterBox
 					{char}
