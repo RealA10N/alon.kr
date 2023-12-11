@@ -18,8 +18,16 @@
 	});
 
 	const pixelShift = 40 + 4; // 40px width+ 4px margin
-	$: $shift = state.shift * pixelShift;
-	$: $comperingShift = state.comparing * pixelShift;
+
+	$: {
+		$shift = state.shift * pixelShift;
+		// if the screen is big, and the pattern string is large,
+		// we add a skew to fill the screen, otherwise it looks weird,
+		// especially at the start since half of the screen is empty.
+		const skew =
+			Math.min(state.pattern.length * 35, 300) * (state.comparing / state.pattern.length - 0.5);
+		$comperingShift = state.comparing * pixelShift - skew;
+	}
 
 	const compareTextToPattern = (idx: number) =>
 		state.pattern[idx] === state.text[idx + state.shift]
@@ -54,7 +62,8 @@
 
 <style lang="postcss">
 	span {
-		@apply transition-opacity opacity-0 absolute left-0 py-2;
+		@apply invisible sm:visible 
+			transition-opacity opacity-0 absolute left-0 py-2;
 	}
 	.init {
 		@apply opacity-75 duration-1000 delay-1000;
