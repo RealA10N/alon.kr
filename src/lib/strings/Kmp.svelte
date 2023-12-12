@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Confetti } from "svelte-confetti"
 	import Kmp from '$src/lib/strings/StingMatching.svelte';
 	import {
 		LetterMode,
@@ -71,7 +72,7 @@
 	const markCommonPrefix = () => {
 		const p = pi[state.focus - 1] ?? 0;
 		for (let i = 0; i < p; i++) {
-			const j = i + state.shift + state.pattern.length - p - 1;
+			const j = i + state.shift + state.focus - p;
 			state.pattern[i].mode = state.text[j].mode = LetterMode.Marked;
 		}
 	};
@@ -93,10 +94,21 @@
 		for (let i = 0; i < state.pattern.length; i++) state.pattern[i].highlight = i === state.focus;
 	};
 
+	let confetti: null[] = [];
 	const match = () => {
-		console.log('match!');
+		confetti = [...confetti, null];
+		console.log(confetti)
 	};
 </script>
+
+<div class="fixed -top-10 left-0
+		h-screen w-screen overflow-hidden pointer-events-none
+		flex justify-center">
+	{#each confetti as _}
+		<Confetti x={[-5, 5]} y={[0, 0.1]} delay={[0,1000]} duration={1500} amount={150} fallDistance="500px" />
+	{/each}
+</div>
+
 
 <Kmp {state} />
 <StepAnimationUnbounded {next} {reset} bind:stop interval={1500} playOnMount={false} />
