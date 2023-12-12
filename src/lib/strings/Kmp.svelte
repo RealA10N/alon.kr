@@ -13,11 +13,11 @@
 	let pattern = 'ABCDABD';
 	let state: StringMatchingState;
 
-	$: text, pattern, init();
+	$: text, pattern, reset();
 	$: pi = calcpi(pattern);
 
 	let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
-	let stop: () => undefined;
+	let stop: () => undefined = () => undefined;
 
 	const init = () => {
 		clearTimeout(timeout);
@@ -111,7 +111,7 @@
 
 
 <Kmp {state} />
-<StepAnimationUnbounded {next} {reset} bind:stop interval={1500} playOnMount={false} />
+<StepAnimationUnbounded {next} {reset} bind:stop interval={1500} />
 
 <div>
 	<label for="text">Text:</label>
