@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Metadata from '$src/lib/Metadata.svelte';
 	import PostCard from '$src/lib/PostCard.svelte';
-	export const prerender = true;
 	export let data;
 
 	let description = `My name is Alon Krymgnad. This is my site. I write about stuff that I find interesting, and I hope you find it interesting too!`;
