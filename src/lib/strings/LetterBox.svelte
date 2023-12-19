@@ -4,9 +4,9 @@
 </script>
 
 <div
-	style="width: 40px; height: 40px;"
 	class:highlight={state.highlight}
 	class="inline-flex justify-center items-center
+			h-[40px] min-w-[40px] px-[8px]
 			border-2 text-center align-text-bottom m-[2px]
 			shadow-sm rounded-md transition-all {state.mode}
 			border-zinc-300 dark:border-zinc-700
