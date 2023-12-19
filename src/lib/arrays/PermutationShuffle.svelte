@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Figure from '$lib/Figure.svelte';
-	import Permutations from '$lib/permutation/Permutations.svelte';
+	import Permutations from '$lib/arrays/Permutations.svelte';
 	import AnimationButton from '$src/lib/AnimationButton.svelte';
-	import { factorial, idxToPerm, permIdx, shuffle } from '$lib/permutation/permutation';
+	import { factorial, idxToPerm, permIdx, shuffle } from '$lib/arrays/permutation';
 
 	export let n: bigint = 8n;
 	export let playOnMount = true;
