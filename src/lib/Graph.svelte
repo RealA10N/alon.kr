@@ -8,7 +8,8 @@
 	export let height: number = 350;
 
 	export let radius = 12;
-	let padding = 2 * radius;
+	$: diameter = 2 * radius;
+	$: padding = diameter;
 
 	export let vertexLabels: boolean = true;
 	export let edgeLabels: boolean = true;
@@ -20,6 +21,14 @@
 
 	type runOnTickFunc = { (): any };
 	export let runOnTick: runOnTickFunc | undefined = undefined;
+
+	// A unique string representing an instance of the graph.
+	// Since we are manipulating the svg (DOM) directly, svelte can't help
+	// us with isolation between different instances of the component in the
+	// same page. Where needed, we use this unique value to share state between
+	// the same instance and to not mix different instances (for example, in
+	// class names).
+	const unique = Math.random().toString(16).substring(2);
 
 	// When one of the props updates, we "reheat" the simulation.
 	let simulation: d3.Simulation<Vertex, Edge> | undefined;
@@ -131,7 +140,8 @@
 			.attr('x1', (d) => d.source.x)
 			.attr('y1', (d) => d.source.y)
 			.attr('x2', (d) => d.target.x)
-			.attr('y2', (d) => d.target.y);
+			.attr('y2', (d) => d.target.y)
+			.attr('marker-end', (d) => (d.direction ? `url(#arrow-${unique})` : ''));
 
 		link
 			.select('.graph-label')
@@ -181,6 +191,19 @@
 </script>
 
 <svg {width} {height} viewBox="{-width / 2} {-height / 2} {width} {height}">
+	<marker
+		id="arrow-{unique}"
+		class="graph-marker"
+		viewBox="-15 -10 15 20"
+		markerUnits="userSpaceOnUse"
+		refX={radius}
+		markerWidth={16}
+		markerHeight={16}
+		orient="auto"
+	>
+		<path d="M -15 -10 L 0 0 L -15 10" fill="currentColor" />
+	</marker>
+
 	<g class="graph-links" bind:this={graphLinks} />
 	<g class="graph-nodes" bind:this={graphNodes} />
 </svg>

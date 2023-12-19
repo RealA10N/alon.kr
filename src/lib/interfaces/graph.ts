@@ -4,6 +4,7 @@ export interface Edge extends SimulationLinkDatum<Vertex> {
 	// includes 'source', 'target' from SimulationLinkDatum.
 	highlight?: boolean;
 	weight?: number;
+	direction?: boolean;
 }
 
 export interface Vertex extends SimulationNodeDatum {

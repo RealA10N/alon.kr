@@ -1,10 +1,12 @@
 <script lang="ts">
 	import Graph from '$lib/Graph.svelte';
 	import { onMount } from 'svelte';
-	import { GraphMode, type Edge, type Vertex } from '$src/lib/interfaces/graph';
+	import { GraphMode, type Edge, type Vertex } from '$lib/interfaces/graph';
 	import { BinaryHeap } from 'structurae';
 	import blossom from 'edmonds-blossom-fixed';
-	import StepAnimation from '$src/lib/StepAnimation.svelte';
+	import StepAnimation from '$lib/StepAnimation.svelte';
+	import Figure from '$lib/Figure.svelte';
+	import FullWidth from '$lib/FullWidth.svelte';
 
 	const n = 25,
 		maxWidth = 650,
@@ -196,31 +198,23 @@
 		  ];
 </script>
 
-<figure bind:clientWidth={width} class="graph-container">
-	<Graph
-		{width}
-		{edges}
-		{vertices}
-		vertexLabels={true}
-		edgeLabels={false}
-		gravity={false}
-		mode={GraphMode.regular}
-		radius={5}
-	/>
-	<div class="text-center mt-4 mb-2 text-sm px-12 max-w-2xl mx-auto">
-		<StepAnimation {steps} />
-	</div>
-	<figcaption>
+<Figure>
+	<FullWidth slot="content" bind:width>
+		<Graph
+			{width}
+			{edges}
+			{vertices}
+			vertexLabels={true}
+			edgeLabels={false}
+			gravity={false}
+			mode={GraphMode.regular}
+			radius={5}
+		/></FullWidth
+	>
+	<StepAnimation slot="buttons" {steps} />
+	<svelte:fragment slot="caption">
 		A demonstration of the TSP Problem: The distance between any two vertices is the Euclidean
 		distance between them. Showing the steps of Christofides' algorithm to calculate a
 		1.5-approximation.
-	</figcaption>
-</figure>
-
-<style>
-	.graph-container {
-		width: 100vw;
-		position: relative;
-		left: calc(-50vw + 50%);
-	}
-</style>
+	</svelte:fragment>
+</Figure>
