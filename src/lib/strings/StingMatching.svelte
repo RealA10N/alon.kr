@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { tweened } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
-	import type { StringMatchingState } from '$lib/interfaces/stringMatching';
-	import LetterBox from '$lib/strings/LetterBox.svelte';
+	import type { StringMatchingState } from '$lib/interfaces/strings';
+	import StringBox from '$src/lib/strings/StringBox.svelte';
 	import FullWidth from '$lib/FullWidth.svelte';
 
 	export let state: StringMatchingState;
@@ -36,12 +36,12 @@
 	<div class="relative" style="right: calc(-50vw + {$focusShift}px);">
 		<span class:init class="-translate-x-14">Text</span>
 		<div class="string" style="right: {$shift}px">
-			{#each state.text as ltr} <LetterBox state={ltr} />{/each}
+			{#each state.text as ltr}<StringBox state={ltr} />{/each}
 		</div>
 
 		<span class:init class="-translate-x-20">Pattern</span>
 		<div class="string">
-			{#each state.pattern as ltr}<LetterBox state={ltr} />{/each}
+			{#each state.pattern as ltr}<StringBox state={ltr} />{/each}
 		</div>
 	</div>
 </FullWidth>

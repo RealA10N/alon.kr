@@ -1,11 +1,7 @@
 <script lang="ts">
-	import { Confetti } from "svelte-confetti"
+	import { Confetti } from 'svelte-confetti';
 	import Kmp from '$src/lib/strings/StingMatching.svelte';
-	import {
-		LetterMode,
-		type StringMatchingState,
-		type LetterState
-	} from '$lib/interfaces/stringMatching';
+	import type { StringMatchingState, BoxState } from '$lib/interfaces/strings';
 	import { calcpi } from '$lib/strings/kmp';
 	import StepAnimationUnbounded from '$lib/StepAnimationUnbounded.svelte';
 
@@ -23,12 +19,8 @@
 		clearTimeout(timeout);
 		timeout = undefined;
 		state = {
-			text: text
-				.split('')
-				.map((char) => ({ text: char, mode: LetterMode.Regular, highlight: false } as LetterState)),
-			pattern: pattern
-				.split('')
-				.map((char) => ({ text: char, mode: LetterMode.Regular, highlight: false } as LetterState)),
+			text: text.split('').map((char) => ({ text: char, highlight: false } as BoxState)),
+			pattern: pattern.split('').map((char) => ({ text: char, highlight: false } as BoxState)),
 			shift: 0,
 			focus: -1
 		} as StringMatchingState;
@@ -62,9 +54,7 @@
 		timeout = undefined;
 		clearMarks();
 
-		if (state.pattern[state.focus])
-			state.pattern[state.focus].mode = cmp ? LetterMode.Matching : LetterMode.NotMatching;
-
+		if (state.pattern[state.focus]) state.pattern[state.focus].color = cmp ? 'green' : 'red';
 		if (cmp && state.focus === state.pattern.length - 1) match();
 		if (!cmp) markCommonPrefix();
 	};
@@ -73,19 +63,19 @@
 		const p = pi[state.focus - 1] ?? 0;
 		for (let i = 0; i < p; i++) {
 			const j = i + state.shift + state.focus - p;
-			state.pattern[i].mode = state.text[j].mode = LetterMode.Marked;
+			state.pattern[i].color = state.text[j].color = 'yellow';
 		}
 	};
 
 	const clearSuffix = () => {
 		for (let i = Math.max(0, state.focus); i < state.pattern.length; i++)
-			state.pattern[i].mode = LetterMode.Regular;
+			state.pattern[i].color = undefined;
 	};
 
 	const clearMarks = () => {
-		for (let i = 0; i < state.text.length; i++) state.text[i].mode = LetterMode.Regular;
+		for (let i = 0; i < state.text.length; i++) state.text[i].color = undefined;
 		for (let i = 0; i < state.pattern.length; i++)
-			state.pattern[i].mode = i < state.focus ? LetterMode.Matching : LetterMode.Regular;
+			state.pattern[i].color = i < state.focus ? 'green' : undefined;
 	};
 
 	const updateHighlights = () => {
@@ -97,18 +87,26 @@
 	let confetti: null[] = [];
 	const match = () => {
 		confetti = [...confetti, null];
-		console.log(confetti)
+		console.log(confetti);
 	};
 </script>
 
-<div class="fixed -top-10 left-0
+<div
+	class="fixed -top-10 left-0
 		h-screen w-screen overflow-hidden pointer-events-none
-		flex justify-center">
+		flex justify-center"
+>
 	{#each confetti as _}
-		<Confetti x={[-5, 5]} y={[0, 0.1]} delay={[0,1000]} duration={1500} amount={150} fallDistance="500px" />
+		<Confetti
+			x={[-5, 5]}
+			y={[0, 0.1]}
+			delay={[0, 1000]}
+			duration={1500}
+			amount={150}
+			fallDistance="500px"
+		/>
 	{/each}
 </div>
-
 
 <Kmp {state} />
 <StepAnimationUnbounded {next} {reset} bind:stop interval={1500} />
