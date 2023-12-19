@@ -106,3 +106,8 @@ ol > li {
 	text-zinc-800 dark:text-zinc-200
 	border border-zinc-800 dark:border-zinc-200;
 }
+
+input {
+	@apply tag bg-transparent transition-colors
+	focus:border-2 focus:dark:bg-zinc-700;
+}

@@ -10,5 +10,5 @@
 </script>
 
 {#if $navigating}
-	<div in:width class="fixed left-0 top-0 w-full h-1 z-50 bg-zinc-400 dark:bg-zinc-100" />
+	<div in:width|global class="fixed left-0 top-0 w-full h-1 z-50 bg-zinc-400 dark:bg-zinc-100" />
 {/if}
