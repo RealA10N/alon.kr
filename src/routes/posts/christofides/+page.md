@@ -174,7 +174,7 @@ Christofides published his paper in 1976, and for almost 50 years (!) it was the
 
 Although the algorithm is much more complex (I did not even try to understand it), and the approximation improvement is clearly not sufficient, it actually proves that $3/2$ is not the lower bound of the approximation factor. This gives hope that an efficient and elegant algorithm exists whose factor is a magnitude better than $1.5$, and we just haven't discovered it yet. The paper was published at [STOC'21](https://en.wikipedia.org/wiki/Symposium_on_Theory_of_Computing) and for this reason, received the best paper award.
 
-## References and further reading
+## References and Further Reading
 
 I was heavily inspired to write this post after a lecture about the topic of [Prof. Feldman Moran](https://cs.haifa.ac.il/~moranfe/) in the course Combinatorial Optimization at the University of Haifa, spring 2023. Proofreading was done by [Almog Ben Chen](https://www.youtube.com/@almogbenchen6282). Thanks!
 
