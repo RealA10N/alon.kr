@@ -1,5 +1,7 @@
+export type Text = string | number | bigint;
+
 export interface BoxState {
-	text: string;
+	text: Text;
 	highlight?: boolean;
 	color?: 'red' | 'green' | 'yellow';
 }

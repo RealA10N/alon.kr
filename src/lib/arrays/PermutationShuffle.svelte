@@ -1,6 +1,8 @@
 <script lang="ts">
+	import type { BoxState } from '$lib/interfaces/strings';
+
 	import Figure from '$lib/Figure.svelte';
-	import Permutations from '$lib/arrays/Permutations.svelte';
+	import Array from '$lib/arrays/Array.svelte';
 	import AnimationButton from '$src/lib/AnimationButton.svelte';
 	import { factorial, idxToPerm, permIdx, shuffle } from '$lib/arrays/permutation';
 
@@ -15,6 +17,7 @@
 	$: idx = permIdx(permutation, []);
 	$: fact = factorial(n);
 	$: permutation, validateUserInput();
+	$: array = permutation.map((val) => ({ text: val } as BoxState));
 
 	const shfl = () => (permutation = shuffle(permutation));
 	const next = () => (permutation = idxToPerm((idx + 1n) % fact, n));
@@ -37,7 +40,7 @@
 </script>
 
 <Figure>
-	<Permutations slot="content" {permutation} />
+	<Array slot="content" {array} />
 
 	<svelte:fragment slot="buttons">
 		<AnimationButton next={animate} bind:stop {playOnMount} />
