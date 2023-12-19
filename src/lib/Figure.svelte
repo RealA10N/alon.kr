@@ -2,7 +2,7 @@
 	<slot name="content" />
 
 	{#if $$slots.buttons}
-		<div class="mt-4 px-12">
+		<div class="mt-4 sm:px-12 px-2">
 			<slot name="buttons" />
 		</div>
 	{/if}
