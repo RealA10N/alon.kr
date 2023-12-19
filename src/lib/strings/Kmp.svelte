@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { Confetti } from 'svelte-confetti';
-	import Kmp from '$src/lib/strings/StingMatching.svelte';
+	import StingMatching from '$src/lib/strings/StingMatching.svelte';
 	import type { StringMatchingState, BoxState } from '$lib/interfaces/strings';
 	import { calcpi } from '$lib/strings/kmp';
-	import StepAnimationUnbounded from '$lib/StepAnimationUnbounded.svelte';
+	import StepAnimationUnbounded from '$lib/AnimationButton.svelte';
+	import FullConfetti from '$lib/FullConfetti.svelte';
 
-	let text = 'ABCDABCDABDABCDAB';
-	let pattern = 'ABCDABD';
+	export let text = 'ABCDABCDABDABCDAB';
+	export let pattern = 'ABCDABD';
 	let state: StringMatchingState;
 
 	$: text, pattern, reset();
@@ -84,39 +84,17 @@
 		for (let i = 0; i < state.pattern.length; i++) state.pattern[i].highlight = i === state.focus;
 	};
 
-	let confetti: null[] = [];
-	const match = () => {
-		confetti = [...confetti, null];
-		console.log(confetti);
-	};
+	let trigger: () => any;
+	const match = () => trigger();
 </script>
 
-<div
-	class="fixed -top-10 left-0
-		h-screen w-screen overflow-hidden pointer-events-none
-		flex justify-center"
->
-	{#each confetti as _}
-		<Confetti
-			x={[-5, 5]}
-			y={[0, 0.1]}
-			delay={[0, 1000]}
-			duration={1500}
-			amount={150}
-			fallDistance="500px"
-		/>
-	{/each}
-</div>
+<FullConfetti bind:trigger />
 
-<Kmp {state} />
-<StepAnimationUnbounded {next} {reset} bind:stop interval={1500} />
-
-<div>
-	<label for="text">Text:</label>
-	<input type="text" name="text" id="text" bind:value={text} />
-</div>
-
-<div>
-	<label for="pattern">Pattern:</label>
-	<input type="text" name="pattern" id="pattern" bind:value={pattern} />
-</div>
+<figure>
+	<StingMatching {state} />
+	<figcaption>
+		<StepAnimationUnbounded {next} bind:stop interval={1500} />
+		<button on:click={next}>Next</button>
+		<button on:click={reset}>Reset</button>
+	</figcaption>
+</figure>
