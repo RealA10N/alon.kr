@@ -23,12 +23,12 @@ export const idxToPerm = (idx: bigint, n: bigint): Permutation => {
 	return [first].concat(tail.map((v) => (v >= first ? v + 1n : v)));
 };
 
-export const shuffle = (permutation: Permutation): Permutation => {
+export const shuffle = <T>(array: T[]): T[] => {
 	// Fisher–Yates shuffle
-	permutation = [...permutation];
-	for (let i = permutation.length - 1; i > 0; i--) {
+	array = [...array];
+	for (let i = array.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
-		[permutation[i], permutation[j]] = [permutation[j], permutation[i]];
+		[array[i], array[j]] = [array[j], array[i]];
 	}
-	return permutation;
+	return array;
 };
