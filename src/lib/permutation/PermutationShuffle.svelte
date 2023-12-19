@@ -47,6 +47,7 @@
 
 	<svelte:fragment slot="caption">
 		Permutation #<span
+			inputmode="numeric"
 			contenteditable
 			class:invalidUserInput
 			bind:textContent={userIdx}
