@@ -4,7 +4,7 @@
 	import { shuffle } from '$lib/arrays/permutation';
 	import Figure from '$lib/Figure.svelte';
 	import ConfettiWrapper from '$lib/effects/ConfettiWrapper.svelte';
-	import AnimationButton from '../AnimationButton.svelte';
+	import AnimationButton from '$lib/AnimationButton.svelte';
 
 	interface State {
 		processing: number | null;
