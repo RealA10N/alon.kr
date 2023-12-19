@@ -12,15 +12,18 @@
 	$: px = width / parts;
 
 	export const trigger = () => {
-		triggeredKeys = [nextKey++, ...triggeredKeys];
-		setTimeout(triggeredKeys.pop);
+		const key = nextKey++;
+		triggeredKeys = [key, ...triggeredKeys];
+		setTimeout(() => remove(key), duration + delay * parts);
 	};
+
+	const remove = (key: number) => (triggeredKeys = triggeredKeys.filter((k) => k != key));
 </script>
 
 {#each triggeredKeys as key (key)}
 	{#each Array(parts) as _, p}
 		<RandomTransform x={[px * p, px * (p + 1)]} y={[0, height]}>
-			<Confetti {duration} delay={[delay * p, delay * p + 50]} />
+			<Confetti {duration} delay={[delay * p, delay * p + 50]} destroyOnComplete={false} />
 		</RandomTransform>
 	{/each}
 {/each}
