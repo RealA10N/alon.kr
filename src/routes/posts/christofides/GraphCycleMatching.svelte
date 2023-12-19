@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Graph from '$lib/Graph.svelte';
+	import Figure from '$src/lib/Figure.svelte';
+	import FullWidth from '$src/lib/FullWidth.svelte';
 	import type { Edge, Vertex } from '$src/lib/interfaces/graph';
 
 	export const prerender = true;
@@ -28,17 +30,11 @@
 	let width: number;
 </script>
 
-<figure bind:clientWidth={width} class="graph-container">
-	<Graph {width} {edges} {vertices} vertexLabels={true} gravity={true} sticky={false} />
-	<figcaption>
+<Figure>
+	<FullWidth slot="content" bind:width>
+		<Graph {width} {edges} {vertices} vertexLabels={true} gravity={true} sticky={false} />
+	</FullWidth>
+	<svelte:fragment slot="caption">
 		An example of a cycle C' of length 8 with the matching M<sub>1</sub> highlighted
-	</figcaption>
-</figure>
-
-<style>
-	.graph-container {
-		width: 100vw;
-		position: relative;
-		left: calc(-50vw + 50%);
-	}
-</style>
+	</svelte:fragment>
+</Figure>

@@ -1,18 +1,17 @@
 <script lang="ts">
 	import Graph from '$lib/Graph.svelte';
+	import Figure from '$lib/Figure.svelte';
+
 	import { edges, vertices } from './graphWithMst';
+	import FullWidth from '$src/lib/FullWidth.svelte';
 	let width: number;
 </script>
 
-<figure bind:clientWidth={width} class="graph-container">
-	<Graph {width} {edges} {vertices} vertexLabels={false} gravity={true} sticky={false} />
-	<figcaption>A weighted graph with his minimum spanning tree highlighted</figcaption>
-</figure>
-
-<style>
-	.graph-container {
-		width: 100vw;
-		position: relative;
-		left: calc(-50vw + 50%);
-	}
-</style>
+<Figure>
+	<FullWidth slot="content" bind:width>
+		<Graph {width} {edges} {vertices} vertexLabels={false} gravity={true} sticky={false} />
+	</FullWidth>
+	<svelte:fragment slot="caption">
+		A weighted graph with his minimum spanning tree highlighted
+	</svelte:fragment>
+</Figure>
