@@ -1,4 +1,3 @@
-import matter from 'gray-matter';
 import moment from 'moment';
 import type { PageServerLoad } from './$types';
 import type { Post } from '$lib/interfaces/post';
@@ -11,18 +10,18 @@ function globToUrl(glob: string) {
 }
 
 export const load = (async () => {
-	const globs = import.meta.glob('./posts/*/+page.md', { as: 'raw' });
+	const globs = import.meta.glob('./posts/*/+page.md');
 
 	const contents = await Promise.all(
 		Object.entries(globs).map(async ([glob, fn]) => [globToUrl(glob), await fn()])
 	);
 
-	const posts = contents.map(([url, content]) => {
-		const data = matter(content).data;
+	const posts = contents.map(([url, { metadata }]) => {
+		metadata as Post;
 		return {
-			...data,
+			...metadata,
 			url: url,
-			published: moment(data.published).unix() * 1000
+			published: moment(metadata.published).unix() * 1000
 		} as Post;
 	});
 
