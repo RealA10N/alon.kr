@@ -68,7 +68,7 @@
 		@apply relative before:absolute before:left-0 before:-bottom-[1px]
 			before:w-full before:h-[1px] focus:outline-none before:rounded
 			before:scale-x-100 before:focus:scale-x-105 before:transition-all
-			before:bg-zinc-400 before:focus:bg-zinc-600 dark:before:focus:bg-zinc-200;
+			before:bg-zinc-500 before:focus:bg-zinc-700 dark:before:focus:bg-zinc-400;
 	}
 
 	.invalidUserInput {

@@ -7,7 +7,7 @@
 		</div>
 	{/if}
 
-	<figcaption class="text-sm my-2 italic px-12 mx-auto">
+	<figcaption class="text-sm my-2 italic px-12 mx-auto text-zinc-500">
 		<slot name="caption" />
 	</figcaption>
 </figure>
