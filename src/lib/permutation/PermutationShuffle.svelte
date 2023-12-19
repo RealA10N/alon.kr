@@ -41,8 +41,8 @@
 
 	<svelte:fragment slot="buttons">
 		<AnimationButton next={animate} bind:stop {playOnMount} />
-		<button on:click={shfl}>Shuffle</button>
-		<button on:click={next}>Next</button>
+		<button on:click={() => (stop(), shfl())}>Shuffle</button>
+		<button on:click={() => (stop(), next())}>Next</button>
 	</svelte:fragment>
 
 	<svelte:fragment slot="caption">
