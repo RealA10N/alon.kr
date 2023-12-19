@@ -21,7 +21,9 @@
 
 	const shfl = () => (permutation = shuffle(permutation));
 	const next = () => (permutation = idxToPerm((idx + 1n) % fact, n));
-	const animate = n <= 3 ? next : shfl;
+	const animate = () => {
+		(n <= 3 ? next : shfl)();
+	};
 
 	const invalidateUserIdx = () => (invalidUserInput = true);
 	const validateUserInput = () => ((userIdx = (idx + 1n).toString()), (invalidUserInput = false));
