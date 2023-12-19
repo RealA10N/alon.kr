@@ -1,7 +1,8 @@
 <script lang="ts">
+	import Figure from '$lib/Figure.svelte';
 	import Permutations from '$lib/permutation/Permutations.svelte';
-	import { factorial, idxToPerm, permIdx, shuffle } from '$lib/permutation/permutation';
 	import AnimationButton from '$src/lib/AnimationButton.svelte';
+	import { factorial, idxToPerm, permIdx, shuffle } from '$lib/permutation/permutation';
 
 	export let n: bigint = 8n;
 	export let playOnMount = true;
@@ -17,6 +18,7 @@
 
 	const shfl = () => (permutation = shuffle(permutation));
 	const next = () => (permutation = idxToPerm((idx + 1n) % fact, n));
+	const animate = () => (n <= 3 ? next() : shfl());
 
 	const invalidateUserIdx = () => (invalidUserInput = true);
 	const validateUserInput = () => ((userIdx = (idx + 1n).toString()), (invalidUserInput = false));
@@ -34,14 +36,16 @@
 	};
 </script>
 
-<figure>
-	<Permutations {permutation} />
-	<figcaption class="mt-4">
-		<div class="my-1">
-			<AnimationButton next={shfl} bind:stop {playOnMount} />
-			<button on:click={shfl}>Shuffle</button>
-			<button on:click={next}>Next</button>
-		</div>
+<Figure>
+	<Permutations slot="content" {permutation} />
+
+	<svelte:fragment slot="buttons">
+		<AnimationButton next={animate} bind:stop {playOnMount} />
+		<button on:click={shfl}>Shuffle</button>
+		<button on:click={next}>Next</button>
+	</svelte:fragment>
+
+	<svelte:fragment slot="caption">
 		Permutation #<span
 			contenteditable
 			class:invalidUserInput
@@ -50,8 +54,8 @@
 			on:focus={stop}
 		/>
 		out of {n}!={fact} possible permutations of {n} elements.
-	</figcaption>
-</figure>
+	</svelte:fragment>
+</Figure>
 
 <style lang="postcss">
 	span {
