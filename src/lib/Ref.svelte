@@ -8,4 +8,4 @@
 	export let number = references.length;
 </script>
 
-<sup id="src{number}"><a href="#ref{number}"> {number} </a></sup>
+<sup id="src{number}"><a class="no-underline" href="#ref{number}">[{number}]</a></sup>
