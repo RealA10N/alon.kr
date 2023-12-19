@@ -69,9 +69,9 @@
 			<button on:click={() => (stop(), shfl())}>Shuffle</button>
 		</svelte:fragment>
 		<svelte:fragment slot="caption">
-			A demonstration of the Insertion Sort Algorithm: each new element is compared against the
-			already ordered prefix, and placed in the among the prefix accordingly, increasing it's length
-			by one.
+			The Insertion Sort Algorithm: each new element is compared against the already ordered prefix,
+			and placed among the prefix accordingly, preserving the order and increasing it's length by
+			one.
 		</svelte:fragment>
 	</Figure>
 </ConfettiWrapper>
