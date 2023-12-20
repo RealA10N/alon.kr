@@ -254,4 +254,22 @@
 	#links :global(.red .label) {
 		@apply !stroke-red-500 text-red-500;
 	}
+
+	#nodes :global(.blue),
+	#links :global(.blue .line),
+	#links :global(.blue .label) {
+		@apply !stroke-blue-500 text-blue-500;
+	}
+
+	#nodes :global(.green),
+	#links :global(.green .line),
+	#links :global(.green .label) {
+		@apply !stroke-green-500 text-green-500;
+	}
+
+	#nodes :global(.yellow),
+	#links :global(.yellow .line),
+	#links :global(.yellow .label) {
+		@apply !stroke-yellow-500 text-yellow-500;
+	}
 </style>

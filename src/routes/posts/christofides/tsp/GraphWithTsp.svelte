@@ -154,8 +154,9 @@
 		highlightVertices([]);
 	}
 
-	const highlight = (d : {color?: Color, highlight?: boolean}, should: boolean) => 
-		(d.highlight = should, d.color = should? 'red' : undefined);
+	const highlight = (d: { color?: Color; highlight?: boolean }, should: boolean) => (
+		(d.highlight = should), (d.color = should ? 'red' : undefined)
+	);
 
 	const highlightVertices = (toHighlight: Vertex[]) =>
 		vertices.forEach((v) => highlight(v, toHighlight.includes(v)));

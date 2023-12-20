@@ -1,7 +1,10 @@
 import type { SimulationLinkDatum, SimulationNodeDatum } from 'd3-force';
 
 export enum Color {
-	Red = 'red'
+	Red = 'red',
+	Blue = 'blue',
+	Green = 'green',
+	Yellow = 'yellow'
 }
 
 export interface Edge extends SimulationLinkDatum<Vertex> {
