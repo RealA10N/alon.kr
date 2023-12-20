@@ -3,29 +3,25 @@
 
 	type P = [number, number];
 
-	const grab = (e: PointerEvent) => {
-		grabbingPointer = e.pointerId;
-		grabOffset = [e.offsetX, e.offsetY];
-		const cursor = [e.clientX, e.clientY] as P;
-		updateDummy(cursor);
-	};
-	const release = (e: PointerEvent) => {
-		if (e.pointerId !== grabbingPointer) return;
-		grabbingPointer = undefined;
-	};
-
-	const move = (e: PointerEvent) => {
-		if (e.pointerId !== grabbingPointer) return;
-		const cursor = [e.clientX, e.clientY] as P;
-		updateDummy(cursor);
-	};
-
-	const updateDummy = (cursor: P) =>
-		(dummyPosition = [cursor[0] - grabOffset[0], cursor[1] - grabOffset[1]]);
-
 	let grabbingPointer: number | undefined;
 	$: grabbed = grabbingPointer !== undefined;
 	let dummyPosition: P, grabOffset: P;
+
+	const grab = (e: PointerEvent) => {
+		grabbingPointer = e.pointerId;
+		grabOffset = [e.offsetX, e.offsetY];
+		updateDummy(e);
+	};
+	const release = (e: PointerEvent) => {
+		if (e.pointerId === grabbingPointer) grabbingPointer = undefined;
+	};
+
+	const move = (e: PointerEvent) => {
+		if (e.pointerId === grabbingPointer) updateDummy(e);
+	};
+
+	const updateDummy = (e: PointerEvent) =>
+		(dummyPosition = [e.clientX - grabOffset[0], e.clientY - grabOffset[1]]);
 
 	onMount(() => {
 		window.addEventListener('pointerup', release);
