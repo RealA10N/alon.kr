@@ -250,26 +250,38 @@
 	}
 
 	#nodes :global(.red),
-	#links :global(.red .line),
-	#links :global(.red .label) {
-		@apply !stroke-red-500 text-red-500;
+	#links :global(.red .line) {
+		@apply !stroke-red-500;
+	}
+
+	#graph :global(.red .label) {
+		@apply !fill-red-500;
 	}
 
 	#nodes :global(.blue),
-	#links :global(.blue .line),
-	#links :global(.blue .label) {
-		@apply !stroke-blue-500 text-blue-500;
+	#links :global(.blue .line) {
+		@apply !stroke-blue-500;
+	}
+
+	#graph :global(.blue .label) {
+		@apply !fill-blue-500;
 	}
 
 	#nodes :global(.green),
-	#links :global(.green .line),
-	#links :global(.green .label) {
-		@apply !stroke-green-500 text-green-500;
+	#links :global(.green .line) {
+		@apply !stroke-green-500;
+	}
+
+	#graph :global(.green .label) {
+		@apply !fill-green-500;
 	}
 
 	#nodes :global(.yellow),
-	#links :global(.yellow .line),
-	#links :global(.yellow .label) {
-		@apply !stroke-yellow-500 text-yellow-500;
+	#links :global(.yellow .line) {
+		@apply !stroke-yellow-500;
+	}
+
+	#graph :global(.yellow .label) {
+		@apply !fill-yellow-500;
 	}
 </style>
