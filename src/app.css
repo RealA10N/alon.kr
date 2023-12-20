@@ -43,44 +43,19 @@ a {
 }
 
 button {
-	@apply tag m-1 transition-all
-		hover:!bg-zinc-300 hover:dark:!bg-zinc-700;
+	@apply tag m-1 transition-all;
+}
+
+button:not(:disabled) {
+	@apply hover:bg-zinc-300 hover:dark:bg-zinc-700;
 }
 
 button.focus {
 	@apply shadow-md dark:shadow-none bg-zinc-200 dark:bg-zinc-700;
 }
 
-.graph-link {
-	@apply stroke-2 stroke-zinc-600 dark:stroke-zinc-400;
-}
-
-.graph-node {
-	@apply cursor-pointer fill-zinc-100 dark:fill-zinc-900 stroke-2 stroke-zinc-600 dark:stroke-zinc-400;
-}
-
-.graph-node.graph-node-fixed {
-	@apply fill-zinc-300 dark:fill-zinc-700;
-}
-
-.graph-highlight {
-	@apply stroke-[5px] stroke-red-500;
-}
-
-.graph-link.graph-highlight {
-	@apply opacity-100 stroke-red-500 fill-red-500;
-}
-
-.graph-label {
-	@apply stroke-none text-base fill-zinc-800 dark:fill-zinc-200 select-none;
-}
-
-.graph-node > .graph-label {
-	@apply font-black text-sm;
-}
-
-.graph-highlight > .graph-label {
-	@apply fill-red-600;
+button:disabled {
+	@apply border-dashed border-zinc-500 bg-zinc-200 dark:bg-zinc-800 text-opacity-50;
 }
 
 li {

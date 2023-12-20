@@ -7,7 +7,6 @@ length: 13
 ---
 
 <script>
-   import Graph from "$lib/Graph.svelte";
    import GraphWithMst from "./mst/GraphWithMst.svelte";
    import GraphWithTsp from "./tsp/GraphWithTsp.svelte";
    import GraphCycleMatching from "./GraphCycleMatching.svelte";

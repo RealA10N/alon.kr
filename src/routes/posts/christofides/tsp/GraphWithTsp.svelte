@@ -1,9 +1,10 @@
 <script lang="ts">
-	import Graph from '$lib/Graph.svelte';
 	import { onMount } from 'svelte';
-	import { GraphMode, type Edge, type Vertex } from '$lib/interfaces/graph';
 	import { BinaryHeap } from 'structurae';
 	import blossom from 'edmonds-blossom-fixed';
+
+	import { GraphMode, type Edge, type Vertex, Color } from '$lib/graphs/graphs';
+	import Graph from '$lib/graphs/Graph.svelte';
 	import StepAnimation from '$lib/StepAnimation.svelte';
 	import Figure from '$lib/Figure.svelte';
 	import FullWidth from '$lib/FullWidth.svelte';
@@ -153,13 +154,15 @@
 		highlightVertices([]);
 	}
 
-	function highlightVertices(toHighlight: Vertex[]) {
-		for (const v of vertices) v.highlight = toHighlight.includes(v);
-	}
+	const highlight = (d: { color?: Color; highlight?: boolean }, should: boolean) => (
+		(d.highlight = should), (d.color = should ? Color.Red : undefined)
+	);
 
-	function highlightEdges(toHighlight: Edge[]) {
-		for (const e of edges) e.highlight = toHighlight.includes(e);
-	}
+	const highlightVertices = (toHighlight: Vertex[]) =>
+		vertices.forEach((v) => highlight(v, toHighlight.includes(v)));
+
+	const highlightEdges = (toHighlight: Edge[]) =>
+		edges.forEach((e) => highlight(e, toHighlight.includes(e)));
 
 	function showMst() {
 		edges = calculateMst();
