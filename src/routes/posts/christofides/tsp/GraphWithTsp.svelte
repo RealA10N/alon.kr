@@ -154,13 +154,14 @@
 		highlightVertices([]);
 	}
 
-	function highlightVertices(toHighlight: Vertex[]) {
-		for (const v of vertices) v.highlight = toHighlight.includes(v);
-	}
+	const highlight = (d : {color?: Color, highlight?: boolean}, should: boolean) => 
+		(d.highlight = should, d.color = should? 'red' : undefined);
 
-	function highlightEdges(toHighlight: Edge[]) {
-		for (const e of edges) e.highlight = toHighlight.includes(e);
-	}
+	const highlightVertices = (toHighlight: Vertex[]) =>
+		vertices.forEach((v) => highlight(v, toHighlight.includes(v)));
+
+	const highlightEdges = (toHighlight: Edge[]) =>
+		edges.forEach((e) => highlight(e, toHighlight.includes(e)));
 
 	function showMst() {
 		edges = calculateMst();
