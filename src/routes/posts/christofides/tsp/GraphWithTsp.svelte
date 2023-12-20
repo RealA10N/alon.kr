@@ -1,9 +1,10 @@
 <script lang="ts">
-	import Graph from '$lib/Graph.svelte';
 	import { onMount } from 'svelte';
-	import { GraphMode, type Edge, type Vertex } from '$lib/interfaces/graph';
 	import { BinaryHeap } from 'structurae';
 	import blossom from 'edmonds-blossom-fixed';
+
+	import { GraphMode, type Edge, type Vertex } from '$lib/graphs/graphs';
+	import Graph from '$lib/graphs/Graph.svelte';
 	import StepAnimation from '$lib/StepAnimation.svelte';
 	import Figure from '$lib/Figure.svelte';
 	import FullWidth from '$lib/FullWidth.svelte';

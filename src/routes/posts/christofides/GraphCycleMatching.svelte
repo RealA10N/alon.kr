@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Graph from '$lib/Graph.svelte';
-	import Figure from '$src/lib/Figure.svelte';
-	import FullWidth from '$src/lib/FullWidth.svelte';
-	import type { Edge, Vertex } from '$src/lib/interfaces/graph';
+	import Graph from '$lib/graphs/Graph.svelte';
+	import Figure from '$lib/Figure.svelte';
+	import FullWidth from '$lib/FullWidth.svelte';
+	import type { Edge, Vertex } from '$lib/graphs/graphs';
 
 	export const prerender = true;
 

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import * as d3 from 'd3';
-	import type { Edge, Vertex } from '$lib/interfaces/graph';
-	import { GraphMode } from '$lib/interfaces/graph';
+	import type { Edge, Vertex } from '$lib/graphs/graphs';
+	import { GraphMode } from '$lib/graphs/graphs';
 
 	export let width: number = 500;
 	export let height: number = 350;
@@ -125,7 +125,7 @@
 				g.append('line').classed('graph-line', true);
 
 				if (edgeLabels)
-					g.filter((d) => Boolean(d.weight))
+					g.filter((d) => Boolean(d.label))
 						.append('text')
 						.classed('graph-label', true)
 						.attr('text-anchor', 'middle') // horizontal alignment
@@ -145,7 +145,7 @@
 
 		link
 			.select('.graph-label')
-			.text((d) => d.weight?.toString() ?? '')
+			.text((d) => d.label?.toString() ?? '')
 			.attr('x', (d) => (d.source.x + d.target.x) / 2)
 			.attr('y', (d) => (d.source.y + d.target.y) / 2)
 			.attr(
@@ -172,7 +172,7 @@
 
 				if (vertexLabels)
 					g.append('text')
-						.text((d) => d.label)
+						.text((d) => d.label ?? '')
 						.classed('graph-label', true)
 						.attr('text-anchor', 'middle') // horizontal alignment
 						.attr('dominant-baseline', 'middle'); // vertical alignment

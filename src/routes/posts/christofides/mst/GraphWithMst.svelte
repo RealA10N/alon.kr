@@ -1,9 +1,8 @@
 <script lang="ts">
-	import Graph from '$lib/Graph.svelte';
+	import Graph from '$lib/graphs/Graph.svelte';
 	import Figure from '$lib/Figure.svelte';
-
+	import FullWidth from '$lib/FullWidth.svelte';
 	import { edges, vertices } from './graphWithMst';
-	import FullWidth from '$src/lib/FullWidth.svelte';
 	let width: number;
 </script>
 

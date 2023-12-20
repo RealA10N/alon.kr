@@ -1,13 +1,17 @@
 import type { SimulationLinkDatum, SimulationNodeDatum } from 'd3-force';
 
+type Color = 'red';
+
 export interface Edge extends SimulationLinkDatum<Vertex> {
 	// includes 'source', 'target' from SimulationLinkDatum.
-	highlight?: boolean;
-	weight?: number;
-	direction?: boolean;
+	color?: Color;
+	label?: number | string;
+	highlight?: boolean; // should the edge be bolder
+	direction?: boolean; // is the edge directed?
 }
 
 export interface Vertex extends SimulationNodeDatum {
+	color?: Color;
 	label?: string | number;
 	highlight?: boolean;
 }

@@ -1,20 +1,20 @@
-import type { Edge, Vertex } from '$src/lib/interfaces/graph';
+import type { Edge, Vertex } from '$src/lib/graphs/graphs';
 
 export const prerender = true;
 
 export const edges: Edge[] = [
-	{ source: 4, target: 6, weight: 1 },
-	{ source: 7, target: 6, weight: 3 },
-	{ source: 7, target: 2, weight: 4 },
-	{ source: 1, target: 2, weight: 5 },
-	{ source: 1, target: 3, weight: 6 },
-	{ source: 8, target: 1, weight: 7 },
-	{ source: 4, target: 3, weight: 8 },
-	{ source: 4, target: 2, weight: 9 },
-	{ source: 4, target: 5, weight: 10 },
-	{ source: 7, target: 4, weight: 11 },
-	{ source: 1, target: 7, weight: 12 },
-	{ source: 2, target: 3, weight: 13 }
+	{ source: 4, target: 6, label: 1 },
+	{ source: 7, target: 6, label: 3 },
+	{ source: 7, target: 2, label: 4 },
+	{ source: 1, target: 2, label: 5 },
+	{ source: 1, target: 3, label: 6 },
+	{ source: 8, target: 1, label: 7 },
+	{ source: 4, target: 3, label: 8 },
+	{ source: 4, target: 2, label: 9 },
+	{ source: 4, target: 5, label: 10 },
+	{ source: 7, target: 4, label: 11 },
+	{ source: 1, target: 7, label: 12 },
+	{ source: 2, target: 3, label: 13 }
 ];
 
 export const vertices: Vertex[] = [
@@ -42,8 +42,8 @@ export function highlightMstEdges(vertices: Vertex[], edges: Edge[]) {
 	let queue: Edge[] = edgesTouchingVertex(vertices[0], edges);
 
 	while (queue.length) {
-		const minCost = Math.min(...queue.map((e) => e?.weight ?? Infinity));
-		const minEdge = queue.find((e) => e.weight == minCost) as Edge;
+		const minCost = Math.min(...queue.map((e) => (e?.label as number | undefined) ?? Infinity));
+		const minEdge = queue.find((e) => e.label == minCost) as Edge;
 
 		if (!visited.includes(minEdge?.source as Vertex)) {
 			minEdge.highlight = true;
