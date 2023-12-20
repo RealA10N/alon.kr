@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Metadata from '$src/lib/Metadata.svelte';
-	import PostCard from '$src/lib/PostCard.svelte';
+	import Metadata from '$lib/Metadata.svelte';
+	import PostCard from '$lib/PostCard.svelte';
 	export let data;
 
-	let description = `My name is Alon Krymgnad. This is my site. I write about stuff that I find interesting, and I hope you find it interesting too!`;
+	let description = `My name is Alon Krymgand. This is my site. I write about stuff that I find interesting, and I hope you find it interesting too!`;
 </script>
 
 <Metadata {description} />
