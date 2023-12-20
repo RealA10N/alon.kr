@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import * as d3 from 'd3';
 	import type { Edge, Vertex } from '$lib/graphs/graphs';
-	import { GraphMode, type Color } from '$lib/graphs/graphs';
+	import { GraphMode, Color } from '$lib/graphs/graphs';
 
 	export let width: number = 500;
 	export let height: number = 350;
@@ -112,8 +112,9 @@
 
 	onMount(initSimulation);
 
-	function addColorClass(this: any, d: { color?: Color }): void {
-		if (d.color !== undefined) this.classList.add(d.color);
+	function updateColorClass(this: any, d: { color?: Color }): void {
+		this.classList.remove(...Object.values(Color));
+		this.classList.add(d.color);
 	}
 
 	function tick() {
@@ -138,7 +139,7 @@
 				return g;
 			})
 			.classed('highlight', (e) => e.highlight ?? false)
-			.each(addColorClass);
+			.each(updateColorClass);
 
 		link
 			.select('.line')
@@ -187,7 +188,7 @@
 		node
 			.attr('transform', (d) => `translate(${d.x}, ${d.y})`)
 			.classed('highlight', (v) => v.highlight ?? false)
-			.each(addColorClass);
+			.each(updateColorClass);
 
 		node.select('label').text((v) => v.label ?? '');
 
