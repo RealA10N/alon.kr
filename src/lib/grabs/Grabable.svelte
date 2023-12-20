@@ -33,7 +33,7 @@
 	});
 </script>
 
-<span class="inline-block select-none cursor-grab" on:pointerdown={grab}>
+<span class="inline-block select-none cursor-grab touch-none" on:pointerdown={grab}>
 	<slot dummy={grabbed} />
 </span>
 
