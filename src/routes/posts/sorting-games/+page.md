@@ -1,6 +1,6 @@
 ---
 title: Sorting Lower Bounds & Algorithmic Game Theory
-description: "Using technics from the game and graph theory fields, we prove that O(nlogn) is the best complexity a deterministic comparison sorting algorithm can achieve."
+description: "Using technics from game and graph theory, we prove that O(nlogn) is the best complexity a deterministic comparison sorting algorithm can achieve."
 published: 2023-12-20
 tags: ["Game Theory", "Graph Theory", "Algorithms"]
 length: 999
@@ -28,7 +28,7 @@ Sorting algorithms that are comparison based like the ones mentioned above do no
 ## Fastest Sorting Algorithm?
 
 The comparison algorithms mentioned above all preform $\mathcal{O}(n^2)$ comparisons in
-the worst case. However, there are popular comparison based algorithms that guarantee to preform at most $\mathcal{O}(n \log n)$ comparisons. Perhaps the simplest one is the [merge sort](https://en.wikipedia.org/wiki/Merge_sort). I will also mention the popular [Quicksort](https://en.wikipedia.org/wiki/Quicksort) algorithm which performs $\mathcal{O}(n^2)$ comparisons in the worst case, but is not deterministic and usually outperforms other algorithms when measuring time. In fact, modern implementations of the standard C/C++ library use [Introsort](https://en.wikipedia.org/wiki/Introsort), which is a hybrid combination of *quick sort* and *insertion sort*, resulting both worst case of $\mathcal{O}(n \log n)$ comparisons and fast running time in practice.<Ref title="Sorting Algorithms in C++" people="Wikipedia" url="https://en.wikipedia.org/wiki/Sort_(C%2B%2B)#Complexity_and_implementations" references={references} /> Python, Java and Rust use [Timsort](https://en.wikipedia.org/wiki/Timsort) as the standard sorting algorithm, which is hybrid too, and guarantees $\mathcal{O}(n \log n)$.
+the worst case. However, there are popular comparison based algorithms that guarantee to preform at most $\mathcal{O}(n \log n)$ comparisons. Perhaps the simplest one is the [merge sort](https://en.wikipedia.org/wiki/Merge_sort). I will also mention the popular [Quicksort](https://en.wikipedia.org/wiki/Quicksort) algorithm which performs $\mathcal{O}(n^2)$ comparisons in the worst case, but usually outperforms other algorithms when measuring time. In fact, modern implementations of the standard C/C++ library use [Introsort](https://en.wikipedia.org/wiki/Introsort), which is a hybrid combination of *quick sort* and *insertion sort*, resulting both worst case of $\mathcal{O}(n \log n)$ comparisons and fast running time in practice.<Ref title="Sorting Algorithms in C++" people="Wikipedia" url="https://en.wikipedia.org/wiki/Sort_(C%2B%2B)#Complexity_and_implementations" references={references} /> Python, Java and Rust use [Timsort](https://en.wikipedia.org/wiki/Timsort) as the standard sorting algorithm, which is hybrid too, and guarantees $\mathcal{O}(n \log n)$.
 
 ## References and Further Reading
 
