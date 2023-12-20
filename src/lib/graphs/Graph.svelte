@@ -63,12 +63,12 @@
 	function endNodeSelection(event, d) {
 		delete d.fx;
 		delete d.fy;
-		d3.select(this).classed('graph-node-fixed', false);
+		d3.select(this).classed('fixed', false);
 		simulation?.alpha(1).restart();
 	}
 
 	function startNodeSelection() {
-		d3.select(this).classed('graph-node-fixed', true);
+		d3.select(this).classed('fixed', true);
 	}
 
 	function dragNode(event, d) {
@@ -117,26 +117,26 @@
 
 		const link = d3
 			.select(graphLinks)
-			.selectAll('.graph-link')
+			.selectAll('.link')
 			.data(edges)
 			.join((enter) => {
-				const g = enter.append('g').classed('graph-link', true);
+				const g = enter.append('g').classed('link', true);
 
-				g.append('line').classed('graph-line', true);
+				g.append('line').classed('line', true);
 
 				if (edgeLabels)
 					g.filter((d) => Boolean(d.label))
 						.append('text')
-						.classed('graph-label', true)
+						.classed('label', true)
 						.attr('text-anchor', 'middle') // horizontal alignment
 						.attr('dominant-baseline', 'middle'); // vertical alignment
 
 				return g;
 			})
-			.classed('graph-highlight', (e) => e.highlight ?? false);
+			.classed('highlight', (e) => e.highlight ?? false);
 
 		link
-			.select('.graph-line')
+			.select('.line')
 			.attr('x1', (d) => d.source.x)
 			.attr('y1', (d) => d.source.y)
 			.attr('x2', (d) => d.target.x)
@@ -144,7 +144,7 @@
 			.attr('marker-end', (d) => (d.direction ? `url(#arrow-${unique})` : ''));
 
 		link
-			.select('.graph-label')
+			.select('.label')
 			.text((d) => d.label?.toString() ?? '')
 			.attr('x', (d) => (d.source.x + d.target.x) / 2)
 			.attr('y', (d) => (d.source.y + d.target.y) / 2)
@@ -161,19 +161,19 @@
 
 		const node = d3
 			.select(graphNodes)
-			.selectAll('.graph-node')
+			.selectAll('.node')
 			.data(vertices)
 			.join((enter) => {
 				const g = enter
 					.append('g')
-					.classed('graph-node', true)
-					.classed('graph-node-fixed', (d) => d.fx !== undefined);
+					.classed('node', true)
+					.classed('fixed', (d) => d.fx !== undefined);
 				g.append('circle').attr('r', radius);
 
 				if (vertexLabels)
 					g.append('text')
 						.text((d) => d.label ?? '')
-						.classed('graph-label', true)
+						.classed('label', true)
 						.attr('text-anchor', 'middle') // horizontal alignment
 						.attr('dominant-baseline', 'middle'); // vertical alignment
 				return g;
@@ -181,16 +181,16 @@
 
 		node
 			.attr('transform', (d) => `translate(${d.x}, ${d.y})`)
-			.classed('graph-highlight', (v) => v.highlight ?? false);
+			.classed('highlight', (v) => v.highlight ?? false);
 
-		node.select('graph-label').text((v) => v.label ?? '');
+		node.select('label').text((v) => v.label ?? '');
 
 		if (mode == GraphMode.sticky) initStickyDrag(node);
 		if (mode == GraphMode.regular) initRegularDrag(node);
 	}
 </script>
 
-<svg {width} {height} viewBox="{-width / 2} {-height / 2} {width} {height}">
+<svg id="graph" {width} {height} viewBox="{-width / 2} {-height / 2} {width} {height}">
 	<marker
 		id="arrow-{unique}"
 		class="graph-marker"
@@ -204,6 +204,41 @@
 		<path d="M -15 -10 L 0 0 L -15 10" fill="currentColor" />
 	</marker>
 
-	<g class="graph-links" bind:this={graphLinks} />
-	<g class="graph-nodes" bind:this={graphNodes} />
+	<g id="links" bind:this={graphLinks} />
+	<g id="nodes" bind:this={graphNodes} />
 </svg>
+
+<style lang="postcss">
+	#nodes :global(.node) {
+		/* nodes only */
+		@apply cursor-pointer;
+	}
+
+	#links :global(.line),
+	#nodes :global(.node) {
+		/* regular appearance */
+		@apply stroke-2 stroke-zinc-600 dark:stroke-zinc-400
+			fill-zinc-100 dark:fill-zinc-900;
+	}
+
+	#nodes :global(.highlight),
+	#links :global(.highlight .line) {
+		/* highlight appearance */
+		@apply stroke-[5px];
+	}
+
+	#nodes :global(.node.fixed) {
+		/* fixed node appearance */
+		@apply fill-zinc-300 dark:fill-zinc-700;
+	}
+
+	#graph :global(.label) {
+		/* all labels */
+		@apply font-black !stroke-none fill-zinc-600 dark:fill-zinc-400;
+	}
+
+	#nodes :global(.label) {
+		/* node labels only */
+		@apply text-sm;
+	}
+</style>
