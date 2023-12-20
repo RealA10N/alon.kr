@@ -9,6 +9,7 @@
 	export let next: () => number | void;
 
 	let timeout: ReturnType<typeof setTimeout> | undefined;
+	$: playing = timeout !== undefined;
 
 	export const play = () => (timeout = setTimeout(play, next() ?? interval));
 	export const stop = () => (clearTimeout(timeout), (timeout = undefined));
@@ -20,4 +21,6 @@
 	if (playOnMount) onMount(play);
 </script>
 
-<button on:click={toggle}>{timeout === undefined ? 'Play' : 'Pause'}</button>
+<button on:click={toggle} class:focus={playing}>
+	{playing ? 'Pause' : 'Play'} Animation
+</button>
