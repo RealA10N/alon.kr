@@ -1,12 +1,10 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
-
 	import Metadata from '$lib/Metadata.svelte';
 	import { type Post, toTaglist } from '$src/lib/interfaces/post';
 	export let post: Post;
 
-	onMount(() => {});
+	export const prerender = true;
 </script>
 
 <Metadata title={post.title} description={post.description} />
