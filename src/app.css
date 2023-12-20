@@ -43,9 +43,12 @@ a {
 }
 
 button {
-	@apply tag m-1
-		hover:bg-zinc-300 hover:dark:bg-zinc-700
-		transition-colors;
+	@apply tag m-1 transition-all
+		hover:!bg-zinc-300 hover:dark:!bg-zinc-700;
+}
+
+button.focus {
+	@apply shadow-md dark:shadow-none bg-zinc-200 dark:bg-zinc-700;
 }
 
 .graph-link {

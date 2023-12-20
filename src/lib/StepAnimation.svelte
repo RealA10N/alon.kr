@@ -12,6 +12,7 @@
 
 	let current: number | undefined;
 	let timeout: ReturnType<typeof setTimeout> | undefined;
+	$: playing = timeout !== undefined;
 
 	export const play = () => {
 		if (timeout === undefined) current = 0;
@@ -39,16 +40,9 @@
 	if (playOnMount) onMount(play);
 </script>
 
-<button on:click={toggle}>{timeout === undefined ? 'Restart' : 'Stop'} Animation</button
->{#each steps as step, i}
-	<button class={current === i ? 'highlight-button' : ''} on:click={() => set(i)}>
+<button on:click={toggle}>{playing ? 'Stop' : 'Restart'} Animation</button>
+{#each steps as step, i}
+	<button class:focus={current === i} on:click={() => set(i)}>
 		{step.name}
 	</button>
 {/each}
-
-<style lang="postcss">
-	.highlight-button {
-		@apply bg-zinc-300 dark:bg-zinc-700
-		text-zinc-700 dark:text-zinc-300;
-	}
-</style>
