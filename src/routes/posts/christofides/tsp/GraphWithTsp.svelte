@@ -3,7 +3,7 @@
 	import { BinaryHeap } from 'structurae';
 	import blossom from 'edmonds-blossom-fixed';
 
-	import { GraphMode, type Edge, type Vertex } from '$lib/graphs/graphs';
+	import { GraphMode, type Edge, type Vertex, Color } from '$lib/graphs/graphs';
 	import Graph from '$lib/graphs/Graph.svelte';
 	import StepAnimation from '$lib/StepAnimation.svelte';
 	import Figure from '$lib/Figure.svelte';
@@ -155,7 +155,7 @@
 	}
 
 	const highlight = (d: { color?: Color; highlight?: boolean }, should: boolean) => (
-		(d.highlight = should), (d.color = should ? 'red' : undefined)
+		(d.highlight = should), (d.color = should ? Color.Red : undefined)
 	);
 
 	const highlightVertices = (toHighlight: Vertex[]) =>
