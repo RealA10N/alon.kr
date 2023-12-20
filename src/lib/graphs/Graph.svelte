@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import * as d3 from 'd3';
 	import type { Edge, Vertex } from '$lib/graphs/graphs';
-	import { GraphMode } from '$lib/graphs/graphs';
+	import { GraphMode, type Color } from '$lib/graphs/graphs';
 
 	export let width: number = 500;
 	export let height: number = 350;
@@ -112,6 +112,10 @@
 
 	onMount(initSimulation);
 
+	function addColorClass(this: any, d: { color?: Color }): void {
+		if (d.color !== undefined) this.classList.add(d.color);
+	}
+
 	function tick() {
 		runOnTick?.();
 
@@ -133,7 +137,8 @@
 
 				return g;
 			})
-			.classed('highlight', (e) => e.highlight ?? false);
+			.classed('highlight', (e) => e.highlight ?? false)
+			.each(addColorClass);
 
 		link
 			.select('.line')
@@ -181,7 +186,8 @@
 
 		node
 			.attr('transform', (d) => `translate(${d.x}, ${d.y})`)
-			.classed('highlight', (v) => v.highlight ?? false);
+			.classed('highlight', (v) => v.highlight ?? false)
+			.each(addColorClass);
 
 		node.select('label').text((v) => v.label ?? '');
 
@@ -240,5 +246,11 @@
 	#nodes :global(.label) {
 		/* node labels only */
 		@apply text-sm;
+	}
+
+	#nodes :global(.red),
+	#links :global(.red .line),
+	#links :global(.red .label) {
+		@apply !stroke-red-500 text-red-500;
 	}
 </style>

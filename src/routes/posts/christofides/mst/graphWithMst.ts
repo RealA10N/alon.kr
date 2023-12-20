@@ -18,15 +18,15 @@ export const edges: Edge[] = [
 ];
 
 export const vertices: Vertex[] = [
-	{ id: 1, highlight: true, y: 0, x: 200 },
-	{ id: 2, highlight: true, y: 0, x: 0 },
-	{ id: 3, highlight: true, y: 100, x: -100 },
-	{ id: 4, highlight: true, y: 0, x: -100 },
-	{ id: 5, highlight: true, y: 0, x: -200 },
-	{ id: 6, highlight: true, y: -150, x: 0 },
-	{ id: 7, highlight: true, y: -100, x: 100 },
-	{ id: 8, highlight: true, y: 0, x: 300 }
-];
+	{ id: 1, y: 0, x: 200 },
+	{ id: 2, y: 0, x: 0 },
+	{ id: 3, y: 100, x: -100 },
+	{ id: 4, y: 0, x: -100 },
+	{ id: 5, y: 0, x: -200 },
+	{ id: 6, y: -150, x: 0 },
+	{ id: 7, y: -100, x: 100 },
+	{ id: 8, y: 0, x: 300 }
+].map((d) => ({ ...d, highlight: true, color: 'red' } as Vertex));
 
 function edgesTouchingVertex(vertex: Vertex, edges: Edge[]): Edge[] {
 	return edges.filter(
@@ -34,6 +34,11 @@ function edgesTouchingVertex(vertex: Vertex, edges: Edge[]): Edge[] {
 			e.source == vertex.id || e.source == vertex || e.target == vertex.id || e.target == vertex
 	);
 }
+
+const highlightEdge = (edge: Edge) => {
+	edge.highlight = true;
+	edge.color = 'red';
+};
 
 export function highlightMstEdges(vertices: Vertex[], edges: Edge[]) {
 	// A very naive and not optimized implementation of Prim's algorithm.
@@ -46,13 +51,13 @@ export function highlightMstEdges(vertices: Vertex[], edges: Edge[]) {
 		const minEdge = queue.find((e) => e.label == minCost) as Edge;
 
 		if (!visited.includes(minEdge?.source as Vertex)) {
-			minEdge.highlight = true;
+			highlightEdge(minEdge);
 			visited.push(minEdge?.source as Vertex);
 			queue = queue.concat(...edgesTouchingVertex(minEdge?.source as Vertex, edges));
 		}
 
 		if (!visited.includes(minEdge?.target as Vertex)) {
-			minEdge.highlight = true;
+			highlightEdge(minEdge);
 			visited.push(minEdge?.target as Vertex);
 			queue = queue.concat(...edgesTouchingVertex(minEdge?.target as Vertex, edges));
 		}
