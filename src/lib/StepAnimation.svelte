@@ -40,9 +40,7 @@
 	if (playOnMount) onMount(play);
 </script>
 
-<button on:click={toggle}>{playing ? 'Stop' : 'Restart'} Animation</button>
-{#each steps as step, i}
-	<button class:focus={current === i} on:click={() => set(i)}>
-		{step.name}
-	</button>
-{/each}
+<button on:click={toggle}>{playing ? 'Stop' : 'Restart'} Animation</button
+>{#each steps as step, i}<button class:focus={current === i} on:click={() => set(i)}>
+		{step.name}</button
+	>{/each}
