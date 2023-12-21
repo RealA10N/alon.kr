@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-
-	type P = [number, number];
+	import type { P } from './utils';
 
 	let grabbingPointer: number | undefined;
 	$: grabbed = grabbingPointer !== undefined;
@@ -9,7 +8,7 @@
 
 	const grab = (e: PointerEvent) => {
 		grabbingPointer = e.pointerId;
-		grabOffset = [e.offsetX, e.offsetY];
+		grabOffset = { x: e.offsetX, y: e.offsetY };
 		updateDummy(e);
 	};
 	const release = (e: PointerEvent) => {
@@ -21,7 +20,7 @@
 	};
 
 	const updateDummy = (e: PointerEvent) =>
-		(dummyPosition = [e.clientX - grabOffset[0], e.clientY - grabOffset[1]]);
+		(dummyPosition = { x: e.clientX - grabOffset.x, y: e.clientY - grabOffset.y });
 
 	onMount(() => {
 		window.addEventListener('pointerup', release);
@@ -40,8 +39,8 @@
 {#if grabbed}
 	<span
 		class="inline-block select-none fixed cursor-grabbing"
-		style="top: {dummyPosition[1]}px; left: {dummyPosition[0]}px"
+		style="top: {dummyPosition.y}px; left: {dummyPosition.x}px"
 	>
-		<slot dummy={false} />
+		<slot name="floating" dummy={false} />
 	</span>
 {/if}
