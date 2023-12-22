@@ -5,11 +5,10 @@
 <script lang="ts" generics="Text extends Stringable">
 	import StringBox from '$lib/strings/StringBox.svelte';
 	import Grabzone from '$lib/grabs/Grabzone.svelte';
-	import type { Writable } from 'svelte/store';
 
 	type BoxState = GenericBoxState<Text>;
 
-	export let items: Writable<BoxState[]>;
+	export let items: BoxState[];
 	export let onGrab: (item: BoxState) => any = () => {};
 	export let onUpdate: (item: BoxState) => any = () => {};
 	export let onRelease: (item: BoxState) => any = () => {};

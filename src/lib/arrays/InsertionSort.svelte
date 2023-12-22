@@ -5,7 +5,6 @@
 	import Figure from '$lib/Figure.svelte';
 	import ConfettiWrapper from '$lib/effects/ConfettiWrapper.svelte';
 	import AnimationButton from '$lib/AnimationButton.svelte';
-	import { writable } from 'svelte/store';
 	import { Color } from '../graphs/graphs';
 
 	type BoxState = GenericBoxState<number>;
@@ -34,8 +33,7 @@
 			color: isCorrect(idx) ? Color.Green : undefined
 		}));
 
-	let uiArray = writable([] as BoxState[]);
-	$: $uiArray = buildUiArray(state);
+	$: uiArray = buildUiArray(state);
 
 	const next = () => {
 		if (state.processing === null) {
@@ -64,7 +62,7 @@
 
 	const reset = () => (state = init(state.array));
 
-	const updateFromUser = () => (state.array = $uiArray.map((state) => state.text));
+	const updateFromUser = () => (state.array = uiArray.map((state) => state.text));
 </script>
 
 <ConfettiWrapper bind:trigger={confetti}>
