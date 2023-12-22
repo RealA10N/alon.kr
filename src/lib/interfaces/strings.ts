@@ -1,6 +1,8 @@
+import type { Identifiable } from '$lib/grabs/utils';
+
 export type Text = string | number | bigint;
 
-export interface BoxState {
+export interface BoxState extends Identifiable {
 	text: Text;
 	highlight?: boolean;
 	color?: 'red' | 'green' | 'yellow';

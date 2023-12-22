@@ -1,18 +1,25 @@
 <script lang="ts">
-	import { flip } from 'svelte/animate';
-	import { blur } from 'svelte/transition';
 	import StringBox from '$lib/strings/StringBox.svelte';
+	import Grabzone from '$lib/grabs/Grabzone.svelte';
 	import type { BoxState } from '$lib/interfaces/strings';
-	export let array: BoxState[];
+	import type { Writable } from 'svelte/store';
+
+	export let items: Writable<BoxState[]>;
+	export let onGrab: (item: BoxState) => any = () => {};
+	export let onUpdate: (item: BoxState) => any = () => {};
+	export let onRelease: (item: BoxState) => any = () => {};
 </script>
 
-{#each array as state (state.text)}
-	<div
-		class="inline-block"
-		animate:flip={{ duration: 400 }}
-		in:blur={{ duration: 400 }}
-		out:blur={{ duration: 150 }}
-	>
-		<StringBox {state} />
+<Grabzone
+	{items}
+	let:item
+	let:dummy
+	flipOptions={{ duration: 400 }}
+	{onGrab}
+	{onRelease}
+	{onUpdate}
+>
+	<div class="inline-block" class:opacity-50={dummy}>
+		<StringBox state={item} />
 	</div>
-{/each}
+</Grabzone>

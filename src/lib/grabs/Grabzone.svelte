@@ -19,6 +19,11 @@
 	let grabbingPointerId: number = -1;
 	let grabPos: P, grabOffset: P;
 
+	// callbacks for user of compoennt
+	export let onGrab: (item: Item) => any = () => {};
+	export let onUpdate: (item: Item) => any = () => {};
+	export let onRelease: (item: Item) => any = () => {};
+
 	const grab = (e: PointerEvent, item: Item) => {
 		if (isGrabbed) return;
 		grabbedItem = item;
@@ -27,17 +32,22 @@
 		saveElementsPositions();
 		updateFloatingPos(e);
 		updateItemsPositions();
+		onGrab(item);
 	};
 
 	const drag = (e: PointerEvent) => {
-		if (!isGrabbed || e.pointerId !== grabbingPointerId) return;
+		if (!isEventRelevent(e)) return;
 		updateFloatingPos(e);
 		updateItemsPositions();
 	};
 
 	const release = (e: PointerEvent) => {
-		if (isGrabbed && e.pointerId === grabbingPointerId) grabbedItem = undefined;
+		if (!isEventRelevent(e)) return;
+		onRelease(grabbedItem!);
+		grabbedItem = undefined;
 	};
+
+	const isEventRelevent = (e: PointerEvent) => isGrabbed && e.pointerId === grabbingPointerId;
 
 	const updateFloatingPos = (e: PointerEvent) =>
 		(grabPos = { x: e.clientX - grabOffset.x, y: e.clientY - grabOffset.y });
@@ -48,6 +58,7 @@
 		if (closestIdx === grabbedIdx) return;
 		moveByIdx($items, grabbedIdx, closestIdx);
 		$items = $items;
+		onUpdate(grabbedItem!);
 	};
 
 	const saveElementsPositions = () => {
