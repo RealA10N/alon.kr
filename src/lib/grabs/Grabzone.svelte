@@ -82,14 +82,17 @@
 
 {#if grabbedItem !== undefined}
 	{#key items}
-		<span class="cursor-grabbing fixed" style="left: {grabPos.x}px; top: {grabPos.y}px">
+		<span class="grabbed fixed" style="left: {grabPos.x}px; top: {grabPos.y}px">
 			<slot item={grabbedItem} dummy={false} />
 		</span>
 	{/key}
 {/if}
 
 <style lang="postcss">
-	span {
+	span:not(.grabbed) {
 		@apply inline-block select-none touch-none cursor-grab;
+	}
+	span.grabbed {
+		@apply cursor-grabbing;
 	}
 </style>
