@@ -4,7 +4,16 @@
 	import Figure from '$lib/Figure.svelte';
 	import Array from '$lib/arrays/Array.svelte';
 	import AnimationButton from '$src/lib/AnimationButton.svelte';
-	import { factorial, idxToPerm, permIdx, shuffle } from '$lib/arrays/permutation';
+	import {
+		factorial,
+		idxToPerm,
+		permIdx,
+		shuffle,
+		type Permutation
+	} from '$lib/arrays/permutation';
+	import { writable } from 'svelte/store';
+
+	type State = BoxState<bigint>;
 
 	export let n: bigint = 8n;
 	export let playOnMount = true;
@@ -17,7 +26,9 @@
 	$: idx = permIdx(permutation, []);
 	$: fact = factorial(n);
 	$: permutation, validateUserInput();
-	$: array = permutation.map((val) => ({ text: val } as BoxState));
+
+	let items = writable([] as State[]);
+	$: $items = permutationToItems(permutation);
 
 	const shfl = () => (permutation = shuffle(permutation));
 	const next = () => (permutation = idxToPerm((idx + 1n) % fact, n));
@@ -39,10 +50,18 @@
 			return invalidateUserIdx();
 		}
 	};
+
+	const permutationToItems = (permutation: Permutation): State[] =>
+		permutation.map((val) => ({ text: val + 1n, id: val.toString() } as State));
+
+	const itemsToPermutation = (items: State[]): Permutation =>
+		items.map((item) => (item.text - 1n) as bigint);
+
+	const updateFromUser = () => (permutation = itemsToPermutation($items));
 </script>
 
 <Figure>
-	<Array slot="content" {array} />
+	<Array slot="content" {items} onGrab={stop} onUpdate={updateFromUser} />
 
 	<svelte:fragment slot="buttons">
 		<AnimationButton next={animate} bind:stop {playOnMount} />
