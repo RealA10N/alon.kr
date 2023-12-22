@@ -1,55 +1,58 @@
 <script context="module" lang="ts">
-	interface Identifiable<Id> {
-		id: Id;
-	}
+	import type { Id, Identifiable } from './utils';
 </script>
 
-<script lang="ts" generics="Id, Item extends Identifiable<Id>">
+<script lang="ts" generics="Item extends Identifiable">
 	import { onMount } from 'svelte';
 	import { flip, type FlipParams } from 'svelte/animate';
 	import type { Writable } from 'svelte/store';
-	import type { P } from './utils';
+	import { findClosestIdx, elementPos, type P, moveByIdx, findIdx } from './utils';
 
 	export let flipOptions: FlipParams = {};
 	export let items: Writable<Item[]>;
 
+	let grabbedItem: Item | undefined;
 	let elements = [] as HTMLElement[];
-	let grabbedId: Id | undefined;
-	$: isGrabbed = grabbedId !== undefined;
-	$: grabbedIdx = findGrabbedIdx(grabbedId);
-	$: grabbedItem = grabbedIdx === undefined? undefined : $items.at(grabbedIdx);
-	$: grabbedElement = grabbedIdx === undefined? undefined : elements.at(grabbedIdx);
+	let elementsPos = [] as P[];
+	$: isGrabbed = grabbedItem !== undefined;
 
-	const findGrabbedIdx = (id: Id | undefined): number | undefined => {
-		const idx = $items.findIndex(item => item.id === id);
-		return idx === -1? undefined : idx;
-	}
-
-	let floatingElement: HTMLElement | undefined;
-	let grabbingPointerId: number | undefined;
+	let grabbingPointerId: number = -1;
 	let grabPos: P, grabOffset: P;
 
 	const grab = (e: PointerEvent, item: Item) => {
 		if (isGrabbed) return;
-		grabbedId = item.id;
+		grabbedItem = item;
 		grabbingPointerId = e.pointerId;
-		grabOffset = {x:e.offsetX, y:e.offsetY};
-		update(e);
-	}
+		grabOffset = { x: e.offsetX, y: e.offsetY };
+		saveElementsPositions();
+		updateFloatingPos(e);
+		updateItemsPositions();
+	};
 
 	const drag = (e: PointerEvent) => {
 		if (!isGrabbed || e.pointerId !== grabbingPointerId) return;
-		update(e);
-	}
+		updateFloatingPos(e);
+		updateItemsPositions();
+	};
 
-	const release = (e: PointerEvent) =>  {
-		if (!isGrabbed || e.pointerId !== grabbingPointerId) return;
-		grabbingPointerId = grabbedId = undefined;
-	}
+	const release = (e: PointerEvent) => {
+		if (isGrabbed && e.pointerId === grabbingPointerId) grabbedItem = undefined;
+	};
 
-	const update = (e: PointerEvent) => {
-		grabPos = {x: e.clientX - grabOffset.x, y:e.clientY - grabOffset.y};
-	}
+	const updateFloatingPos = (e: PointerEvent) =>
+		(grabPos = { x: e.clientX - grabOffset.x, y: e.clientY - grabOffset.y });
+
+	const updateItemsPositions = () => {
+		const closestIdx = findClosestIdx(grabPos, elementsPos)!;
+		const grabbedIdx = findIdx($items, grabbedItem!.id);
+		if (closestIdx === grabbedIdx) return;
+		moveByIdx($items, grabbedIdx, closestIdx);
+		$items = $items;
+	};
+
+	const saveElementsPositions = () => {
+		for (const [idx, elem] of elements.entries()) elementsPos[idx] = elementPos(elem);
+	};
 
 	onMount(() => {
 		window.addEventListener('pointerup', release);
@@ -62,18 +65,14 @@
 </script>
 
 {#each $items as item, idx (item.id)}
-<span
-	animate:flip={flipOptions}
-	on:pointerdown={(e) => grab(e, item)}
-	bind:this={elements[idx]}
->
-	<slot {item} dummy={item.id === grabbedId} />
-</span>
+	<span animate:flip={flipOptions} on:pointerdown={(e) => grab(e, item)} bind:this={elements[idx]}>
+		<slot {item} dummy={item === grabbedItem} />
+	</span>
 {/each}
 
 {#if grabbedItem !== undefined}
-	<span class="cursor-grabbing fixed" style="left: {grabPos.x}px; top: {grabPos.y}px" bind:this={floatingElement}>
-		<slot item={grabbedItem} dummy={false}/>
+	<span class="cursor-grabbing fixed" style="left: {grabPos.x}px; top: {grabPos.y}px">
+		<slot item={grabbedItem} dummy={false} />
 	</span>
 {/if}
 
