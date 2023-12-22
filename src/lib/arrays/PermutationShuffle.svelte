@@ -13,6 +13,8 @@
 	} from '$lib/arrays/permutation';
 	import { writable } from 'svelte/store';
 
+	type State = BoxState<bigint>;
+
 	export let n: bigint = 8n;
 	export let playOnMount = true;
 
@@ -25,7 +27,7 @@
 	$: fact = factorial(n);
 	$: permutation, validateUserInput();
 
-	let items = writable([] as BoxState[]);
+	let items = writable([] as State[]);
 	$: $items = permutationToItems(permutation);
 
 	const shfl = () => (permutation = shuffle(permutation));
@@ -49,10 +51,10 @@
 		}
 	};
 
-	const permutationToItems = (permutation: Permutation): BoxState[] =>
-		permutation.map((val) => ({ text: val + 1n, id: val.toString() } as BoxState));
+	const permutationToItems = (permutation: Permutation): State[] =>
+		permutation.map((val) => ({ text: val + 1n, id: val.toString() } as State));
 
-	const itemsToPermutation = (items: BoxState[]): Permutation =>
+	const itemsToPermutation = (items: State[]): Permutation =>
 		items.map((item) => (item.text - 1n) as bigint);
 
 	const updateFromUser = () => (permutation = itemsToPermutation($items));
