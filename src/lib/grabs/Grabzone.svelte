@@ -82,9 +82,11 @@
 {/each}
 
 {#if grabbedItem !== undefined}
-	<span class="cursor-grabbing fixed" style="left: {grabPos.x}px; top: {grabPos.y}px">
-		<slot item={grabbedItem} dummy={false} />
-	</span>
+	{#key $items}
+		<span class="cursor-grabbing fixed" style="left: {grabPos.x}px; top: {grabPos.y}px">
+			<slot item={grabbedItem} dummy={false} />
+		</span>
+	{/key}
 {/if}
 
 <style lang="postcss">

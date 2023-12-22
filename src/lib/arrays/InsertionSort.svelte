@@ -1,10 +1,14 @@
 <script lang="ts">
-	import type { BoxState } from '$lib/interfaces/strings';
+	import type { BoxState as GenericBoxState } from '$lib/interfaces/strings';
 	import Array from '$lib/arrays/Array.svelte';
 	import { shuffle } from '$lib/arrays/permutation';
 	import Figure from '$lib/Figure.svelte';
 	import ConfettiWrapper from '$lib/effects/ConfettiWrapper.svelte';
 	import AnimationButton from '$lib/AnimationButton.svelte';
+	import { writable } from 'svelte/store';
+	import { Color } from '../graphs/graphs';
+
+	type BoxState = GenericBoxState<number>;
 
 	interface State {
 		processing: number | null;
@@ -12,27 +16,26 @@
 		array: number[];
 	}
 
-	const init = (array: number[]) =>
-		({
-			processing: null,
-			goods: 0,
-			array: [...array]
-		} as State);
+	const init = (array: number[]) => ({
+		processing: null,
+		goods: 0,
+		array: [...array]
+	});
 
 	export let array: number[];
 	$: state = init(array);
 	$: n = array.length;
-	$: uiArray = buildUiArray(state);
 
 	const buildUiArray = (state: State): BoxState[] =>
-		state.array.map(
-			(val, idx) =>
-				({
-					text: val,
-					highlight: idx === state.processing,
-					color: isCorrect(idx) ? 'green' : undefined
-				} as BoxState)
-		);
+		state.array.map((val, idx) => ({
+			id: val.toString(),
+			text: val,
+			highlight: idx === state.processing,
+			color: isCorrect(idx) ? Color.Green : undefined
+		}));
+
+	let uiArray = writable([] as BoxState[]);
+	$: $uiArray = buildUiArray(state);
 
 	const next = () => {
 		if (state.processing === null) {
@@ -58,11 +61,20 @@
 
 	const isCorrect = (idx: number): boolean =>
 		idx !== state.processing && idx < state.goods + (state.processing !== null ? 1 : 0);
+
+	const reset = () => (state = init(state.array));
+
+	const updateFromUser = () => (state.array = $uiArray.map((state) => state.text));
 </script>
 
 <ConfettiWrapper bind:trigger={confetti}>
 	<Figure>
-		<Array array={uiArray} slot="content" />
+		<Array
+			items={uiArray}
+			slot="content"
+			onGrab={() => (stop(), reset())}
+			onUpdate={updateFromUser}
+		/>
 		<svelte:fragment slot="buttons">
 			<AnimationButton {next} bind:stop interval={800} />
 			<button on:click={() => (stop(), next())}>Next</button>

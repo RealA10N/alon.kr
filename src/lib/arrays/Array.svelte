@@ -1,8 +1,13 @@
-<script lang="ts">
+<script lang="ts" context="module">
+	import type { BoxState as GenericBoxState, Stringable } from '$lib/interfaces/strings';
+</script>
+
+<script lang="ts" generics="Text extends Stringable">
 	import StringBox from '$lib/strings/StringBox.svelte';
 	import Grabzone from '$lib/grabs/Grabzone.svelte';
-	import type { BoxState } from '$lib/interfaces/strings';
 	import type { Writable } from 'svelte/store';
+
+	type BoxState = GenericBoxState<Text>;
 
 	export let items: Writable<BoxState[]>;
 	export let onGrab: (item: BoxState) => any = () => {};
