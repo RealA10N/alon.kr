@@ -5,6 +5,7 @@
 	import StepAnimationUnbounded from '$lib/AnimationButton.svelte';
 	import FullConfetti from '$lib/FullConfetti.svelte';
 	import Figure from '$lib/Figure.svelte';
+	import { Color } from '$lib/interfaces/color';
 
 	export let text = 'ABCDABCDABDABCDAB';
 	export let pattern = 'ABCDABD';
@@ -55,7 +56,8 @@
 		timeout = undefined;
 		clearMarks();
 
-		if (state.pattern[state.focus]) state.pattern[state.focus].color = cmp ? 'green' : 'red';
+		if (state.pattern[state.focus])
+			state.pattern[state.focus].color = cmp ? Color.Green : Color.Red;
 		if (cmp && state.focus === state.pattern.length - 1) match();
 		if (!cmp) markCommonPrefix();
 	};
@@ -64,7 +66,7 @@
 		const p = pi[state.focus - 1] ?? 0;
 		for (let i = 0; i < p; i++) {
 			const j = i + state.shift + state.focus - p;
-			state.pattern[i].color = state.text[j].color = 'yellow';
+			state.pattern[i].color = state.text[j].color = Color.Yellow;
 		}
 	};
 
@@ -76,7 +78,7 @@
 	const clearMarks = () => {
 		for (let i = 0; i < state.text.length; i++) state.text[i].color = undefined;
 		for (let i = 0; i < state.pattern.length; i++)
-			state.pattern[i].color = i < state.focus ? 'green' : undefined;
+			state.pattern[i].color = i < state.focus ? Color.Green : undefined;
 	};
 
 	const updateHighlights = () => {
