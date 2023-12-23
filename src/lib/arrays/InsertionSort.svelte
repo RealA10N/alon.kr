@@ -5,7 +5,7 @@
 	import Figure from '$lib/Figure.svelte';
 	import ConfettiWrapper from '$lib/effects/ConfettiWrapper.svelte';
 	import AnimationButton from '$lib/AnimationButton.svelte';
-	import { Color } from '../graphs/graphs';
+	import { Color } from '$lib/interfaces/color';
 
 	type BoxState = GenericBoxState<number>;
 
