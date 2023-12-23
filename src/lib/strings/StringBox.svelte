@@ -31,6 +31,10 @@
 		@apply border-yellow-400 bg-yellow-200 dark:border-yellow-600 dark:bg-yellow-800;
 	}
 
+	.blue {
+		@apply border-blue-400 bg-blue-200 dark:border-blue-600 dark:bg-blue-800;
+	}
+
 	.highlight {
 		@apply scale-[1.15] shadow-md mx-2 font-bold
 		text-zinc-600 dark:text-zinc-200
