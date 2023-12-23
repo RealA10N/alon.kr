@@ -1,11 +1,12 @@
 import type { Identifiable } from '$lib/grabs/utils';
+import type { Color } from '$lib/interfaces/color';
 
 export type Stringable = string | number | bigint;
 
 export interface BoxState<Text extends Stringable> extends Identifiable {
 	text: Text;
 	highlight?: boolean;
-	color?: 'red' | 'green' | 'yellow';
+	color?: Color;
 }
 
 export interface StringMatchingState {

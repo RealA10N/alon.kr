@@ -2,7 +2,8 @@
 	import { onMount } from 'svelte';
 	import * as d3 from 'd3';
 	import type { Edge, Vertex } from '$lib/graphs/graphs';
-	import { GraphMode, Color } from '$lib/graphs/graphs';
+	import { GraphMode } from '$lib/graphs/graphs';
+	import { Color } from '$lib/interfaces/color';
 
 	export let width: number = 500;
 	export let height: number = 350;

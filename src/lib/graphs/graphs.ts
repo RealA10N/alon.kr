@@ -1,11 +1,5 @@
 import type { SimulationLinkDatum, SimulationNodeDatum } from 'd3-force';
-
-export enum Color {
-	Red = 'red',
-	Blue = 'blue',
-	Green = 'green',
-	Yellow = 'yellow'
-}
+import type { Color } from '$lib/interfaces/color';
 
 export interface Edge extends SimulationLinkDatum<Vertex> {
 	// includes 'source', 'target' from SimulationLinkDatum.

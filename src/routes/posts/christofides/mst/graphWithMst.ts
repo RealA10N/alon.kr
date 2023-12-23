@@ -1,4 +1,5 @@
-import type { Edge, Vertex } from '$src/lib/graphs/graphs';
+import type { Edge, Vertex } from '$lib/graphs/graphs';
+import { Color } from '$lib/interfaces/color';
 
 export const prerender = true;
 
@@ -26,7 +27,7 @@ export const vertices: Vertex[] = [
 	{ id: 6, y: -150, x: 0 },
 	{ id: 7, y: -100, x: 100 },
 	{ id: 8, y: 0, x: 300 }
-].map((d) => ({ ...d, highlight: true, color: 'red' } as Vertex));
+].map((d) => ({ ...d, highlight: true, color: Color.Red } as Vertex));
 
 function edgesTouchingVertex(vertex: Vertex, edges: Edge[]): Edge[] {
 	return edges.filter(
@@ -37,7 +38,7 @@ function edgesTouchingVertex(vertex: Vertex, edges: Edge[]): Edge[] {
 
 const highlightEdge = (edge: Edge) => {
 	edge.highlight = true;
-	edge.color = 'red';
+	edge.color = Color.Red;
 };
 
 export function highlightMstEdges(vertices: Vertex[], edges: Edge[]) {
