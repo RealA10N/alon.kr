@@ -1,4 +1,4 @@
-<figure class="my-2 text-center">
+<figure class="my-6 text-center">
 	<slot name="content" />
 
 	{#if $$slots.buttons}
