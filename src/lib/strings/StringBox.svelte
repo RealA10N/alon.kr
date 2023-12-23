@@ -1,5 +1,8 @@
-<script lang="ts">
-	import type { BoxState } from '$lib/interfaces/strings';
+<script lang="ts" context="module">
+	import type { BoxState as GenericBoxState, Stringable } from '$lib/interfaces/strings';
+</script>
+
+<script lang="ts" generics="Id extends Stringable, BoxState extends GenericBoxState<Id>">
 	export let state: BoxState;
 </script>
 

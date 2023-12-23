@@ -75,7 +75,12 @@
 </script>
 
 {#each items as item, idx (item.id)}
-	<span animate:flip={flipOptions} on:pointerdown={(e) => grab(e, item)} bind:this={elements[idx]}>
+	<span
+		{...$$restProps}
+		animate:flip={flipOptions}
+		on:pointerdown={(e) => grab(e, item)}
+		bind:this={elements[idx]}
+	>
 		<slot {item} dummy={item === grabbedItem} />
 	</span>
 {/each}
@@ -89,8 +94,12 @@
 {/if}
 
 <style lang="postcss">
+	span {
+		@apply inline-block;
+	}
+
 	span:not(.grabbed) {
-		@apply inline-block select-none touch-none cursor-grab;
+		@apply select-none touch-none cursor-grab;
 	}
 	span.grabbed {
 		@apply cursor-grabbing;
