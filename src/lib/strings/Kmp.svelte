@@ -1,9 +1,10 @@
 <script lang="ts">
-	import StingMatching from '$src/lib/strings/StingMatching.svelte';
+	import StingMatching from '$lib/strings/StingMatching.svelte';
 	import type { StringMatchingState, BoxState } from '$lib/interfaces/strings';
 	import { calcpi } from '$lib/strings/kmp';
 	import StepAnimationUnbounded from '$lib/AnimationButton.svelte';
 	import FullConfetti from '$lib/FullConfetti.svelte';
+	import Figure from '$lib/Figure.svelte';
 
 	export let text = 'ABCDABCDABDABCDAB';
 	export let pattern = 'ABCDABD';
@@ -90,11 +91,14 @@
 
 <FullConfetti bind:trigger />
 
-<figure>
-	<StingMatching {state} />
-	<figcaption>
+<Figure>
+	<StingMatching slot="content" {state} />
+	<svelte:fragment slot="buttons">
 		<StepAnimationUnbounded {next} bind:stop interval={1500} />
 		<button on:click={next}>Next</button>
 		<button on:click={reset}>Reset</button>
-	</figcaption>
-</figure>
+	</svelte:fragment>
+	<svelte:fragment slot="caption">
+		A demonstration of the KMP String Matching Algorithm.
+	</svelte:fragment>
+</Figure>
