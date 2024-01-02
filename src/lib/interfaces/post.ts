@@ -1,11 +1,12 @@
 import moment from 'moment';
+import type { ReadTimeResults } from 'reading-time';
 
 export interface Post {
 	title: string;
 	description: string;
 	url: string;
 	published: number;
-	length: number;
+	readingTime: ReadTimeResults;
 	tags: string[];
 }
 
@@ -20,6 +21,6 @@ export const countWords = (element: HTMLElement) =>
 
 export const toTaglist = (post: Post, specific: boolean = false): string[] => [
 	formatDuration(post.published, specific),
-	`${post.length} min read`,
+	`${post.readingTime.text}`,
 	...post.tags
 ];
