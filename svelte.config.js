@@ -17,7 +17,10 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			$src: 'src/'
-		}
+		},
+		// inline all stylesheets smaller than 4kib
+		// https://github.com/sveltejs/kit/issues/962#issuecomment-1010413860
+		inlineStyleThreshold: 4096
 	}
 };
 
