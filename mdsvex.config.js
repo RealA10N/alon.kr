@@ -12,7 +12,10 @@ const config = defineConfig({
 
 	remarkPlugins: [[readingTime, { wpm: 185 }], remarkMath],
 	rehypePlugins: [rehypeKatexSvelte],
-	layout: 'src/routes/posts/_PostLayout.svelte'
+	layout: {
+		post: 'src/routes/posts/_PostLayout.svelte',
+		package: 'src/routes/x/_PackageLayout.svelte'
+	}
 });
 
 export default config;

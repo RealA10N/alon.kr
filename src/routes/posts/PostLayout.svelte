@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import Metadata from '$lib/Metadata.svelte';
+	import Header from '$src/lib/Header.svelte';
 	import { type Post, toTaglist } from '$src/lib/interfaces/post';
 	export let post: Post;
 
@@ -9,15 +10,7 @@
 
 <Metadata title={post.title} description={post.description} />
 
-<header class="mb-4 text-zinc-700 dark:text-zinc-300">
-	<h1>{post.title}</h1>
-	<div class="font-medium tracking-wider text-sm italic">
-		{post.description}
-	</div>
-	<ul class="flex flex-wrap mt-1 gap-2">
-		{#each toTaglist(post, true) as tag}<li class="tag m-0">{tag}</li>{/each}
-	</ul>
-</header>
+<Header title={post.title} description={post.description} tags={toTaglist(post, true)} />
 
 <article class="text-justify">
 	<slot />

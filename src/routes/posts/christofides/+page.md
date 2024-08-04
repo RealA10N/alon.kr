@@ -1,4 +1,5 @@
 ---
+layout: post
 title: The Christofides Algorithm
 description: "Approximating the Metric TSP Problem: An Introduction to Combinatorial Optimization."
 published: 2023-05-20
