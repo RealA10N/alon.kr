@@ -2,7 +2,7 @@
 	export let title: string;
 	export let description: string | undefined = undefined;
 	export let tags: string[] | undefined = undefined;
-	export let url: string | undefined = undefined;
+	export let href: string | undefined = undefined;
 </script>
 
 <div
@@ -28,8 +28,8 @@
 		{/if}
 	</div>
 
-	{#if url}
+	{#if href}
 		<!-- svelte-ignore a11y-missing-content -->
-		<a href={url} class="absolute left-0 right-0 top-0 bottom-0" />
+		<a {href} class="absolute left-0 right-0 top-0 bottom-0" />
 	{/if}
 </div>

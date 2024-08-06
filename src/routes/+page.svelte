@@ -17,6 +17,6 @@
 		title={post.title}
 		description={post.description}
 		tags={toTaglist(post)}
-		url={post.url}
+		href={post.url}
 	/>
 {/each}

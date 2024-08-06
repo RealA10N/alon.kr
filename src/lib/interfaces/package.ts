@@ -1,9 +1,12 @@
 export interface Package {
 	name: string;
 	title: string;
-	description: string;
+	description: string | undefined;
 	versionSourceControl: 'bzr' | 'fossil' | 'git' | 'hg' | 'svn';
 	sourceUrl: string;
+	lastUpdate: number;
+	relativeUrl: string;
+	tags: string[] | undefined;
 }
 
 export const packageUrl = (pkg: Package) => {

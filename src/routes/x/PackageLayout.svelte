@@ -13,7 +13,7 @@
 
 <Metadata title={pkg.title} description={pkg.description} />
 
-<Header title={pkg.title} description={pkg.description} />
+<Header title={pkg.title} description={pkg.description} tags={pkg.tags} />
 
 <h2>Get</h2>
 <code>go get {packageUrl(pkg)}</code>
