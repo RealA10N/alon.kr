@@ -5,4 +5,5 @@ title: WriterTo Utils
 description: A collection of utilities to easily manage, modify and concatenate io.WriterTo's.
 sourceUrl: https://github.com/RealA10N/writertoutils
 versionSourceControl: git
+lastUpdate: 2024-06-05
 ---
