@@ -19,9 +19,9 @@
 <code>go get {packageUrl(pkg)}</code>
 
 <h2>Source</h2>
-<p>can be found <a href={pkg.sourceUrl}>here</a>.</p>
+<p>can be found <a target="_blank" href={pkg.sourceUrl}>here</a>.</p>
 
 <h2>Documentation</h2>
-<p>can be found <a href={documentationUrl(pkg)}>here</a>.</p>
+<p>can be found <a target="_blank" href={documentationUrl(pkg)}>here</a>.</p>
 
 <slot />
