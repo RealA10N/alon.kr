@@ -27,5 +27,5 @@ export const load = (async () => {
 
 	posts.sort((a, b) => a.published - b.published).reverse();
 
-	return { posts: posts };
+	return { posts };
 }) satisfies PageServerLoad;
