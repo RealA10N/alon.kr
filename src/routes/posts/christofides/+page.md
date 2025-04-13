@@ -110,7 +110,7 @@ meaning that the sum of degrees across all vertices in the graph is even. If we 
 $$
 \sum_{v \in V_\text{odd}}{ \deg(v) } + \underbrace{\sum_{v\in V_\text{even}}{\deg(v)}}_\text{even} = \underbrace{2 \left| E \right|}_\text{even}
 $$
-Hence $\sum_{v \in V_\text{odd}} \deg(v)$ must be even too. By definition, all elements in the sum are even, meaning that $|V_\text{odd}|$ must be even, as required.<Ref references={references} title="Handshaking Lemma" people="Wikipedia" url="https://en.wikipedia.org/wiki/Handshaking_lemma"/>
+Hence $\sum_{v \in V_\text{odd}} \deg(v)$ must be even too. By definition, all elements in the sum are odd, meaning that $|V_\text{odd}|$ must be even, as required.<Ref references={references} title="Handshaking Lemma" people="Wikipedia" url="https://en.wikipedia.org/wiki/Handshaking_lemma"/>
 
 Recall that in the naïve algorithm, we have the MST and we want to convert it to a graph with even vertices only. By the Handshaking lemma, we know that the number of *bad* vertices (odd degree vertices) must be even, which is a crucial observation towards Christofides' Algortihm.
 

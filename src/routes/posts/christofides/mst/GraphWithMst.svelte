@@ -11,6 +11,6 @@
 		<Graph {width} {edges} {vertices} vertexLabels={false} gravity={true} sticky={false} />
 	</FullWidth>
 	<svelte:fragment slot="caption">
-		A weighted graph with his minimum spanning tree highlighted
+		A weighted graph with its minimum spanning tree highlighted
 	</svelte:fragment>
 </Figure>
