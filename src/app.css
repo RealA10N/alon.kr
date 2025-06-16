@@ -90,3 +90,23 @@ input {
 	@apply tag bg-transparent transition-colors
 	focus:border-2 focus:dark:bg-zinc-700;
 }
+
+table {
+	@apply divide-y divide-zinc-800 dark:divide-zinc-200
+	overflow-hidden border-separate border-spacing-0
+	shadow dark:shadow-none rounded-md
+	border border-zinc-600 dark:border-zinc-400;
+}
+
+th {
+	@apply text-zinc-700 dark:text-zinc-300
+	bg-zinc-200 dark:bg-zinc-800;
+}
+
+td, th {
+	@apply px-2 py-1;
+}
+
+tr {
+	@apply hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors
+}
