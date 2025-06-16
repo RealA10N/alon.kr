@@ -10,6 +10,8 @@ tags: ["#SoME4", "Theoretical Computer Science"]
     import Ref from "$lib/Ref.svelte";
     import ReferencesList from "$lib/ReferencesList.svelte";
 
+    import Circuit from "./lib/Circuit.svelte";
+
     let references = [];
 </script>
 
@@ -34,7 +36,7 @@ The field has surprisingly deep and far-reaching implications, yet many of its m
 Moreover, the models and problems are very *pure* - easy to grasp, experiment with, and surprisingly rich in depth.
 
 In this blog post I will try to introduce you to the field, and will walk you
-through the definitions, methods, main results and open problems, and implications.
+through the definitions, methods, main results, open problems, and implications.
 I also try to reference as much sources as possible for you to explore on your
 own. Hopefully, my excitement for this topic rubs off on you. Happy reading!
 
@@ -42,9 +44,8 @@ own. Hopefully, my excitement for this topic rubs off on you. Happy reading!
 
 A *boolean function* is a function $f : \{0,1\}^n \to \{0, 1\}$, which
 intuitively takes $n$ bits as inputs, and outputs a single bit.
-We usually denote the input bits as $x_1, x_2, ..., x_n$, and say that an input
-bit $x_i$ is *on* if $x_i = 1$, or *off* if $x_i = 0$.
-
+We usually denote the input vector as $x = (x_1, x_2, ..., x_n)$, where $x_i$ is
+the $i$-th input bit.
 Examples of such functions are
 
 $$
@@ -68,39 +69,44 @@ $$
 $$
 
 which outputs 1 if and only if the number of on inputs bits is greater than some
-constant $k$ (The $\text{Th}$ stands for *Threshold*).
+constant $k$ (The *"Th"* stands for *Threshold*).
+
+### Non-Trivial Boolean Functions
 
 Notice boolean functions can also represent much more complex properties. For
 example, given a graph with $v$ vertices, we can describe a boolean function
-with $n = \binom{v}{2}$ inputs, one bit for each possible edge, where the output
-is $1$ if and only if some property of the input graph holds. One, commonly
-mentioned example is the $\text{CLIQUE}_k(x)$ function, which outputs $1$ if
-and only if the provided graph has a subgraph which is a clique of size $k$.
-Note that this problem is a $\textsf{NP-Complete}$ problem, which in simple
-terms means that it is widely believed that finding the answer is computationally hard.<Ref
+with $n = \binom{v}{2}$ inputs, one input bit for each possible edge, where the
+output is 1 if and only if some property of the input graph holds.
+One, commonly mentioned example is the $\text{CLIQUE}_k(x)$ function, which outputs
+1 if and only if the provided graph has a clique subgraph of size $k$.
+This problem is *NP-Complete*, which in simple terms means that it
+is widely believed that finding the answer is computationally hard.<Ref
     title="Clique problem"
     url="https://en.wikipedia.org/wiki/Clique_problem"
     people="Wikipedia"
     references={references}
 />
 
-One final note is that the model above can be extended to functions that output
-multiple bits.
+The model described above can also be extended to functions that output multiple bits.
 Given a function $f^n_m : \{0, 1\}^n \to \{0, 1\}^m$, we can define $m$ different
 functions $f_1, f_2, \dots, f_m$ where each $f_i : \{0, 1\}^n \to \{0, 1\}$ is
 defined such that $f_i(x) = 1$ if and only if the $i$-th bit of $f^n_m(x)$ is 1.
-An example of such function, with multiple outputs bits, is
+I will use $y = (y_1, y_2, \dots, y_m)$ to denote the output vector of such
+functions, where $y_i$ is the $i$-th output bit.
+A particularly interesting example of a function with multiple outputs bits is
 $\text{FACTOR}_n : \{0, 1\}^n \to \{0, 1\}^n$,
-that takes a binary vector $(x_1, x_2, \dots, x_n)$, which represents the binary
-encoded integer $x^\star = \sum_{i=1}^n x_i 2^{i-1}$, and a outputs an $n$ bit
-binary encoded integer which represents the smallest prime factor of $x^\star$,
-(or 1 if $x^\star$ is prime).<Ref
+that takes a binary vector $(x_1, x_2, \dots, x_n)$, that represents the binary
+encoded integer $x^\star = \sum_{i=1}^n x_i 2^{i-1}$, and outputs a similarly
+encoded integer $y^\star = \sum_{i=1}^n y_i 2^{i-1}$, where $y^\star$ is the
+smallest prime factor of $x^\star$ (or $1$ if $x^\star$ is prime).<Ref
     title="Integer factorization"
     url="https://en.wikipedia.org/wiki/Integer_factorization"
     people="Wikipedia"
     references={references}
 />
-Notice that $\text{FACTOR}_n$ is well-defined, and factoring large numbers is widely believed to be hard in general: many cryptographic systems rely on this hardness to ensure their security.<Ref
+Notice that $\text{FACTOR}_n$ is well-defined, and factoring large numbers is
+widely believed to be hard in general: many cryptographic systems rely on this
+hardness to ensure their security.<Ref
     title="RSA cryptosystem"
     url="https://en.wikipedia.org/wiki/RSA_cryptosystem"
     people="Wikipedia"
@@ -109,7 +115,7 @@ Notice that $\text{FACTOR}_n$ is well-defined, and factoring large numbers is wi
 
 ## The Boolean Circuit
 
-A *boolean circuit*
+<Circuit />
 
 ## Why Upper Bounds Are Important?
 
@@ -142,5 +148,12 @@ A *boolean circuit*
 On $\textsf{P}/\textsf{poly}$.
 
 ## References and Further Reading
+
+<Ref
+    title="Boolean Function Complexity: Advances and Frontiers"
+    url="https://www.doi.org/10.1007/978-3-642-24508-4"
+    people="Stasys Jukna"
+    references={references}
+/>
 
 <ReferencesList {references}/>
