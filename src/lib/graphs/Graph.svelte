@@ -26,19 +26,20 @@
 	// A function that can be called to reheat the simulation.
 	// This is useful when the graph is updated, for example, when
 	// edges or vertices are added or removed.
+	// No now forces are applied to the simulation: if the simulation is in a
+	// stable state, no new movement will be applied to the nodes. If you want
+	// to reset the forces, use `warmRefresh` instead.
 	export const refresh = () => {
 		simulation?.restart();
 	};
 
-	// A unique string representing an instance of the graph.
-	// Since we are manipulating the svg (DOM) directly, svelte can't help
-	// us with isolation between different instances of the component in the
-	// same page. Where needed, we use this unique value to share state between
-	// the same instance and to not mix different instances (for example, in
-	// class names).
-	const unique = Math.random().toString(16).substring(2);
+	// A function that can be called to reheat the simulation, and reset all
+	// forces applied to the nodes.
+	export const warmRefresh = () => {
+		simulation?.alpha(1).restart();
+	};
 
-	// When one of the props updates, we "reheat" the simulation.
+	// When one of the props updates, we reinitialize the whole simulation.
 	let simulation: d3.Simulation<Vertex, Edge> | undefined;
 	$: $$props, initSimulation();
 
@@ -72,7 +73,7 @@
 		delete d.fx;
 		delete d.fy;
 		d3.select(this).classed('fixed', false);
-		simulation?.alpha(1).restart();
+		warmRefresh();
 	}
 
 	function startNodeSelection() {
@@ -82,7 +83,7 @@
 	function dragNode(event, d) {
 		d.fx = clamp(event.x, width);
 		d.fy = clamp(event.y, height);
-		simulation?.alpha(1).restart();
+		warmRefresh();
 	}
 
 	function initRegularDrag(node) {
