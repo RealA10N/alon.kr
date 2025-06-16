@@ -10,6 +10,7 @@ export interface Edge extends SimulationLinkDatum<Vertex> {
 }
 
 export interface Vertex extends SimulationNodeDatum {
+	id: number;
 	color?: Color;
 	label?: string | number;
 	highlight?: boolean;

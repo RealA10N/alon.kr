@@ -199,7 +199,7 @@
 	}
 </script>
 
-<svg id="graph" {width} {height} viewBox="{-width / 2} {-height / 2} {width} {height}">
+<svg {...$$props} id="graph" {width} {height} viewBox="{-width / 2} {-height / 2} {width} {height}">
 	<marker
 		id="graph-arrow-head"
 		markerWidth="10"
