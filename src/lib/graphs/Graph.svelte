@@ -23,6 +23,13 @@
 	type runOnTickFunc = { (): any };
 	export let runOnTick: runOnTickFunc | undefined = undefined;
 
+	// A function that can be called to reheat the simulation.
+	// This is useful when the graph is updated, for example, when
+	// edges or vertices are added or removed.
+	export const refresh = () => {
+		simulation?.restart();
+	};
+
 	// A unique string representing an instance of the graph.
 	// Since we are manipulating the svg (DOM) directly, svelte can't help
 	// us with isolation between different instances of the component in the
@@ -199,7 +206,13 @@
 	}
 </script>
 
-<svg {...$$props} id="graph" {width} {height} viewBox="{-width / 2} {-height / 2} {width} {height}">
+<svg
+	{...$$restProps}
+	id="graph"
+	{width}
+	{height}
+	viewBox="{-width / 2} {-height / 2} {width} {height}"
+>
 	<marker
 		id="graph-arrow-head"
 		markerWidth="10"
