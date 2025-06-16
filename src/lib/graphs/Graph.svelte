@@ -148,7 +148,7 @@
 			.attr('y1', (d) => d.source.y)
 			.attr('x2', (d) => d.target.x)
 			.attr('y2', (d) => d.target.y)
-			.attr('marker-end', (d) => (d.direction ? `url(#arrow-${unique})` : ''));
+			.attr('marker-end', (d) => (d.direction ? 'url(#graph-arrow-head)' : ''));
 
 		link
 			.select('.label')
@@ -201,16 +201,15 @@
 
 <svg id="graph" {width} {height} viewBox="{-width / 2} {-height / 2} {width} {height}">
 	<marker
-		id="arrow-{unique}"
-		class="graph-marker"
-		viewBox="-15 -10 15 20"
-		markerUnits="userSpaceOnUse"
-		refX={radius}
-		markerWidth={16}
-		markerHeight={16}
+		id="graph-arrow-head"
+		markerWidth="10"
+		markerHeight="10"
+		refX={10 + radius}
+		refY="5"
 		orient="auto"
+		markerUnits="userSpaceOnUse"
 	>
-		<path d="M -15 -10 L 0 0 L -15 10" fill="currentColor" />
+		<polygon points="0 0, 10 5, 0 10" fill="context-stroke" />
 	</marker>
 
 	<g id="links" bind:this={graphLinks} />
