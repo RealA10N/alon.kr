@@ -174,6 +174,7 @@
 				const g = enter
 					.append('g')
 					.classed('node', true)
+					.classed('clickable', mode !== GraphMode.static)
 					.classed('fixed', (d) => d.fx !== undefined);
 				g.append('circle').attr('r', radius);
 
@@ -217,8 +218,7 @@
 </svg>
 
 <style lang="postcss">
-	#nodes :global(.node) {
-		/* nodes only */
+	#nodes :global(.clickable) {
 		@apply cursor-pointer;
 	}
 
