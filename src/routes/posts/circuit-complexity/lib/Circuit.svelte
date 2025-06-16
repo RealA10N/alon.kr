@@ -100,12 +100,6 @@
 		{ source: 9, target: 10 }
 	].map((e) => ({ ...e, direction: true } as Edge));
 
-	let width: number;
-
-	const flipInput = (i: number) => () => {
-		inputs[i] = !inputs[i];
-	};
-
 	let gateResults = computeFunction();
 	$: inputs, vertices, edges, (gateResults = computeFunction());
 
@@ -113,56 +107,64 @@
 	$: outputs = outputIndices.map((i) => gateResults[i]);
 
 	onMount(computeFunction);
+
+	let width: number;
+	$: graphWidth = Math.min(width, 460);
 </script>
 
 <Figure>
-	<FullWidth bind:width slot="content">
-		<Graph
-			class="inline-block "
-			width={400}
-			{edges}
-			{vertices}
-			vertexLabels={true}
-			mode={GraphMode.regular}
-		/>
-		<table class="inline-block table-fixed translate-y-4">
-			<colgroup>
-				<col class="w-20" />
-				<col class="w-20" />
-			</colgroup>
-			<tr>
-				<th class="text-center">Input</th>
-				<th class="text-center">Value</th>
-			</tr>
-			{#each inputs as input, i}
-				<tr>
-					<td class="text-center">x<sub>{i + 1}</sub></td>
-					<td>
-						<BooleanButton bind:value={input} />
-					</td>
-				</tr>
-			{/each}
-		</table>
+	<FullWidth slot="content" bind:width>
+		<div class="flex flex-wrap items-center justify-center">
+			<Graph
+				class="inline-block flex-shrink-0"
+				width={graphWidth}
+				{edges}
+				{vertices}
+				vertexLabels={true}
+				mode={GraphMode.regular}
+			/>
 
-		<table class="inline-block table-fixed translate-y-28 -translate-x-10">
-			<colgroup>
-				<col class="w-20" />
-				<col class="w-20" />
-			</colgroup>
+			<div class="flex flex-row sm:flex-col items-start">
+				<table class="m-2 inline-block table-fixed">
+					<colgroup>
+						<col class="w-20" />
+						<col class="w-20" />
+					</colgroup>
+					<tr>
+						<th class="text-center">Input</th>
+						<th class="text-center">Value</th>
+					</tr>
+					{#each inputs as input, i}
+						<tr>
+							<td class="text-center">x<sub>{i + 1}</sub></td>
+							<td>
+								<BooleanButton bind:value={input} />
+							</td>
+						</tr>
+					{/each}
+				</table>
 
-			<tr>
-				<th class="text-center">Output</th>
-				<th class="text-center">Value</th>
-			</tr>
-			{#each outputs as output, i}
-				<tr>
-					<td class="text-center">y<sub>{i + 1}</sub></td>
-					<td>
-						<BooleanTag value={output} />
-					</td>
-				</tr>
-			{/each}
-		</table>
+				<table class="m-2 inline-block table-fixed">
+					<colgroup>
+						<col class="w-20" />
+						<col class="w-20" />
+					</colgroup>
+
+					<tr>
+						<th class="text-center">Output</th>
+						<th class="text-center">Value</th>
+					</tr>
+					{#each outputs as output, i}
+						<tr>
+							<td class="text-center">y<sub>{i + 1}</sub></td>
+							<td>
+								<BooleanTag value={output} />
+							</td>
+						</tr>
+					{/each}
+				</table>
+			</div>
+		</div>
 	</FullWidth>
 
 	<svelte:fragment slot="caption">
