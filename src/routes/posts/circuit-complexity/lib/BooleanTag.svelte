@@ -2,12 +2,14 @@
 	export let value: boolean;
 </script>
 
-<span class="tag inline-block w-14" class:true={value}>
-	{value ? 'True' : 'False'}
+<span class="inline-block w-14">
+	<span class="text-sm border-b" class:true={value}>
+		{value ? 'True' : 'False'}
+	</span>
 </span>
 
 <style lang="postcss">
-	.tag.true {
+	.true {
 		@apply border-red-500;
 	}
 </style>
