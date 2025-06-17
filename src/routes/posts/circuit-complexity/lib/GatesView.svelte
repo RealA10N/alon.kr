@@ -127,9 +127,14 @@
 			</table>
 		{/if}
 	</div>
+
 	<svelte:fragment slot="buttons">
 		{#each options as option, i}
 			<Toggle options={option} bind:selected={selectedOptions[i]} />
 		{/each}
+	</svelte:fragment>
+
+	<svelte:fragment slot="caption">
+		A representation of the 16 boolean gates of fanin 2.
 	</svelte:fragment>
 </Figure>
