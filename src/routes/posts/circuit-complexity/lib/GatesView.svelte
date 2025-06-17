@@ -1,11 +1,4 @@
-<script lang="ts">
-	import Figure from '$lib/Figure.svelte';
-	import Toggle from '$lib/Toggle.svelte';
-	import type { Option } from '$lib/Toggle.svelte';
-	import BooleanTag from './BooleanTag.svelte';
-
-	import Gate from './Gate.svelte';
-
+<script lang="ts" context="module">
 	type GateDesc = {
 		id: number;
 		name: string;
@@ -13,6 +6,21 @@
 		bits: boolean[];
 		highlight?: boolean;
 	};
+
+	type GateFilter = (g: GateDesc) => boolean;
+
+	type OptionWithFilter = Option & {
+		filter?: GateFilter;
+	};
+</script>
+
+<script lang="ts">
+	import Figure from '$lib/Figure.svelte';
+	import Toggle from '$lib/Toggle.svelte';
+	import type { Option } from '$lib/Toggle.svelte';
+	import BooleanTag from './BooleanTag.svelte';
+
+	import Gate from './Gate.svelte';
 
 	const gatesBase = [
 		{ id: 1, name: '⊥', description: 'False', bits: [false, false, false, false] },
@@ -32,8 +40,6 @@
 		{ id: 15, name: '∨', description: 'Or', bits: [false, true, true, true] },
 		{ id: 16, name: '⊤', description: 'True', bits: [true, true, true, true] }
 	] as GateDesc[];
-
-	type GateFilter = (g: GateDesc) => boolean;
 
 	const isSymmetric = (g: GateDesc) => g.bits[1] === g.bits[2];
 	const isAsymmetric = (g: GateDesc) => !isSymmetric(g);
@@ -72,11 +78,11 @@
 			{ name: '3 True Output', filter: isNumberOfTrueOutputs(3), focus: true },
 			{ name: 'Constant', filter: isConstant, focus: true }
 		]
-	] as Option[][];
+	] as OptionWithFilter[][];
 
 	let selectedOptions = options.map((o) => o[0]);
 
-	const selectedFilters = (selectedOptions: Option[]): GateFilter[] =>
+	const selectedFilters = (selectedOptions: OptionWithFilter[]): GateFilter[] =>
 		selectedOptions.filter((o) => o?.filter !== undefined).map((o) => o.filter as GateFilter);
 
 	const isHighlighted = (g: GateDesc, selectedOptions: Option[]) =>
