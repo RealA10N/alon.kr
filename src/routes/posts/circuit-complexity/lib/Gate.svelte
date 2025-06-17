@@ -3,15 +3,16 @@
 	export let description: string = '';
 	export let highlight: boolean = false;
 	export let focus: boolean = false;
+	export let onHover: () => void = () => {};
 </script>
 
 <button
 	class:highlight
 	class:focus
-	on:mouseenter={() => (focus = true)}
-	on:mouseleave={() => (focus = false)}
+	on:mouseenter={onHover}
+	on:pointerdown={onHover}
 	class="w-20 h-20 transition-all p-2 rounded-md shadow dark:shadow-none
-	border border-zinc-600 dark:border-zinc-400 text-center
+	border border-zinc-600 dark:border-zinc-400 text-center hover:scale-105
 	flex flex-col items-center justify-center gap-1"
 >
 	<div class="text-sm">{name}</div>
@@ -24,8 +25,7 @@
 	button.highlight {
 		@apply border-red-500  border-2;
 	}
-
 	button.focus {
-		@apply scale-105 shadow-md;
+		@apply shadow-md;
 	}
 </style>

@@ -5,6 +5,7 @@
 		description?: string;
 		bits: boolean[];
 		highlight?: boolean;
+		focus?: boolean;
 	};
 
 	type GateFilter = (g: GateDesc) => boolean;
@@ -18,28 +19,37 @@
 	import Figure from '$lib/Figure.svelte';
 	import Toggle from '$lib/Toggle.svelte';
 	import type { Option } from '$lib/Toggle.svelte';
+	import AnimationButton from '$src/lib/AnimationButton.svelte';
+	import BooleanButton from './BooleanButton.svelte';
 	import BooleanTag from './BooleanTag.svelte';
 
 	import Gate from './Gate.svelte';
 
-	const gatesBase = [
-		{ id: 1, name: '⊥', description: 'False', bits: [false, false, false, false] },
-		{ id: 2, name: '↓', description: 'Not Or', bits: [true, false, false, false] },
-		{ id: 3, name: '¬x₁ ∧ x₂', bits: [false, true, false, false] },
-		{ id: 4, name: '¬x₁', description: 'Negation', bits: [true, true, false, false] },
-		{ id: 5, name: 'x₁ ∧ ¬x₂', bits: [false, false, true, false] },
-		{ id: 6, name: '¬x₂', description: 'Negation', bits: [true, false, true, false] },
-		{ id: 7, name: '⊕', description: 'Exclusive Or', bits: [false, true, true, false] },
-		{ id: 8, name: '↑', description: 'Not And', bits: [true, true, true, false] },
-		{ id: 9, name: '∧', description: 'And', bits: [false, false, false, true] },
-		{ id: 10, name: '↔', description: 'Equality', bits: [true, false, false, true] },
-		{ id: 11, name: 'x₂', description: 'Identity', bits: [false, true, false, true] },
-		{ id: 12, name: 'x₁ → x₂', description: 'Implication', bits: [true, true, false, true] },
-		{ id: 13, name: 'x₁', description: 'Identity', bits: [false, false, true, true] },
-		{ id: 14, name: 'x₂ → x₁', description: 'Implication', bits: [true, false, true, true] },
-		{ id: 15, name: '∨', description: 'Or', bits: [false, true, true, true] },
-		{ id: 16, name: '⊤', description: 'True', bits: [true, true, true, true] }
-	] as GateDesc[];
+	const idToBits = (n: number, len: number) =>
+		Array.from({ length: len }, (_, i) => (n & (1 << i)) !== 0);
+
+	let gatesBase = [
+		{ name: '⊥', description: 'False', focus: true },
+		{ name: '↓', description: 'Not Or' },
+		{ name: '¬x₁ ∧ x₂' },
+		{ name: '¬x₁', description: 'Negation' },
+		{ name: 'x₁ ∧ ¬x₂' },
+		{ name: '¬x₂', description: 'Negation' },
+		{ name: '⊕', description: 'Exclusive Or' },
+		{ name: '↑', description: 'Not And' },
+		{ name: '∧', description: 'And' },
+		{ name: '↔', description: 'Equality' },
+		{ name: 'x₂', description: 'Identity' },
+		{ name: 'x₁ → x₂', description: 'Implication' },
+		{ name: 'x₁', description: 'Identity' },
+		{ name: 'x₂ → x₁', description: 'Implication' },
+		{ name: '∨', description: 'Or' },
+		{ name: '⊤', description: 'True' }
+	].map((g, id) => ({
+		...g,
+		id: id,
+		bits: idToBits(id, 4)
+	})) as GateDesc[];
 
 	const isSymmetric = (g: GateDesc) => g.bits[1] === g.bits[2];
 	const isAsymmetric = (g: GateDesc) => !isSymmetric(g);
@@ -95,37 +105,74 @@
 		highlight: isHighlighted(g, selectedOptions)
 	}));
 
-	let selectedGate;
+	const hover = (g: GateDesc) => (stop(), select(g));
+
+	const select = (g: GateDesc) => {
+		gatesBase.forEach((gate) => (gate.focus = gate.id === g.id));
+		gatesBase = [...gatesBase];
+		console.log(gatesBase.map((g) => g.bits));
+	};
+
+	const next = () => {
+		const inc = (i: number) => (i + 1) % gatesBase.length;
+
+		for (let i = inc(selectedGateIdx); i !== selectedGateIdx; i = inc(i)) {
+			if (gates[i].highlight) {
+				return select(gatesBase[i]);
+			}
+		}
+
+		// None of the gates are highlighted, so we just select the next one.
+		select(gates[inc(selectedGateIdx)]);
+	};
+
+	let stop: () => void = () => {};
+
+	$: selectedGateIdx = Math.max(
+		0,
+		gatesBase.findIndex((g) => g.focus)
+	);
+	$: selectedGate = gatesBase[selectedGateIdx];
 </script>
 
 <Figure>
 	<div class="flex flex-row items-center justify-center gap-4" slot="content">
 		<div class="w-96 flex flex-row flex-wrap items-center justify-center">
 			{#each gates as g (g.id)}
-				<Gate name={g.name} description={g.description} highlight={g.highlight} />
+				<Gate
+					name={g.name}
+					description={g.description}
+					highlight={g.highlight}
+					onHover={() => hover(g)}
+					focus={g.focus}
+				/>
 			{/each}
 		</div>
 
-		{#if selectedGate}
-			<table>
-				<thead>
-					<tr>
-						<th>x₁</th>
-						<th>x₂</th>
-						<th>{selectedGate.name}</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each selectedGate.bits as b, i}
+		<div class="flex flex-col justify-items items-center">
+			{#if selectedGate}
+				<table class="m-2">
+					<thead>
 						<tr>
-							<td><BooleanTag value={Boolean(Math.floor(i / 2))} /></td>
-							<td><BooleanTag value={Boolean(i % 2)} /></td>
-							<td><BooleanTag value={b} /></td>
+							<th>x₁</th>
+							<th>x₂</th>
+							<th>{selectedGate.name}</th>
 						</tr>
-					{/each}
-				</tbody>
-			</table>
-		{/if}
+					</thead>
+					<tbody>
+						{#each selectedGate.bits as b, i}
+							<tr>
+								<td><BooleanTag value={Boolean(Math.floor(i / 2))} /></td>
+								<td><BooleanTag value={Boolean(i % 2)} /></td>
+								<td class="w-24"><BooleanButton value={b} /></td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			{/if}
+
+			<AnimationButton {next} bind:stop />
+		</div>
 	</div>
 
 	<svelte:fragment slot="buttons">

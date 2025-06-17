@@ -129,7 +129,10 @@ in particular, there are exactly $2^{2^2} = 16$ unique gates with two inputs.
 
 <GatesView />
 
-<!-- Notice that this family of gates includes all gates of fanin 1 and 0 (constants). -->
+Notice that out of the 16 gates of *fanin-2*, only <a>10 gates</a> depend on
+both inputs, <a>4 gates</a> depend on exactly one of the inputs, and <a>2 gates</a>
+depend on no inputs, and their outputs are constant. Hence, this family of gates
+actually encapsulates all gates of *fanin* $\le 2$.
 
 <Circuit />
 
