@@ -1,10 +1,9 @@
 <script lang="ts">
 	export let value: boolean;
-
-	const toggle = () => (value = !value);
+	export let onClick: () => any = () => (value = !value);
 </script>
 
-<button class="w-14" on:click={toggle} class:true={value}>
+<button class="w-14" on:click={onClick} class:true={value}>
 	{value ? 'True' : 'False'}
 </button>
 

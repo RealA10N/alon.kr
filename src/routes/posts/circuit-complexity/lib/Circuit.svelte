@@ -7,6 +7,7 @@
 	import { onMount } from 'svelte';
 	import BooleanButton from './BooleanButton.svelte';
 	import BooleanTag from './BooleanTag.svelte';
+	import AnimationButton from '$src/lib/AnimationButton.svelte';
 
 	export const prerender = true;
 
@@ -67,6 +68,8 @@
 		return result;
 	};
 
+	let refresh = () => {};
+
 	const computeFunction = (): boolean[] => {
 		let cachedGates = new Map<Gate, boolean>();
 		for (const gate of vertices) {
@@ -74,7 +77,7 @@
 			setGateState(gate, state);
 		}
 
-		edges = [...edges]; // To trigger reactivity.
+		refresh();
 		return vertices.map((g) => computeGate(g, cachedGates));
 	};
 
@@ -106,10 +109,28 @@
 	const outputIndices: number[] = [9];
 	$: outputs = outputIndices.map((i) => gateResults[i]);
 
+	const inputsToNumber = (inputs: boolean[]): number => {
+		return inputs.reduce((acc, input, i) => acc + (input ? 1 << i : 0), 0);
+	};
+
+	const numberToInputs = (number: number): boolean[] => {
+		return Array.from({ length: inputs.length }, (_, i) => Boolean(number & (1 << i)));
+	};
+
+	const next = () => {
+		let n = inputsToNumber(inputs);
+		n += 1;
+		n %= 1 << inputs.length;
+		inputs = numberToInputs(n);
+	};
+
+	let stop = () => {};
+
 	onMount(computeFunction);
 
 	let width: number;
-	$: graphWidth = Math.min(width, 460);
+	$: responsiveWidth = Math.min(width - 280, 460);
+	$: graphWidth = responsiveWidth > 200 ? responsiveWidth : width;
 </script>
 
 <Figure>
@@ -121,10 +142,11 @@
 				{edges}
 				{vertices}
 				vertexLabels={true}
-				mode={GraphMode.regular}
+				mode={GraphMode.sticky}
+				bind:refresh
 			/>
 
-			<div class="flex flex-row sm:flex-col items-start">
+			<div class="flex flex-col items-center justify-center">
 				<table class="m-2 inline-block table-fixed">
 					<colgroup>
 						<col class="w-20" />
@@ -138,7 +160,13 @@
 						<tr>
 							<td class="text-center">x<sub>{i + 1}</sub></td>
 							<td>
-								<BooleanButton bind:value={input} />
+								<BooleanButton
+									onClick={() => {
+										stop();
+										input = !input;
+									}}
+									bind:value={input}
+								/>
 							</td>
 						</tr>
 					{/each}
@@ -163,6 +191,7 @@
 						</tr>
 					{/each}
 				</table>
+				<AnimationButton {next} bind:stop />
 			</div>
 		</div>
 	</FullWidth>

@@ -1,7 +1,5 @@
 <script lang="ts">
 	export let value: boolean;
-
-	const toggle = () => (value = !value);
 </script>
 
 <span class="tag inline-block w-14" class:true={value}>

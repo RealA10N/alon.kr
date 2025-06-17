@@ -11,6 +11,7 @@ tags: ["#SoME4", "Theoretical Computer Science"]
     import ReferencesList from "$lib/ReferencesList.svelte";
 
     import Circuit from "./lib/Circuit.svelte";
+    import GatesView from "./lib/GatesView.svelte";
 
     let references = [];
 </script>
@@ -37,6 +38,8 @@ Moreover, the models and problems are very *pure* - easy to grasp, experiment wi
 
 In this blog post I will try to introduce you to the field, and will walk you
 through the definitions, methods, main results, open problems, and implications.
+I intentionally avoid getting bogged down in technicalities; my goal is to
+convey the core ideas and intuition, rather than be perfectly rigorous.
 I also try to reference as much sources as possible for you to explore on your
 own. Hopefully, my excitement for this topic rubs off on you. Happy reading!
 
@@ -114,6 +117,19 @@ hardness to ensure their security.<Ref
 />
 
 ## The Boolean Circuit
+
+Intuitively, a *boolean circuit* is a description of a computation of a large
+boolean function $f : \{0, 1\}^n \to \{0,1\}$, that meticulously concatenates
+the outputs of *weaker* boolean functions $g : \{0, 1\}^k \to \{0, 1\}$, which
+we call *gates*. The number of input bits $k$ in a given gate is sometimes called
+the *fanin* or *in-degree* of the gate, and for the purpose of this post, all
+gates are of fanin of at most 2.
+It is easy to show that there are $2^{2^k}$ different gates of *fanin* $k$, and
+in particular, there are exactly $2^{2^2} = 16$ unique gates with two inputs.
+
+<GatesView />
+
+<!-- Notice that this family of gates includes all gates of fanin 1 and 0 (constants). -->
 
 <Circuit />
 
