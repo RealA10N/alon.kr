@@ -10,22 +10,20 @@ tags: ["#SoME4", "Theoretical Computer Science"]
     import Ref from "$lib/Ref.svelte";
     import ReferencesList from "$lib/ReferencesList.svelte";
 
+    import EyeCatcher from "./lib/EyeCatcher.svelte";
     import Circuit from "./lib/Circuit.svelte";
     import GatesView from "./lib/GatesView.svelte";
 
     let references = [];
+
 </script>
 
-Circuit complexity is a subbranch of computational complexity theory that
-studies how simple or efficient a process can be when broken down into its most
-basic steps.
-At its heart, the main question in circuit complexity is this: *How simple can a
-computation be?* More specifically, if you have a function that takes a bunch of
-binary (yes/no) inputs and produces a binary output, how few logical steps (gates)
-do you need to compute it? Some functions are easy, and you can compute them with
-just a few gates; but others seem to require much more! The mystery is that, for
-many functions, we still don't know how simple they could be, or if there's a
-clever trick we’re missing.<Ref
+Circuit complexity is a subbranch of computational complexity theory that studies how simple or efficient a process can be when broken down into its most basic steps.
+
+<EyeCatcher />
+
+More specifically, if you have a function that takes a bunch of binary (yes/no) inputs and produces a binary output, how few logical steps (gates) do you need to compute it? Some functions are easy, and you can compute them with just a few gates; but others seem to require much more! The mystery is that, for
+many functions, we still don't know how simple they could be, or if there's a clever trick we’re missing.<Ref
     title="Circuit Complexity"
     people="Wikipedia"
     url="https://en.wikipedia.org/wiki/Circuit_complexity"
