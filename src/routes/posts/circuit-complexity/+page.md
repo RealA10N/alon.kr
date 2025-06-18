@@ -32,9 +32,12 @@ clever trick we’re missing.<Ref
     references={references}
 />
 
-I first came across circuit complexity just a few weeks ago, and I was immediately hooked;
-The field has surprisingly deep and far-reaching implications, yet many of its most basic and fundamental questions remain open!
-Moreover, the models and problems are very *pure* - easy to grasp, experiment with, and surprisingly rich in depth.
+I first came across circuit complexity just a few weeks ago, and I was immediately
+hooked;
+The field has surprisingly deep and far-reaching implications, yet many of its
+most basic and fundamental questions remain open!
+Moreover, the models and problems are very *pure* - easy to grasp, experiment
+with, and surprisingly rich in depth.
 
 In this blog post I will try to introduce you to the field, and will walk you
 through the definitions, methods, main results, open problems, and implications.
@@ -130,11 +133,30 @@ in particular, there are exactly $2^{2^2} = 16$ unique gates with two inputs.
 <GatesView />
 
 Notice that out of the 16 gates of *fanin-2*, only <a>10 gates</a> depend on
-both inputs, <a>4 gates</a> depend on exactly one of the inputs, and <a>2 gates</a>
-depend on no inputs, and their outputs are constant. Hence, this family of gates
-actually encapsulates all gates of *fanin* $\le 2$.
+both inputs, <a>2 gates</a> depend strictly on $x_1$, <a>another 2</a> depends
+only on $x_2$, and the final <a>2 gates</a> depend on no inputs, and their outputs
+are constant. Hence, this family of gates actually encapsulates all gates of
+*fanin* $\le 2$.
+
+We call a collection $\Phi$ of boolean functions a *basis*.
+Then, a *circuit* $C$ over $\Phi$ is a directed acyclic graph $G = (V, E)$
+where all nodes $v \in V$ with $\deg_\text{in}(v) = 0$ are labeled by a variable
+$(x_1, x_2, \dots)$, and are called the *inputs* of the circuit.
+Every other node $u \in V$ is labeled by a function (gate) from $\Phi$ of
+$\deg_\text{in}(u)$ variables.
+In addition, nodes $w \in V$ where $\deg_\text{out}(w) = 0$ are called the *outputs*
+of the circuit and are labeled by $(y_1, y_2, \dots)$.<Ref
+    title="Boolean Circuit Complexity: Lecture Notes"
+    people="Uri Zwick, Omer Shibolet"
+    url="https://www.cs.tau.ac.il//~zwick/scribe-boolean.html"
+    references={references}
+/>
 
 <Circuit />
+
+### Complete Bases
+
+### Notes on Other Models
 
 ## Why Upper Bounds Are Important?
 
