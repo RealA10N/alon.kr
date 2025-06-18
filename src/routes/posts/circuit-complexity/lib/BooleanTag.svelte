@@ -3,7 +3,7 @@
 </script>
 
 <span class="inline-block w-14">
-	<span class="text-sm border-b" class:true={value}>
+	<span class="text-sm border-b border-zinc-500" class:true={value}>
 		{value ? 'True' : 'False'}
 	</span>
 </span>
