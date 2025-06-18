@@ -7,7 +7,7 @@
 <header class="flex flex-col items-center mb-4 text-zinc-700 dark:text-zinc-300">
 	<h1 class="text-center mt-0">{title}</h1>
 	{#if description}
-		<div class="font-medium tracking-wider text-md italic text-center">
+		<div class="font-medium text-base tracking-wider text-md italic text-center">
 			{description}
 		</div>
 	{/if}
