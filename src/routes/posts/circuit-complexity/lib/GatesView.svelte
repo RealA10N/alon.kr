@@ -19,11 +19,10 @@
 	import Figure from '$lib/Figure.svelte';
 	import Toggle from '$lib/Toggle.svelte';
 	import type { Option } from '$lib/Toggle.svelte';
-	import AnimationButton from '$src/lib/AnimationButton.svelte';
-	import BooleanButton from './BooleanButton.svelte';
-	import BooleanTag from './BooleanTag.svelte';
-
+	import AnimationButton from '$lib/AnimationButton.svelte';
+	
 	import Gate from './Gate.svelte';
+import TruthTable from '$lib/logic/TruthTable.svelte';
 
 	const idToBits = (n: number, len: number) =>
 		Array.from({ length: len }, (_, i) => (n & (1 << i)) !== 0);
@@ -99,8 +98,7 @@
 		selectedFilters(selectedOptions).length > 0 &&
 		selectedFilters(selectedOptions).every((f) => f(g));
 
-	// Create reactive gates array that updates when filters change
-	$: gates = gatesBase.map((g) => ({
+		$: gates = gatesBase.map((g) => ({
 		...g,
 		highlight: isHighlighted(g, selectedOptions)
 	}));
@@ -132,6 +130,7 @@
 		0,
 		gatesBase.findIndex((g) => g.focus)
 	);
+
 	$: selectedGate = gatesBase[selectedGateIdx];
 </script>
 
@@ -148,33 +147,14 @@
 				/>
 			{/each}
 		</div>
-
 		<div class="flex flex-col justify-items items-center">
 			{#if selectedGate}
-				<table class="m-2">
-					<thead>
-						<tr>
-							<th>x₁</th>
-							<th>x₂</th>
-							<th>{selectedGate.name}</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each selectedGate.bits as b, i}
-							<tr>
-								<td><BooleanTag value={Boolean(Math.floor(i / 2))} /></td>
-								<td><BooleanTag value={Boolean(i % 2)} /></td>
-								<td class="w-24"><BooleanButton value={b} /></td>
-							</tr>
-						{/each}
-					</tbody>
-				</table>
+				<TruthTable bits={selectedGate.bits} name={selectedGate.name} />
 			{/if}
 
 			<AnimationButton {next} bind:stop />
 		</div>
 	</div>
-
 	<svelte:fragment slot="buttons">
 		{#each options as option, i}
 			<Toggle options={option} bind:selected={selectedOptions[i]} />

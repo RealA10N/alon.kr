@@ -5,9 +5,9 @@
 	import { GraphMode, type Edge, type Vertex } from '$lib/graphs/graphs';
 	import { Color } from '$lib/interfaces/color';
 	import { onMount } from 'svelte';
-	import BooleanButton from './BooleanButton.svelte';
-	import BooleanTag from './BooleanTag.svelte';
-	import AnimationButton from '$src/lib/AnimationButton.svelte';
+	import BooleanButton from '$lib/logic/BooleanButton.svelte';
+	import BooleanTag from '$lib/logic/BooleanTag.svelte';
+	import AnimationButton from '$lib/AnimationButton.svelte';
 
 	export const prerender = true;
 
