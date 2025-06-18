@@ -20,9 +20,9 @@
 	import Toggle from '$lib/Toggle.svelte';
 	import type { Option } from '$lib/Toggle.svelte';
 	import AnimationButton from '$lib/AnimationButton.svelte';
-	
+
 	import Gate from './Gate.svelte';
-import TruthTable from '$lib/logic/TruthTable.svelte';
+	import TruthTable from '$lib/logic/TruthTable.svelte';
 
 	const idToBits = (n: number, len: number) =>
 		Array.from({ length: len }, (_, i) => (n & (1 << i)) !== 0);
@@ -30,18 +30,18 @@ import TruthTable from '$lib/logic/TruthTable.svelte';
 	let gatesBase = [
 		{ name: '⊥', description: 'False', focus: true },
 		{ name: '↓', description: 'Not Or' },
-		{ name: '¬x₁ ∧ x₂' },
-		{ name: '¬x₁', description: 'Negation' },
 		{ name: 'x₁ ∧ ¬x₂' },
 		{ name: '¬x₂', description: 'Negation' },
+		{ name: '¬x₁ ∧ x₂' },
+		{ name: '¬x₁', description: 'Negation' },
 		{ name: '⊕', description: 'Exclusive Or' },
 		{ name: '↑', description: 'Not And' },
 		{ name: '∧', description: 'And' },
 		{ name: '↔', description: 'Equality' },
-		{ name: 'x₂', description: 'Identity' },
-		{ name: 'x₁ → x₂', description: 'Implication' },
 		{ name: 'x₁', description: 'Identity' },
 		{ name: 'x₂ → x₁', description: 'Implication' },
+		{ name: 'x₂', description: 'Identity' },
+		{ name: 'x₁ → x₂', description: 'Implication' },
 		{ name: '∨', description: 'Or' },
 		{ name: '⊤', description: 'True' }
 	].map((g, id) => ({
@@ -98,7 +98,7 @@ import TruthTable from '$lib/logic/TruthTable.svelte';
 		selectedFilters(selectedOptions).length > 0 &&
 		selectedFilters(selectedOptions).every((f) => f(g));
 
-		$: gates = gatesBase.map((g) => ({
+	$: gates = gatesBase.map((g) => ({
 		...g,
 		highlight: isHighlighted(g, selectedOptions)
 	}));
