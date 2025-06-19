@@ -11,7 +11,7 @@ tags: ["#SoME4", "Theoretical Computer Science"]
     import ReferencesList from "$lib/ReferencesList.svelte";
 
     import EyeCatcher from "./lib/EyeCatcher.svelte";
-    import Circuit from "./lib/Circuit.svelte";
+    import Th2Circuit from "./lib/Th2Circuit.svelte";
     import GatesView from "./lib/GatesView.svelte";
 
     let references = [];
@@ -89,7 +89,7 @@ Then, a *circuit* $C$ over $\Phi$ is a directed acyclic graph $G = (V, E)$ where
 Every other node $u \in V$ is labeled by a function (gate) from $\Phi$ of $\deg_\text{in}(u)$ variables.
 In addition, nodes $w \in V$ where $\deg_\text{out}(w) = 0$ are called the *outputs* of the circuit and are labeled by $(y_1, y_2, \dots)$.<Ref title="Boolean Circuit Complexity: Lecture Notes" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il//~zwick/scribe-boolean.html" references={references} />
 
-<Circuit />
+<Th2Circuit />
 
 ### Computation of the Circuit
 
