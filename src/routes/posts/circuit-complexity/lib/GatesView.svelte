@@ -31,6 +31,20 @@
 
 	const isConstant = (g: GateDesc) => isNumberOfTrueOutputs(0)(g) || isNumberOfTrueOutputs(4)(g);
 
+	const isIncreasing = (g: GateDesc) =>
+		g.bits[0] <= g.bits[1] &&
+		g.bits[0] <= g.bits[2] &&
+		g.bits[1] <= g.bits[3] &&
+		g.bits[2] <= g.bits[3];
+
+	const isDecreasing = (g: GateDesc) =>
+		g.bits[0] >= g.bits[1] &&
+		g.bits[0] >= g.bits[2] &&
+		g.bits[1] >= g.bits[3] &&
+		g.bits[2] >= g.bits[3];
+
+	const isMonotone = (g: GateDesc) => isIncreasing(g) || isDecreasing(g);
+
 	let options = [
 		[
 			{ name: 'x₁-Dependent' },
@@ -56,9 +70,9 @@
 		],
 		[
 			{ name: 'Monotone' },
-			{ name: 'Monotone', focus: true },
-			{ name: 'Increasing', focus: true },
-			{ name: 'Decreasing', focus: true }
+			{ name: 'Monotone', filter: isMonotone, focus: true },
+			{ name: 'Increasing', filter: isIncreasing, focus: true },
+			{ name: 'Decreasing', filter: isDecreasing, focus: true }
 		]
 	] as OptionWithFilter[][];
 
