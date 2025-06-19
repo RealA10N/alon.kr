@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let name: string = '';
+	export let label: string = '';
 	export let description: string = '';
 	export let highlight: boolean = false;
 	export let focus: boolean = false;
@@ -15,7 +15,7 @@
 	border border-zinc-600 dark:border-zinc-400 text-center hover:scale-105
 	flex flex-col items-center justify-center gap-1"
 >
-	<div class="text-sm">{name}</div>
+	<div class="text-sm">{label}</div>
 	{#if description}
 		<div class="px-2 text-xs italic text-center">{description}</div>
 	{/if}

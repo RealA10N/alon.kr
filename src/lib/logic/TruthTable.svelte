@@ -3,7 +3,7 @@
 	import BooleanTag from '$lib/logic/BooleanTag.svelte';
 
 	export let bits: boolean[] = [];
-	export let name: string = '';
+	export let label: string = '';
 
 	// log2 of the smallest power of two that is greater or equal to the bits length.
 	$: variableCount = Math.ceil(Math.log2(bits.length));
@@ -33,7 +33,7 @@
 			{/each}
 			<!-- The output column is a bit wider to slightly longer function
 			 names to fit nicely without changing the table dimensions. -->
-			<th class="w-24">{name}</th>
+			<th class="w-24">{label}</th>
 		</tr>
 	</thead>
 	<tbody>

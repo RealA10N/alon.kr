@@ -151,7 +151,7 @@
 	<div class="flex flex-row items-center justify-center gap-4" slot="content">
 		<GatesTable gates={BooleanGates} bind:selectedGateIdx bind:highlightIndices bind:select />
 		<div class="flex flex-col justify-items items-center">
-			<TruthTable bind:select={selectBits} name={selectedGate.name} bind:bits={selectedGate.bits} />
+			<TruthTable bind:select={selectBits} label={selectedGate.label} bits={selectedGate.bits} />
 			<AnimationButton {next} bind:stop />
 		</div>
 	</div>

@@ -13,7 +13,7 @@
 <div class="w-96 flex flex-row flex-wrap items-center justify-center">
 	{#each gates as g (g.id)}
 		<GateCard
-			name={g.name}
+			label={g.label}
 			description={g.description}
 			highlight={highlightIndices[g.id]}
 			onHover={() => select(g.id)}
