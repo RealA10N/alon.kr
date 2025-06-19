@@ -12,18 +12,18 @@
 	import type { Option } from '$lib/Toggle.svelte';
 	import AnimationButton from '$lib/AnimationButton.svelte';
 
-	import Gate from './Gate.svelte';
 	import TruthTable from '$lib/logic/TruthTable.svelte';
 	import { BooleanGates } from '$lib/logic/booleanGates';
 	import type { GateDesc } from '$lib/logic/booleanGates';
+	import GatesTable from '$lib/logic/GatesTable.svelte';
 
 	const isSymmetric = (g: GateDesc) => g.bits[1] === g.bits[2];
 	const isAsymmetric = (g: GateDesc) => !isSymmetric(g);
 
-	const isX1Dependent = (g: GateDesc) => g.bits[0] !== g.bits[2] || g.bits[1] !== g.bits[3];
+	const isX1Dependent = (g: GateDesc) => g.bits[0] !== g.bits[1] || g.bits[2] !== g.bits[3];
 	const isX1Independent = (g: GateDesc) => !isX1Dependent(g);
 
-	const isX2Dependent = (g: GateDesc) => g.bits[0] !== g.bits[1] || g.bits[2] !== g.bits[3];
+	const isX2Dependent = (g: GateDesc) => g.bits[0] !== g.bits[2] || g.bits[1] !== g.bits[3];
 	const isX2Independent = (g: GateDesc) => !isX2Dependent(g);
 
 	const isNumberOfTrueOutputs = (n: number) => (g: GateDesc) =>
@@ -67,9 +67,13 @@
 	const selectedFilters = (selectedOptions: OptionWithFilter[]): GateFilter[] =>
 		selectedOptions.filter((o) => o?.filter !== undefined).map((o) => o.filter as GateFilter);
 
-	const hover = (gateIdx: number) => (stop(), select(gateIdx));
+	let selectedGateIdx = 0;
+	$: selectedGate = BooleanGates[selectedGateIdx];
 
-	const select = (gateIdx: number) => (selectedGateIdx = gateIdx);
+	let select = (gateIdx: number) => {
+		selectedGateIdx = gateIdx;
+		stop();
+	};
 
 	const next = () => {
 		const inc = (i: number) => (i + 1) % BooleanGates.length;
@@ -86,25 +90,26 @@
 
 	let stop: () => void = () => {};
 
-	let highlightIndices = Array(BooleanGates.length).fill(false);
+	const computeHighlightedIndices = (
+		selectedOptions: OptionWithFilter[],
+		gates: GateDesc[]
+	): boolean[] => {
+		const filters = selectedFilters(selectedOptions);
+		if (filters.length === 0) {
+			// If no filters are selected, instead of highlighting all gates,
+			// we highlight none of them.
+			return Array(gates.length).fill(false);
+		}
 
-	let selectedGateIdx = 0;
-	$: selectedGate = BooleanGates[selectedGateIdx];
+		return gates.map((g) => filters.every((f) => f(g)));
+	};
+
+	$: highlightIndices = computeHighlightedIndices(selectedOptions, BooleanGates);
 </script>
 
 <Figure>
 	<div class="flex flex-row items-center justify-center gap-4" slot="content">
-		<div class="w-96 flex flex-row flex-wrap items-center justify-center">
-			{#each BooleanGates as g (g.id)}
-				<Gate
-					name={g.name}
-					description={g.description}
-					highlight={highlightIndices[g.id]}
-					onHover={() => hover(g.id)}
-					focus={selectedGateIdx === g.id}
-				/>
-			{/each}
-		</div>
+		<GatesTable gates={BooleanGates} bind:selectedGateIdx bind:highlightIndices bind:select />
 		<div class="flex flex-col justify-items items-center">
 			<TruthTable name={selectedGate.name} bits={selectedGate.bits} />
 
