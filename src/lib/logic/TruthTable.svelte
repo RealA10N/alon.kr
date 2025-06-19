@@ -15,6 +15,14 @@
 	const variableName = (i: number) => 'x' + toSubscript(i + 1);
 
 	const locationToValue = (row: number, col: number) => Boolean((row >> col) & 1);
+
+	export let select = (newBits: boolean[]): any => (bits = newBits);
+
+	const toggle = (row: number) => {
+		const newBits = [...bits];
+		newBits[row] = !newBits[row];
+		select(newBits);
+	};
 </script>
 
 <table class="m-2 text-center">
@@ -34,7 +42,7 @@
 				{#each Array(variableCount) as _, col}
 					<td><BooleanTag value={locationToValue(row, col)} /></td>
 				{/each}
-				<td><BooleanButton value={b} /></td>
+				<td><BooleanButton value={b} onClick={() => toggle(row)} /></td>
 			</tr>
 		{/each}
 	</tbody>

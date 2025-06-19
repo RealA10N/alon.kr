@@ -13,7 +13,7 @@
 	import AnimationButton from '$lib/AnimationButton.svelte';
 
 	import TruthTable from '$lib/logic/TruthTable.svelte';
-	import { BooleanGates } from '$lib/logic/booleanGates';
+	import { bitsToId, BooleanGates } from '$lib/logic/booleanGates';
 	import type { GateDesc } from '$lib/logic/booleanGates';
 	import GatesTable from '$lib/logic/GatesTable.svelte';
 
@@ -75,6 +75,8 @@
 		stop();
 	};
 
+	let selectBits = (bits: boolean[]) => select(bitsToId(bits));
+
 	const next = () => {
 		const inc = (i: number) => (i + 1) % BooleanGates.length;
 
@@ -135,8 +137,7 @@
 	<div class="flex flex-row items-center justify-center gap-4" slot="content">
 		<GatesTable gates={BooleanGates} bind:selectedGateIdx bind:highlightIndices bind:select />
 		<div class="flex flex-col justify-items items-center">
-			<TruthTable name={selectedGate.name} bits={selectedGate.bits} />
-
+			<TruthTable bind:select={selectBits} name={selectedGate.name} bind:bits={selectedGate.bits} />
 			<AnimationButton {next} bind:stop />
 		</div>
 	</div>
