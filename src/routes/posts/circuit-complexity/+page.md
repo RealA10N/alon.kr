@@ -103,22 +103,25 @@ Intuitively, to compute the value of an internal node $v$, we first compute
 the value of all of it's predecessors $\text{pred}(v)$, and then apply the
 corresponding gate function $\varphi$ on the computed value of the predecessors.
 Since the graph is acyclic, this process always terminates.
-
-<!-- Finally, we say that the circuit $C$ computes $f$ -->
-<!-- Definition of "circuit that computes a function" here? -->
-
-### Circuit Complexity Measures
-
-<!-- It is common to measure the *complexity* on two different metrics.
-The first one, is the number of gates in a circuit.
-
-We usually measure the *complexity* of a circuit $C$ by
-
-Measuring the *complexity* of a circuit is the -->
+Finally, we say that the circuit $C$ computes $f$ if for all input vectors $x$,
+the value of the output node $g_w(x)$ equals to $f(x)$.
 
 ### Complete Bases
 
-### Notes on Other Models
+Recall that a basis $\Phi$ is a collection of gates (boolean functions).
+We say that a basis $\Phi$ is *complete* if for every boolean function $f$ (with any number of variables) there exists a circuit $C_\Phi^f$ that computes the function $f$ over the basis $\Phi$.
+<!-- 
+It is easy to see that the basis $\{\wedge, \vee, \neg\}$ is complete;
+One can take any boolean function $f$, look at it's truth table, and construct a circuit that represents the CNF<Ref title="Conjunctive normal form" people="Wikipedia" url="https://en.wikipedia.org/wiki/Conjunctive_normal_form" references={references} /> -->
+
+## Measuring Circuit Complexity
+
+It is common to measure the *complexity* of a circuit using two different metrics.
+
+1. The first is the *number of gates* in the circuit. This measure is fairly straightforward: if we stick with the analogy of gates as very simple pieces of logic, then the more gates a circuit has, the more complex the functions it can represent. When talking about hardware circuits, this directly correlates to the cost, and size, of the corresponding hardware.
+2. The second one is called the *depth* of the circuit, and is the length of the longest path in the circuit. Intuitively, this measure indicates how *parallelizable* the computation is. With real hardware as an analogy, this correlates to how fast the computation can be performed.
+
+We now have all the basic knowledge and definitions to start researching!
 
 ## Why Upper Bounds Are Important?
 
@@ -149,6 +152,10 @@ Measuring the *complexity* of a circuit is the -->
 ## Connection To Classical Computational Theory
 
 On $\textsf{P}/\textsf{poly}$.
+
+## Final Notes
+
+### Other Models Of Computation
 
 ## References and Further Reading
 
