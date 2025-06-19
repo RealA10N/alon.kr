@@ -16,6 +16,10 @@ tags: ["#SoME4", "Theoretical Computer Science"]
 
     let references = [];
 
+    let highlightDependentOnBothVariables: () => any;
+    let highlightDependentOnX1: () => any;
+    let highlightDependentOnX2: () => any;
+    let highlightConstants: () => any;
 </script>
 
 Circuit complexity is a subbranch of computational complexity theory that studies how simple or efficient a process can be when broken down into its most basic steps.
@@ -75,9 +79,9 @@ Intuitively, a *boolean circuit* is a description of a computation of a large bo
 The number of input bits $k$ in a given gate is sometimes called the *fanin* or *in-degree* of the gate, and for the purpose of this post, all gates are of fanin of at most 2.
 It is easy to show that there are $2^{2^k}$ different gates of *fanin* $k$, and in particular, there are exactly $2^{2^2} = 16$ unique gates with two inputs.
 
-<GatesView />
+<GatesView bind:highlightDependentOnBothVariables bind:highlightDependentOnX1 bind:highlightDependentOnX2 bind:highlightConstants />
 
-Notice that out of the 16 gates of *fanin-2*, only <a>10 gates</a> depend on both inputs, <a>2 gates</a> depend strictly on $x_1$, <a>another 2</a> depends only on $x_2$, and the final <a>2 gates</a> depend on no inputs, and their outputs are constant.
+Notice that out of the 16 gates of *fanin-2*, only <a on:click={highlightDependentOnBothVariables}>10 gates</a> depend on both inputs, <a on:click={highlightDependentOnX1}>2 gates</a> depend strictly on $x_1$, <a on:click={highlightDependentOnX2}>another 2</a> depends only on $x_2$, and the final <a on:click={highlightConstants}>2 gates</a> depend on no inputs, and their outputs are constant.
 Hence, this family of gates actually encapsulates all gates of *fanin* $\le 2$.
 
 We call a collection $\Phi$ of boolean functions a *basis*.

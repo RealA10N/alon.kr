@@ -105,6 +105,30 @@
 	};
 
 	$: highlightIndices = computeHighlightedIndices(selectedOptions, BooleanGates);
+
+	export const highlightDependentOnBothVariables = () => {
+		selectedOptions = options.map((o) => o[0]);
+		selectedOptions[0] = options[0][1]; // x₁-Dependent
+		selectedOptions[1] = options[1][1]; // x₂-Dependent
+	};
+
+	export const highlightDependentOnX1 = () => {
+		selectedOptions = options.map((o) => o[0]);
+		selectedOptions[0] = options[0][1]; // x₁-Dependent
+		selectedOptions[1] = options[1][2]; // x₂-Independent
+	};
+
+	export const highlightDependentOnX2 = () => {
+		selectedOptions = options.map((o) => o[0]);
+		selectedOptions[0] = options[0][2]; // x₁-Independent
+		selectedOptions[1] = options[1][1]; // x₂-Dependent
+	};
+
+	export const highlightConstants = () => {
+		selectedOptions = options.map((o) => o[0]);
+		selectedOptions[0] = options[0][2]; // x₁-Independent
+		selectedOptions[1] = options[1][2]; // x₂-Independent
+	};
 </script>
 
 <Figure>
