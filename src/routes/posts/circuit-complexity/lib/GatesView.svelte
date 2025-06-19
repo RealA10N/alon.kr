@@ -1,13 +1,4 @@
 <script lang="ts" context="module">
-	type GateDesc = {
-		id: number;
-		name: string;
-		description?: string;
-		bits: boolean[];
-		highlight?: boolean;
-		focus?: boolean;
-	};
-
 	type GateFilter = (g: GateDesc) => boolean;
 
 	type OptionWithFilter = Option & {
@@ -23,32 +14,8 @@
 
 	import Gate from './Gate.svelte';
 	import TruthTable from '$lib/logic/TruthTable.svelte';
-
-	const idToBits = (n: number, len: number) =>
-		Array.from({ length: len }, (_, i) => (n & (1 << i)) !== 0);
-
-	let gatesBase = [
-		{ name: '⊥', description: 'False', focus: true },
-		{ name: '↓', description: 'Not Or' },
-		{ name: 'x₁ ∧ ¬x₂' },
-		{ name: '¬x₂', description: 'Negation' },
-		{ name: '¬x₁ ∧ x₂' },
-		{ name: '¬x₁', description: 'Negation' },
-		{ name: '⊕', description: 'Exclusive Or' },
-		{ name: '↑', description: 'Not And' },
-		{ name: '∧', description: 'And' },
-		{ name: '↔', description: 'Equality' },
-		{ name: 'x₁', description: 'Identity' },
-		{ name: 'x₂ → x₁', description: 'Implication' },
-		{ name: 'x₂', description: 'Identity' },
-		{ name: 'x₁ → x₂', description: 'Implication' },
-		{ name: '∨', description: 'Or' },
-		{ name: '⊤', description: 'True' }
-	].map((g, id) => ({
-		...g,
-		id: id,
-		bits: idToBits(id, 4)
-	})) as GateDesc[];
+	import { BooleanGates } from '$lib/logic/booleanGates';
+	import type { GateDesc } from '$lib/logic/booleanGates';
 
 	const isSymmetric = (g: GateDesc) => g.bits[1] === g.bits[2];
 	const isAsymmetric = (g: GateDesc) => !isSymmetric(g);
@@ -86,6 +53,12 @@
 			{ name: '1 True Output', filter: isNumberOfTrueOutputs(1), focus: true },
 			{ name: '3 True Output', filter: isNumberOfTrueOutputs(3), focus: true },
 			{ name: 'Constant', filter: isConstant, focus: true }
+		],
+		[
+			{ name: 'Monotone' },
+			{ name: 'Monotone', focus: true },
+			{ name: 'Increasing', focus: true },
+			{ name: 'Decreasing', focus: true }
 		]
 	] as OptionWithFilter[][];
 
@@ -94,63 +67,46 @@
 	const selectedFilters = (selectedOptions: OptionWithFilter[]): GateFilter[] =>
 		selectedOptions.filter((o) => o?.filter !== undefined).map((o) => o.filter as GateFilter);
 
-	const isHighlighted = (g: GateDesc, selectedOptions: Option[]) =>
-		selectedFilters(selectedOptions).length > 0 &&
-		selectedFilters(selectedOptions).every((f) => f(g));
+	const hover = (gateIdx: number) => (stop(), select(gateIdx));
 
-	$: gates = gatesBase.map((g) => ({
-		...g,
-		highlight: isHighlighted(g, selectedOptions)
-	}));
-
-	const hover = (g: GateDesc) => (stop(), select(g));
-
-	const select = (g: GateDesc) => {
-		gatesBase.forEach((gate) => (gate.focus = gate.id === g.id));
-		gatesBase = [...gatesBase];
-		console.log(gatesBase.map((g) => g.bits));
-	};
+	const select = (gateIdx: number) => (selectedGateIdx = gateIdx);
 
 	const next = () => {
-		const inc = (i: number) => (i + 1) % gatesBase.length;
+		const inc = (i: number) => (i + 1) % BooleanGates.length;
 
 		for (let i = inc(selectedGateIdx); i !== selectedGateIdx; i = inc(i)) {
-			if (gates[i].highlight) {
-				return select(gatesBase[i]);
+			if (highlightIndices[i]) {
+				return select(i);
 			}
 		}
 
 		// None of the gates are highlighted, so we just select the next one.
-		select(gates[inc(selectedGateIdx)]);
+		select(inc(selectedGateIdx));
 	};
 
 	let stop: () => void = () => {};
 
-	$: selectedGateIdx = Math.max(
-		0,
-		gatesBase.findIndex((g) => g.focus)
-	);
+	let highlightIndices = Array(BooleanGates.length).fill(false);
 
-	$: selectedGate = gatesBase[selectedGateIdx];
+	let selectedGateIdx = 0;
+	$: selectedGate = BooleanGates[selectedGateIdx];
 </script>
 
 <Figure>
 	<div class="flex flex-row items-center justify-center gap-4" slot="content">
 		<div class="w-96 flex flex-row flex-wrap items-center justify-center">
-			{#each gates as g (g.id)}
+			{#each BooleanGates as g (g.id)}
 				<Gate
 					name={g.name}
 					description={g.description}
-					highlight={g.highlight}
-					onHover={() => hover(g)}
-					focus={g.focus}
+					highlight={highlightIndices[g.id]}
+					onHover={() => hover(g.id)}
+					focus={selectedGateIdx === g.id}
 				/>
 			{/each}
 		</div>
 		<div class="flex flex-col justify-items items-center">
-			{#if selectedGate}
-				<TruthTable bits={selectedGate.bits} name={selectedGate.name} />
-			{/if}
+			<TruthTable name={selectedGate.name} bits={selectedGate.bits} />
 
 			<AnimationButton {next} bind:stop />
 		</div>
