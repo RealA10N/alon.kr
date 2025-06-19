@@ -91,6 +91,31 @@ In addition, nodes $w \in V$ where $\deg_\text{out}(w) = 0$ are called the *outp
 
 <Circuit />
 
+### Computation of the Circuit
+
+The *value* $g_v(x)$ of a node $v \in V$ on input $x = (x_1, x_2 \dots, x_n)$, is defined inductively:
+
+- If $v$ is labeled by an input variable $x_i$, then simply $g_v(x) = x_i$.
+- Otherwise, let $\varphi \in \Phi$ be the function labeled by $v$, and let $\text{pred}(v) = (u_1, u_2, \dots)$ be the nodes with incoming edges to $v$.
+Then, $g_v(x) = \varphi(g_{u_1}(x), g_{u_2}(x), \dots)$.
+
+Intuitively, to compute the value of an internal node $v$, we first compute
+the value of all of it's predecessors $\text{pred}(v)$, and then apply the
+corresponding gate function $\varphi$ on the computed value of the predecessors.
+Since the graph is acyclic, this process always terminates.
+
+<!-- Finally, we say that the circuit $C$ computes $f$ -->
+<!-- Definition of "circuit that computes a function" here? -->
+
+### Circuit Complexity Measures
+
+<!-- It is common to measure the *complexity* on two different metrics.
+The first one, is the number of gates in a circuit.
+
+We usually measure the *complexity* of a circuit $C$ by
+
+Measuring the *complexity* of a circuit is the -->
+
 ### Complete Bases
 
 ### Notes on Other Models
