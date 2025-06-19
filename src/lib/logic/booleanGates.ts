@@ -1,7 +1,8 @@
 export type GateDesc = {
 	id: number;
 	label: string;
-	description?: string;
+	usage: string;
+	description: string;
 	bits: boolean[];
 };
 
@@ -14,22 +15,22 @@ export const bitsToId = (bits: boolean[]) =>
 // Those are all the 16 possible gates with 2 inputs and 1 output, each with
 // an explicit name and description.
 export const BooleanGates = [
-	{ label: '⊥', description: 'False' },
-	{ label: '↓', description: 'Not Or' },
-	{ label: 'x₁ ∧ ¬x₂' },
-	{ label: '¬x₂', description: 'Negation' },
-	{ label: '¬x₁ ∧ x₂' },
-	{ label: '¬x₁', description: 'Negation' },
-	{ label: '⊕', description: 'Exclusive Or' },
-	{ label: '↑', description: 'Not And' },
-	{ label: '∧', description: 'And' },
-	{ label: '↔', description: 'Equality' },
-	{ label: 'x₁', description: 'Identity' },
-	{ label: 'x₂ → x₁', description: 'Implication' },
-	{ label: 'x₂', description: 'Identity' },
-	{ label: 'x₁ → x₂', description: 'Implication' },
-	{ label: '∨', description: 'Or' },
-	{ label: '⊤', description: 'True' }
+	{ label: '⊥', usage: '⊥', description: 'False' },
+	{ label: '↓', usage: 'x₁ ↓ x₂', description: 'Not Or' },
+	{ label: '↛', usage: 'x₁ ↛ x₂', description: 'Not Implication' },
+	{ label: '¬x₂', usage: '¬x₂', description: 'Negation' },
+	{ label: '↚', usage: 'x₁ ↚ x₂', description: 'Not Implication' },
+	{ label: '¬x₁', usage: '¬x₁', description: 'Negation' },
+	{ label: '⊕', usage: 'x₁ ⊕ x₂', description: 'Exclusive Or' },
+	{ label: '↑', usage: 'x₁ ↑ x₂', description: 'Not And' },
+	{ label: '∧', usage: 'x₁ ∧ x₂', description: 'And' },
+	{ label: '↔', usage: 'x₁ ↔ x₂', description: 'Equivalence' },
+	{ label: 'x₁', usage: 'x₁', description: 'Identity' },
+	{ label: '←', usage: 'x₁ ← x₂', description: 'Implication' },
+	{ label: 'x₂', usage: 'x₂', description: 'Identity' },
+	{ label: '→', usage: 'x₁ → x₂', description: 'Implication' },
+	{ label: '∨', usage: 'x₁ ∨ x₂', description: 'Or' },
+	{ label: '⊤', usage: '⊤', description: 'True' }
 ].map((g, id) => ({
 	...g,
 	id: id,
