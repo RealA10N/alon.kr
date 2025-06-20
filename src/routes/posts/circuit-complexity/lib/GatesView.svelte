@@ -161,7 +161,5 @@
 		{/each}
 	</svelte:fragment>
 
-	<svelte:fragment slot="caption">
-		A representation of the 16 boolean gates of fanin 2.
-	</svelte:fragment>
+	<svelte:fragment slot="caption">A representation of the 16 boolean gates in B₂</svelte:fragment>
 </Figure>
