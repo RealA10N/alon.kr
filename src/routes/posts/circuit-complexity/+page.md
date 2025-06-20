@@ -87,7 +87,7 @@ Hence, this family of gates actually encapsulates all gates of *fanin* $\le 2$.
 We call a collection $\Phi$ of boolean functions a *basis*.
 Then, a *circuit* $C$ over $\Phi$ is a directed acyclic graph $G = (V, E)$ where all nodes $v \in V$ with $\deg_\text{in}(v) = 0$ are labeled by a variable $(x_1, x_2, \dots)$, and are called the *inputs* of the circuit.
 Every other node $u \in V$ is labeled by a function (gate) from $\Phi$ of $\deg_\text{in}(u)$ variables.
-In addition, nodes $w \in V$ where $\deg_\text{out}(w) = 0$ are called the *outputs* of the circuit and are labeled by $(y_1, y_2, \dots)$.<Ref title="Boolean Circuit Complexity: Lecture Notes" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il//~zwick/scribe-boolean.html" references={references} />
+In addition, nodes $w \in V$ where $\deg_\text{out}(w) = 0$ are called the *outputs* of the circuit and are labeled by $(y_1, y_2, \dots)$.<Ref title="Boolean Circuit Complexity: Scribe notes. Lecture 1, Section 1.1" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il/~zwick/scribe-boolean.html" references={references} />
 
 <Th2Circuit />
 
@@ -145,20 +145,27 @@ We denote by $C_\Phi(f)$ and $D_\Phi(f)$ the minimal size and depth, respectivel
 ## Almost All Functions Are Complex
 
 A primary result that ignited Circuit Complexity as a field of study came from Shannon in 1949<Ref title="The synthesis of two-terminal switching circuits" people="Claude Shannon" url="https://doi.org/10.1002%2Fj.1538-7305.1949.tb03624.x" references={references} />, and later revised by Muller (1956).<Ref title="Complexity in Electronic Switching Circuits" people="Bodegas De Muller" url="https://doi.org/10.1109/TEC.1956.5219786" references={references} />
-The idea is to use a simple counting argument to show that *almost all Boolean functions are complex*.
+The idea is to use a simple counting argument to show that almost all Boolean functions require a circuit of size $\ge 2^n / n$.
 The original proofs are fairly lengthy and technical (Muller has put it in the article’s appendix!), but since then, many slightly modified proofs have been presented.<Ref title="Algorithms and Complexity: Handbook of Theoretical Computer Science. Chapter 14, Theorem 2.4" people="Ravi B. Boppana, Michael Sipser" url="doi.org/10.1016/B978-0-444-88071-0.50019-9" references={references} /><Ref title="Boolean Circuit Complexity: Scribe notes. Lecture 1, Theorem 1.6" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il//~zwick/scribe-boolean.html" references={references} /><Ref title="Boolean Function Complexity: Advances and Frontiers. Chapter 1, Lemma 1.12" people="Stasys Jukna" url="doi.org/10.1007/978-3-642-24508-4" references={references} /> Below I present a modified version based on the sources mentioned.
 
 <!-- TODO: Add definition of B_2 -->
 
-Denote with $\alpha(n, s)$ the number of different circuits over $B_2$ with $n$ input variables, and $s$ internal gates.
-Now, we want to give a relatively simple expression to bound $\alpha(n, s)$ from above.
-Since it is hard to map and count combinatorially the number of acyclic graphs with $s+n$ vertices, we lift this constraint, and construct a set $\mathcal{A}$, which consists of all graphs with $s+n$ vertices, where $n$ vertices have no incoming edges and correspond to the $n$ input vertices in a circuit. The other $s$ vertices have an in-degree of 2, where each incoming edge can be one of the $s+n$ other vertices. In addition, each of the $s$ vertex is also labeled with one of the $\left|B_2\right| = 16$ gates. Finally, one vertex out of the $s$ vertices is labeled as the output vertex.
+Denote with $\mathcal{\phi}(n, s)$ the number of different circuits over $B_2$ with $n$ input variables, and $s$ internal gates.
+Now, we want to give a relatively simple expression to bound $\mathcal{\phi}(n, s)$ from above.
+We construct a set $\mathcal{A}$, which consists of all graphs with $s+n$ vertices, with the following restrictions:
 
-First, it is easy to see that there are exactly $16 (s+n)^2$ different gate vertices: There are 16 options for the gate label, and another $(s+n)$ options for each of the 2 incoming edges. Hence,
+- $n$ vertices have no incoming edges.
+- The other $s$ vertices have an in-degree of 2. Each of those vertices is also labeled with one of the $\left|B_2\right| = 16$ gate functions.
+
+Clearly, some of these graphs do not represent a legal circuit (mainly, nothing requires the a graph in $\mathcal{A}$ to be acyclic).
+Despite that, every legal circuit with $n$ inputs and $s$ internal gates has a corresponding graph in $\mathcal{A}$!
+Also, note that the output vertex is not explicitly labeled. In a legal circuit, it is the only gate with an out-degree of zero.
+
+First, it is easy to see that there are exactly $16 (s+n)^2$ different ways to characterize a single gate vertex; There are 16 options for the gate label, and another $(s+n)$ options for each of the 2 incoming edges. We have exactly $s$ such vertices, and hence,
 
 $$
 \begin{aligned}
-\alpha(n, s) \le \left|\mathcal{A}\right|
+\mathcal{\phi}(n, s) \le \left|\mathcal{A}\right|
     \le \left( 16 \cdot (s+n)^2 \right)^s
     = \left( 4^2 \cdot (2s)^2 \right)^s
     = \left( 8s \right)^{2s}
@@ -196,7 +203,7 @@ $$
 Putting it all together, we got that:
 
 $$
-\alpha(n, 2^n/n) \le \left|\mathcal{A}\right| \le 2^{2^n} \cdot 2^{- \frac{2^n}{n} \log(n)} \cdot \mathcal{O}(1)
+\mathcal{\phi}(n, 2^n/n) \le \left|\mathcal{A}\right| \le 2^{2^n} \cdot 2^{- \frac{2^n}{n} \log(n)} \cdot \mathcal{O}(1)
 $$
 
 Recall that there are only $2^{2^n}$ unique boolean functions of $n$ variables. But the number of different circuits with $2^n/n$ gates is bounded above by a value that is $2^{\frac{2^n}{n} \log(n)}$ times smaller than that! Hence, clearly most boolean functions require more than $2^n/n$ gates to compute.
