@@ -20,7 +20,12 @@ tags: ["#SoME4", "Theoretical Computer Science"]
     let highlightDependentOnX1: () => any;
     let highlightDependentOnX2: () => any;
     let highlightConstants: () => any;
+
+    let innerWidth: number;
+    $: isMobile = Boolean(innerWidth < 480);
 </script>
+
+<svelte:window bind:innerWidth />
 
 Circuit complexity is a subbranch of computational complexity theory that studies how simple or efficient a process can be when broken down into its most basic steps.
 
@@ -78,10 +83,11 @@ Notice that $\text{FACTOR}_n$ is well-defined, and factoring large numbers is wi
 Intuitively, a *boolean circuit* is a description of a computation of a large boolean function $f : \{0, 1\}^n \to \{0,1\}$, that meticulously concatenates the outputs of *weaker* boolean functions $g : \{0, 1\}^k \to \{0, 1\}$, which we call *gates*.
 The number of input bits $k$ in a given gate is sometimes called the *fanin* or *in-degree* of the gate, and for the purpose of this post, all gates are of fanin of at most 2.
 It is easy to show that there are $2^{2^k}$ different gates of *fanin* $k$, and in particular, there are exactly $2^{2^2} = 16$ unique gates with two inputs.
+We denote by $B_n$ the set of all boolean functions with $n$ input variables.
 
 <GatesView bind:highlightDependentOnBothVariables bind:highlightDependentOnX1 bind:highlightDependentOnX2 bind:highlightConstants />
 
-Notice that out of the 16 gates of *fanin-2*, only <a on:click={highlightDependentOnBothVariables}>10 gates</a> depend on both inputs, <a on:click={highlightDependentOnX1}>2 gates</a> depend strictly on $x_1$, <a on:click={highlightDependentOnX2}>another 2</a> depends only on $x_2$, and the final <a on:click={highlightConstants}>2 gates</a> depend on no inputs, and their outputs are constant.
+Notice that out of the 16 gates of in $B_2$, only <a on:click={highlightDependentOnBothVariables}>10 gates</a> depend on both inputs, <a on:click={highlightDependentOnX1}>2 gates</a> depend strictly on $x_1$, <a on:click={highlightDependentOnX2}>another 2</a> depends only on $x_2$, and the final <a on:click={highlightConstants}>2 gates</a> depend on no inputs, and their outputs are constant.
 Hence, this family of gates actually encapsulates all gates of *fanin* $\le 2$.
 
 We call a collection $\Phi$ of boolean functions a *basis*.
@@ -148,8 +154,6 @@ A primary result that ignited Circuit Complexity as a field of study came from S
 The idea is to use a simple counting argument to show that almost all Boolean functions require a circuit of size $\ge 2^n / n$.
 The original proofs are fairly lengthy and technical (Muller has put it in the article’s appendix!), but since then, many slightly modified proofs have been presented.<Ref title="Algorithms and Complexity: Handbook of Theoretical Computer Science. Chapter 14, Theorem 2.4" people="Ravi B. Boppana, Michael Sipser" url="doi.org/10.1016/B978-0-444-88071-0.50019-9" references={references} /><Ref title="Boolean Circuit Complexity: Scribe notes. Lecture 1, Theorem 1.6" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il//~zwick/scribe-boolean.html" references={references} /><Ref title="Boolean Function Complexity: Advances and Frontiers. Chapter 1, Lemma 1.12" people="Stasys Jukna" url="doi.org/10.1007/978-3-642-24508-4" references={references} /> Below I present a modified version based on the sources mentioned.
 
-<!-- TODO: Add definition of B_2 -->
-
 Denote with $\mathcal{\phi}(n, s)$ the number of different circuits over $B_2$ with $n$ input variables, and $s$ internal gates.
 Now, we want to give a relatively simple expression to bound $\mathcal{\phi}(n, s)$ from above.
 We construct a set $\mathcal{A}$, which consists of all graphs with $s+n$ vertices, with the following restrictions:
@@ -163,6 +167,16 @@ Also, note that the output vertex is not explicitly labeled. In a legal circuit,
 
 First, it is easy to see that there are exactly $16 (s+n)^2$ different ways to characterize a single gate vertex; There are 16 options for the gate label, and another $(s+n)$ options for each of the 2 incoming edges. We have exactly $s$ such vertices, and hence,
 
+{#if isMobile}
+$$
+\begin{aligned}
+\mathcal{\phi}(n, s) \le \left|\mathcal{A}\right|
+    &\le \left( 16 \cdot (s+n)^2 \right)^s \\
+    &= \left( 4^2 \cdot (2s)^2 \right)^s \\
+    &= \left( 8s \right)^{2s}
+\end{aligned}
+$$
+{:else}
 $$
 \begin{aligned}
 \mathcal{\phi}(n, s) \le \left|\mathcal{A}\right|
@@ -171,6 +185,7 @@ $$
     = \left( 8s \right)^{2s}
 \end{aligned}
 $$
+{/if}
 
 For convenience, let's take the logarithm of both sides:
 
@@ -183,19 +198,29 @@ $$
 
 By plugging $s = 2^n / n$ we get:
 
+{#if isMobile}
+$$
+\begin{aligned}
+    \log\left( \left|\mathcal{A}\right| \right)
+    &\le 2 \frac{2^n}{n} \log\left( 8 \frac{2^n}{n} \right) \\
+    &= \frac{2^{n+1}}{n} \left( (n+3) - \log(n) \right)
+\end{aligned}
+$$
+{:else}
 $$
     \log\left( \left|\mathcal{A}\right| \right)
     \le 2 \frac{2^n}{n} \log\left( 8 \frac{2^n}{n} \right)
     = \frac{2^{n+1}}{n} \left( (n+3) - \log(n) \right)
 $$
+{/if}
 
 Assuming $n \ge 3$ gives us:
 
 $$
 \begin{aligned}
-    &\le \frac{2^{n+1}}{n} \left( 2n - \log(n) \right)
-    &= 2^{n+2} - \frac{2^{n+1}}{n} \log(n)
-    % &\le 2^{n+2} - \frac{2^n}{n} \log(n) \\
+    \log\left( \left|\mathcal{A}\right| \right)
+    &\le \frac{2^{n+1}}{n} \left( 2n - \log(n) \right) \\
+    &= 2^{n+2} - \frac{2^{n+1}}{n} \log(n) \\
     &\le 2^n - \frac{2^n}{n} \log(n) + \mathcal{O}(1)
 \end{aligned}
 $$
