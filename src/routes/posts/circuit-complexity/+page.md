@@ -156,7 +156,7 @@ The original proofs are fairly lengthy and technical (Muller has put it in the a
 
 Denote with $\mathcal{\phi}(n, s)$ the number of different circuits over $B_2$ with $n$ input variables, and $s$ internal gates.
 Now, we want to give a relatively simple expression to bound $\mathcal{\phi}(n, s)$ from above.
-We construct a set $\mathcal{A}$, which consists of all graphs with $s+n$ vertices, with the following restrictions:
+We construct a set $\mathcal{A}$, which consists of all graphs with $s+n$ vertices, where $s \ge n \ge 3$, with the following restrictions:
 
 - $n$ vertices have no incoming edges.
 - The other $s$ vertices have an in-degree of 2. Each of those vertices is also labeled with one of the $\left|B_2\right| = 16$ gate functions.
