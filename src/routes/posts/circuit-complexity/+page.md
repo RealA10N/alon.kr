@@ -142,9 +142,64 @@ We denote by $C_\Phi(f)$ and $D_\Phi(f)$ the minimal size and depth, respectivel
 - Reverse Hashing.
 - Reverse Encryption.
 
-## What Do We Know So Far?
+## Almost All Functions Are Complex
 
-### $2^n / n$ Average Complexity
+A primary result that ignited Circuit Complexity as a field of study came from Shannon in 1949<Ref title="The synthesis of two-terminal switching circuits" people="Claude Shannon" url="https://doi.org/10.1002%2Fj.1538-7305.1949.tb03624.x" references={references} />, and later revised by Muller (1956).<Ref title="Complexity in Electronic Switching Circuits" people="Bodegas De Muller" url="https://doi.org/10.1109/TEC.1956.5219786" references={references} />
+The idea is to use a simple counting argument to show that *almost all Boolean functions are complex*.
+The original proofs are fairly lengthy and technical (Muller has put it in the article’s appendix!), but since then, many slightly modified proofs have been presented.<Ref title="Algorithms and Complexity: Handbook of Theoretical Computer Science. Chapter 14, Theorem 2.4" people="Ravi B. Boppana, Michael Sipser" url="doi.org/10.1016/B978-0-444-88071-0.50019-9" references={references} /><Ref title="Boolean Circuit Complexity: Scribe notes. Lecture 1, Theorem 1.6" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il//~zwick/scribe-boolean.html" references={references} /><Ref title="Boolean Function Complexity: Advances and Frontiers. Chapter 1, Lemma 1.12" people="Stasys Jukna" url="doi.org/10.1007/978-3-642-24508-4" references={references} /> Below I present a modified version based on the sources mentioned.
+
+<!-- TODO: Add definition of B_2 -->
+
+Denote with $\alpha(n, s)$ the number of different circuits over $B_2$ with $n$ input variables, and $s$ internal gates.
+Now, we want to give a relatively simple expression to bound $\alpha(n, s)$ from above.
+Since it is hard to map and count combinatorially the number of acyclic graphs with $s+n$ vertices, we lift this constraint, and construct a set $\mathcal{A}$, which consists of all graphs with $s+n$ vertices, where $n$ vertices have no incoming edges and correspond to the $n$ input vertices in a circuit. The other $s$ vertices have an in-degree of 2, where each incoming edge can be one of the $s+n$ other vertices. In addition, each of the $s$ vertex is also labeled with one of the $\left|B_2\right| = 16$ gates. Finally, one vertex out of the $s$ vertices is labeled as the output vertex.
+
+First, it is easy to see that there are exactly $16 (s+n)^2$ different gate vertices: There are 16 options for the gate label, and another $(s+n)$ options for each of the 2 incoming edges. Hence,
+
+$$
+\begin{aligned}
+\alpha(n, s) \le \left|\mathcal{A}\right|
+    \le \left( 16 \cdot (s+n)^2 \right)^s
+    = \left( 4^2 \cdot (2s)^2 \right)^s
+    = \left( 8s \right)^{2s}
+\end{aligned}
+$$
+
+For convenience, let's take the logarithm of both sides:
+
+$$
+\begin{aligned}
+    \log\left( \left|\mathcal{A}\right| \right) &\le \log\left( \left( 8s \right)^{2s} \right)
+    = 2s \log( 8s )
+\end{aligned}
+$$
+
+By plugging $s = 2^n / n$ we get:
+
+$$
+    \log\left( \left|\mathcal{A}\right| \right)
+    \le 2 \frac{2^n}{n} \log\left( 8 \frac{2^n}{n} \right)
+    = \frac{2^{n+1}}{n} \left( (n+3) - \log(n) \right)
+$$
+
+Assuming $n \ge 3$ gives us:
+
+$$
+\begin{aligned}
+    &\le \frac{2^{n+1}}{n} \left( 2n - \log(n) \right)
+    &= 2^{n+2} - \frac{2^{n+1}}{n} \log(n)
+    % &\le 2^{n+2} - \frac{2^n}{n} \log(n) \\
+    &\le 2^n - \frac{2^n}{n} \log(n) + \mathcal{O}(1)
+\end{aligned}
+$$
+
+Putting it all together, we got that:
+
+$$
+\alpha(n, 2^n/n) \le \left|\mathcal{A}\right| \le 2^{2^n} \cdot 2^{- \frac{2^n}{n} \log(n)} \cdot \mathcal{O}(1)
+$$
+
+Recall that there are only $2^{2^n}$ unique boolean functions of $n$ variables. But the number of different circuits with $2^n/n$ gates is bounded above by a value that is $2^{\frac{2^n}{n} \log(n)}$ times smaller than that! Hence, clearly most boolean functions require more than $2^n/n$ gates to compute.
 
 ### Only Linear Explicit Lower Bounds
 
