@@ -118,10 +118,17 @@ One can take any boolean function $f$, look at it's truth table, and construct a
 
 It is common to measure the *complexity* of a circuit using two different metrics.
 
-1. The first is the *number of gates* in the circuit. This measure is fairly straightforward: if we stick with the analogy of gates as very simple pieces of logic, then the more gates a circuit has, the more complex the functions it can represent. When talking about hardware circuits, this directly correlates to the cost, and size, of the corresponding hardware.
+1. The first is the *size* of a circuit, measured by the *number of gates* in it. This measure is fairly straightforward: if we stick with the analogy of gates as very simple pieces of logic, then the more gates a circuit has, the more complex the functions it can represent. When talking about hardware circuits, this directly correlates to the cost, and size, of the corresponding hardware.
 2. The second one is called the *depth* of the circuit, and is the length of the longest path in the circuit. Intuitively, this measure indicates how *parallelizable* the computation is. With real hardware as an analogy, this correlates to how fast the computation can be performed.
 
-We now have all the basic knowledge and definitions to start researching!
+We denote by $C_\Phi(f)$ and $D_\Phi(f)$ the minimal size and depth, respectively, across all circuits that computes $f$ over $\Phi$. The main point of interest in circuit complexity is the behavior of those complexity measures on different functions and families of functions. Mainly, one can ask itself:
+
+- Are there families of functions that require super-polynomial size or depth?
+- Can we prove strong lower bounds on circuit size or depth for explicit functions?
+- Are there functions which are small in size, but *very sequential* (i.e. require large depth)?
+- Are there functions which are *highly parallelizable* (i.e. have low depth) but still require large size?
+- How do restrictions on the circuit model affect complexity?
+- And many more!
 
 ## Why Upper Bounds Are Important?
 
