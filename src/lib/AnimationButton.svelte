@@ -12,7 +12,7 @@
 	$: playing = timeout !== undefined;
 
 	export const play = () => (timeout = setTimeout(play, next() ?? interval));
-	export const stop = () => (clearTimeout(timeout), (timeout = undefined));
+	export const stop = (): void => (clearTimeout(timeout), (timeout = undefined));
 
 	export const toggle = () => {
 		timeout === undefined ? play() : stop();

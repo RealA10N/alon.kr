@@ -23,15 +23,23 @@
 	type runOnTickFunc = { (): any };
 	export let runOnTick: runOnTickFunc | undefined = undefined;
 
-	// A unique string representing an instance of the graph.
-	// Since we are manipulating the svg (DOM) directly, svelte can't help
-	// us with isolation between different instances of the component in the
-	// same page. Where needed, we use this unique value to share state between
-	// the same instance and to not mix different instances (for example, in
-	// class names).
-	const unique = Math.random().toString(16).substring(2);
+	// A function that can be called to reheat the simulation.
+	// This is useful when the graph is updated, for example, when
+	// edges or vertices are added or removed.
+	// No now forces are applied to the simulation: if the simulation is in a
+	// stable state, no new movement will be applied to the nodes. If you want
+	// to reset the forces, use `warmRefresh` instead.
+	export const refresh = () => {
+		simulation?.restart();
+	};
 
-	// When one of the props updates, we "reheat" the simulation.
+	// A function that can be called to reheat the simulation, and reset all
+	// forces applied to the nodes.
+	export const warmRefresh = () => {
+		simulation?.alpha(1).restart();
+	};
+
+	// When one of the props updates, we reinitialize the whole simulation.
 	let simulation: d3.Simulation<Vertex, Edge> | undefined;
 	$: $$props, initSimulation();
 
@@ -65,7 +73,7 @@
 		delete d.fx;
 		delete d.fy;
 		d3.select(this).classed('fixed', false);
-		simulation?.alpha(1).restart();
+		warmRefresh();
 	}
 
 	function startNodeSelection() {
@@ -75,7 +83,7 @@
 	function dragNode(event, d) {
 		d.fx = clamp(event.x, width);
 		d.fy = clamp(event.y, height);
-		simulation?.alpha(1).restart();
+		warmRefresh();
 	}
 
 	function initRegularDrag(node) {
@@ -148,7 +156,7 @@
 			.attr('y1', (d) => d.source.y)
 			.attr('x2', (d) => d.target.x)
 			.attr('y2', (d) => d.target.y)
-			.attr('marker-end', (d) => (d.direction ? `url(#arrow-${unique})` : ''));
+			.attr('marker-end', (d) => (d.direction ? 'url(#graph-arrow-head)' : ''));
 
 		link
 			.select('.label')
@@ -174,6 +182,7 @@
 				const g = enter
 					.append('g')
 					.classed('node', true)
+					.classed('clickable', mode !== GraphMode.static)
 					.classed('fixed', (d) => d.fx !== undefined);
 				g.append('circle').attr('r', radius);
 
@@ -198,18 +207,23 @@
 	}
 </script>
 
-<svg id="graph" {width} {height} viewBox="{-width / 2} {-height / 2} {width} {height}">
+<svg
+	{...$$restProps}
+	id="graph"
+	{width}
+	{height}
+	viewBox="{-width / 2} {-height / 2} {width} {height}"
+>
 	<marker
-		id="arrow-{unique}"
-		class="graph-marker"
-		viewBox="-15 -10 15 20"
-		markerUnits="userSpaceOnUse"
-		refX={radius}
-		markerWidth={16}
-		markerHeight={16}
+		id="graph-arrow-head"
+		markerWidth="10"
+		markerHeight="10"
+		refX={10 + radius}
+		refY="5"
 		orient="auto"
+		markerUnits="userSpaceOnUse"
 	>
-		<path d="M -15 -10 L 0 0 L -15 10" fill="currentColor" />
+		<polygon points="0 0, 10 5, 0 10" fill="context-stroke" />
 	</marker>
 
 	<g id="links" bind:this={graphLinks} />
@@ -217,8 +231,7 @@
 </svg>
 
 <style lang="postcss">
-	#nodes :global(.node) {
-		/* nodes only */
+	#nodes :global(.clickable) {
 		@apply cursor-pointer;
 	}
 

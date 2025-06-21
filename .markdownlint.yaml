@@ -1,0 +1,7 @@
+# allow line length longer than 80 characters
+# https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md013.md
+MD013: false
+
+# allow inline HTML (svelte components inside markdown posts)
+# https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md033.md
+MD033: false
