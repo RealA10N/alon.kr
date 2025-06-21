@@ -65,19 +65,6 @@ $$
 
 which outputs 1 if and only if the number of on inputs bits is greater than some constant $k$ (The *"Th"* stands for *Threshold*).
 
-### Non-Trivial Boolean Functions
-
-Boolean functions can also represent much more complex properties.
-For example, given a graph with $v$ vertices, we can describe a boolean function with $n = \binom{v}{2}$ inputs, one input bit for each possible edge, where the output is 1 if and only if some property of the input graph holds.
-One, commonly mentioned example is the $\text{CLIQUE}_k(x)$ function, which outputs 1 if and only if the provided graph has a clique subgraph of size $k$.
-This problem is *NP-Complete*, which in simple terms means that it is widely believed that finding the answer is computationally hard.<Ref title="Clique problem" url="https://en.wikipedia.org/wiki/Clique_problem" people="Wikipedia" references={references} />
-
-The model described above can also be extended to functions that output multiple bits.
-Given a function $f : \{0, 1\}^n \to \{0, 1\}^m$, we can define $m$ different functions $f_1, f_2, \dots, f_m$ where each $f_i : \{0, 1\}^n \to \{0, 1\}$ is defined such that $f_i(x) = 1$ if and only if the $i$-th bit of $f(x)$ is 1.
-I will use $y = (y_1, y_2, \dots, y_m)$ to denote the output vector of such functions, where $y_i$ is the $i$-th output bit.
-A particularly interesting example of a function with multiple outputs bits is $\text{FACTOR}_n : \{0, 1\}^n \to \{0, 1\}^n$, that takes a binary vector $(x_1, x_2, \dots, x_n)$, that encodes a binary integer $x^\star = \sum_{i=1}^n x_i 2^{i-1}$, and outputs a similarly encoded integer $y^\star = \sum_{i=1}^n y_i 2^{i-1}$, where $y^\star$ is the smallest prime factor of $x^\star$ (or 1 if $x^\star$ is prime).<Ref title="Integer factorization" url="https://en.wikipedia.org/wiki/Integer_factorization" people="Wikipedia" references={references} />
-Notice that $\text{FACTOR}_n$ is well-defined, and factoring large numbers is widely believed to be hard in general: many cryptographic systems rely on this hardness to ensure their security.<Ref title="RSA cryptosystem" url="https://en.wikipedia.org/wiki/RSA_cryptosystem" people="Wikipedia" references={references} />
-
 ## The Boolean Circuit
 
 Intuitively, a *boolean circuit* is a description of a computation of a large boolean function $f : \{0, 1\}^n \to \{0,1\}$, that meticulously concatenates the outputs of *weaker* boolean functions $g : \{0, 1\}^k \to \{0, 1\}$, which we call *gates*.
@@ -97,7 +84,7 @@ In addition, nodes $w \in V$ where $\deg_\text{out}(w) = 0$ are called the *outp
 
 <Th2Circuit />
 
-### Computation of the Circuit
+### Circuits Computing Functions
 
 The *value* $g_v(x)$ of a node $v \in V$ on input $x = (x_1, x_2 \dots, x_n)$, is defined inductively:
 
@@ -127,7 +114,7 @@ It is common to measure the *complexity* of a circuit using two different metric
 1. The first is the *size* of a circuit, measured by the *number of gates* in it. This measure is fairly straightforward: if we stick with the analogy of gates as very simple pieces of logic, then the more gates a circuit has, the more complex the functions it can represent. When talking about hardware circuits, this directly correlates to the cost, and size, of the corresponding hardware.
 2. The second one is called the *depth* of the circuit, and is the length of the longest path in the circuit. Intuitively, this measure indicates how *parallelizable* the computation is. With real hardware as an analogy, this correlates to how fast the computation can be performed.
 
-We denote by $C_\Phi(f)$ and $D_\Phi(f)$ the minimal size and depth, respectively, across all circuits that computes $f$ over $\Phi$. The main point of interest in circuit complexity is the behavior of those complexity measures on different functions and families of functions. Mainly, one can ask itself:
+We denote by $C_\Phi(f)$ and $D_\Phi(f)$ the minimal size and depth, respectively, across all circuits that computes $f$ over $\Phi$. The main point of interest in circuit complexity is the behavior of those complexity measures on different functions and families of functions. Mainly, one can ask himself:
 
 - Are there families of functions that require super-polynomial size or depth?
 - Can we prove strong lower bounds on circuit size or depth for explicit functions?
@@ -144,9 +131,26 @@ We denote by $C_\Phi(f)$ and $D_\Phi(f)$ the minimal size and depth, respectivel
 
 ### Cryptographic Implications
 
-- Primes factorization.
-- Reverse Hashing.
-- Reverse Encryption.
+Boolean functions can represent very complex properties.
+The model described above can also be extended to functions that output multiple bits.
+Given a function $f : \{0, 1\}^n \to \{0, 1\}^m$, we can define $m$ different functions $f_1, f_2, \dots, f_m$ where each $f_i : \{0, 1\}^n \to \{0, 1\}$ is defined such that $f_i(x) = 1$ if and only if the $i$-th bit of $f(x)$ is 1.
+I will use $y = (y_1, y_2, \dots, y_m)$ to denote the output vector of such functions, where $y_i$ is the $i$-th output bit.
+
+A particularly interesting example of a function with multiple outputs bits is $\text{FACTOR}_n : \{0, 1\}^n \to \{0, 1\}^n$, that takes a binary vector $(x_1, x_2, \dots, x_n)$, that encodes a binary integer $x^\star = \sum_{i=1}^n x_i 2^{i-1}$, and outputs a similarly encoded integer $y^\star = \sum_{i=1}^n y_i 2^{i-1}$, where $y^\star$ is the smallest prime factor of $x^\star$ (or 1 if $x^\star$ is prime).<Ref title="Integer factorization" url="https://en.wikipedia.org/wiki/Integer_factorization" people="Wikipedia" references={references} />
+This function is well-defined, and factoring large numbers is widely believed to be hard in general: many cryptographic schemes rely on this hardness to ensure their security.<Ref title="RSA cryptosystem" url="https://en.wikipedia.org/wiki/RSA_cryptosystem" people="Wikipedia" references={references} />
+
+Another interesting cryptographic primitive is *cryptographic hash functions*. For our purposes, a hash function is a boolean function $\{0, 1\}^n \to \{0, 1\}^m$, where $n \gg m$. Intuitively, it maps the input bits to *seemingly arbitrary* outputs deterministically, with no apparent correlation to the input.<Ref title="Cryptographic hash function" people="Wikipedia" url="https://en.wikipedia.org/wiki/Cryptographic_hash_function" references={references} /> Hash functions have many applications:
+
+- *Password verification:* Instead of storing your password as plain text in a database, services store a hash of it instead. When you to log in, your input password gets hashed and compared to the stored hash in the database. This is necessary because even if the database is leaked, the attacker can't recover your actual password from the hash. <Ref title="Key derivation function: Password hashing" people="Wikipedia" url="https://en.wikipedia.org/wiki/Key_derivation_function#Password_hashing" references={references} />
+- *Message Authentication:* When you send a data digitally (say, transferring funds through your bank's website), it is important to ensure that the data was not tampered with on the way. One way to ensure the is to append $\text{hash}(m \cdot s)$ to your message $m$, where $s$ is a shared secret that only you and the other party know, and $\cdot$ denotes concatenation.<Ref title="Message authentication code" people="Wikipedia" url="https://en.wikipedia.org/wiki/Message_authentication_code" references={references} />
+
+So, how can we know if a boolean function is a good hash function? Well, one essential property is called *pre-image resistance*: Provided a hash $h$, finding a message $m$ such that $\text{hash}(m) = h$ should be computationally infeasible.
+
+Notice that we can formalize this property using circuit complexity!
+Given a hash candidate $\text{hash}: \{0, 1\}^n \to \{0, 1\}^m$, we can define the inverse of it $\text{hash}^{-1}: \{0, 1\}^m \to \{0, 1\}^n$, that for each hashed value $h$ returns a message that is hashed to it using $\text{hash}$.
+Then, proving a large lower bound the complexity of $\text{hash}^{-1}$ would immediately imply on the pre-image resistance of $\text{hash}$!
+
+It is important to note that the state-of-the-art cryptographic hash functions (mainly, the *SHA family*<Ref title="Secure Hash Algorithms" url="https://en.wikipedia.org/wiki/Secure_Hash_Algorithms" references={references} />) have no such rigorous proof: security is based on empirical evidence only (decades of cryptanalysis trying to break them, without success). Providing such proof to existing hashes will be a major achievement.
 
 ## Almost All Functions Are Complex
 
