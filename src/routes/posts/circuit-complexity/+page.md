@@ -13,6 +13,7 @@ tags: ["#SoME4", "Theoretical Computer Science"]
     import EyeCatcher from "./lib/EyeCatcher.svelte";
     import Th2Circuit from "./lib/Th2Circuit.svelte";
     import GatesView from "./lib/GatesView.svelte";
+    import FactorCircuit from "./lib/FactorCircuit.svelte";
 
     let references = [];
 
@@ -136,21 +137,27 @@ The model described above can also be extended to functions that output multiple
 Given a function $f : \{0, 1\}^n \to \{0, 1\}^m$, we can define $m$ different functions $f_1, f_2, \dots, f_m$ where each $f_i : \{0, 1\}^n \to \{0, 1\}$ is defined such that $f_i(x) = 1$ if and only if the $i$-th bit of $f(x)$ is 1.
 I will use $y = (y_1, y_2, \dots, y_m)$ to denote the output vector of such functions, where $y_i$ is the $i$-th output bit.
 
-A particularly interesting example of a function with multiple outputs bits is $\text{FACTOR}_n : \{0, 1\}^n \to \{0, 1\}^n$, that takes a binary vector $(x_1, x_2, \dots, x_n)$, that encodes a binary integer $x^\star = \sum_{i=1}^n x_i 2^{i-1}$, and outputs a similarly encoded integer $y^\star = \sum_{i=1}^n y_i 2^{i-1}$, where $y^\star$ is the smallest prime factor of $x^\star$ (or 1 if $x^\star$ is prime).<Ref title="Integer factorization" url="https://en.wikipedia.org/wiki/Integer_factorization" people="Wikipedia" references={references} />
+### Factorization
+
+A particularly interesting example of a function with multiple outputs bits is $\text{FACTOR}_n : \{0, 1\}^n \to \{0, 1\}^{\lceil n/2 \rceil}$, that takes a binary vector $(x_1, x_2, \dots, x_n)$, that encodes a binary integer $x^\star = \sum_{i=1}^n x_i 2^{i-1}$, and outputs a similarly encoded integer $y^\star = \sum_{i=1}^{\lceil n/2 \rceil} y_i 2^{i-1}$, where $y^\star$ is the smallest prime factor of $x^\star$ (or 1 if $x^\star$ is prime).
+Notice that since the smallest factor of $k$ is $\le \sqrt{k}$, we only need at most $\log(\sqrt{k}) \le \lceil n/2 \rceil$ bits to encode it.<Ref title="Integer factorization" url="https://en.wikipedia.org/wiki/Integer_factorization" people="Wikipedia" references={references} />
 This function is well-defined, and factoring large numbers is widely believed to be hard in general: many cryptographic schemes rely on this hardness to ensure their security.<Ref title="RSA cryptosystem" url="https://en.wikipedia.org/wiki/RSA_cryptosystem" people="Wikipedia" references={references} />
 
-Another interesting cryptographic primitive is *cryptographic hash functions*. For our purposes, a hash function is a boolean function $\{0, 1\}^n \to \{0, 1\}^m$, where $n \gg m$. Intuitively, it maps the input bits to *seemingly arbitrary* outputs deterministically, with no apparent correlation to the input.<Ref title="Cryptographic hash function" people="Wikipedia" url="https://en.wikipedia.org/wiki/Cryptographic_hash_function" references={references} /> Hash functions have many applications:
+<FactorCircuit />
 
-- *Password verification:* Instead of storing your password as plain text in a database, services store a hash of it instead. When you to log in, your input password gets hashed and compared to the stored hash in the database. This is necessary because even if the database is leaked, the attacker can't recover your actual password from the hash. <Ref title="Key derivation function: Password hashing" people="Wikipedia" url="https://en.wikipedia.org/wiki/Key_derivation_function#Password_hashing" references={references} />
-- *Message Authentication:* When you send a data digitally (say, transferring funds through your bank's website), it is important to ensure that the data was not tampered with on the way. One way to ensure the is to append $\text{hash}(m \cdot s)$ to your message $m$, where $s$ is a shared secret that only you and the other party know, and $\cdot$ denotes concatenation.<Ref title="Message authentication code" people="Wikipedia" url="https://en.wikipedia.org/wiki/Message_authentication_code" references={references} />
+### Hash Functions
 
-So, how can we know if a boolean function is a good hash function? Well, one essential property is called *pre-image resistance*: Provided a hash $h$, finding a message $m$ such that $\text{hash}(m) = h$ should be computationally infeasible.
+Another interesting cryptographic primitive is *cryptographic hash functions*. For our purposes, a hash function is a boolean function $\{0, 1\}^n \to \{0, 1\}^m$, where $n \gg m$. Such functions deterministically map large inputs to compact outputs that appear uncorrelated with the input.<Ref title="Cryptographic hash function" people="Wikipedia" url="https://en.wikipedia.org/wiki/Cryptographic_hash_function" references={references} /> Hash functions have many applications:
 
-Notice that we can formalize this property using circuit complexity!
-Given a hash candidate $\text{hash}: \{0, 1\}^n \to \{0, 1\}^m$, we can define the inverse of it $\text{hash}^{-1}: \{0, 1\}^m \to \{0, 1\}^n$, that for each hashed value $h$ returns a message that is hashed to it using $\text{hash}$.
-Then, proving a large lower bound the complexity of $\text{hash}^{-1}$ would immediately imply on the pre-image resistance of $\text{hash}$!
+- *Password verification:* Instead of storing your password as plain text in a database, services store a hash of it instead. When you to log in, your input password gets hashed and compared to the stored hash in the database. This is necessary because even if the database is leaked, the attacker can't recover your actual password from the hash.<Ref title="Key derivation function: Password hashing" people="Wikipedia" url="https://en.wikipedia.org/wiki/Key_derivation_function#Password_hashing" references={references} />
+- *Message Authentication:* When you send data digitally (say, transferring funds through your bank's website), it is important to ensure that the data was not tampered with on the way. One way to ensure this is to append $\text{hash}(m \cdot s)$ to your message $m$, where $s$ is a shared secret that only you and the other party know, and $\cdot$ denotes concatenation.<Ref title="Message authentication code" people="Wikipedia" url="https://en.wikipedia.org/wiki/Message_authentication_code" references={references} /><Ref title="HMAC" people="Wikipedia" url="https://en.wikipedia.org/wiki/HMAC" references={references} />
 
-It is important to note that the state-of-the-art cryptographic hash functions (mainly, the *SHA family*<Ref title="Secure Hash Algorithms" url="https://en.wikipedia.org/wiki/Secure_Hash_Algorithms" references={references} />) have no such rigorous proof: security is based on empirical evidence only (decades of cryptanalysis trying to break them, without success). Providing such proof to existing hashes will be a major achievement.
+But what makes a hash function *secure*? One essential property is called *pre-image resistance*: Given an output $h$, finding a message $m$ such that $\text{hash}(m) = h$ should be computationally infeasible.
+We can formalize this property using circuit complexity!
+Given a hash candidate $\text{hash}: \{0, 1\}^n \to \{0, 1\}^m$, we can define the inverse of it $\text{hash}^{-1}: \{0, 1\}^m \to \{0, 1\}^n$, that for each hashed value $h$ returns any $m$ such that $\text{hash}(m) = h$ (or the $0^n$ if such input does not exist).
+Then, proving a large lower bound on the complexity of $\text{hash}^{-1}$ would imply the pre-image resistance of $\text{hash}$!
+
+It is important to note that the state-of-the-art cryptographic hash functions (mainly, the *SHA family*<Ref title="Secure Hash Algorithms" url="https://en.wikipedia.org/wiki/Secure_Hash_Algorithms" references={references} />) have no such rigorous proof: Their security is based on empirical evidence only (decades of cryptanalysis trying to break them, without success). Providing such proof on existing hashes will be a major achievement!
 
 ## Almost All Functions Are Complex
 
