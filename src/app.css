@@ -111,3 +111,8 @@ td, th {
 tr {
 	@apply hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors
 }
+
+code {
+	@apply bg-zinc-200 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200
+	rounded-md px-1 py-0.5 font-mono text-sm;
+}
