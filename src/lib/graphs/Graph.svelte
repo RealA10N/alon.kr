@@ -44,7 +44,7 @@
 	$: $$props, initSimulation();
 
 	// The svg tags is bounded to this variable.
-	let graphNodes: SVGSVGElement, graphLinks: SVGSVGElement;
+	let graphNodes: SVGGElement, graphLinks: SVGGElement;
 
 	function clamp(x: number, total: number) {
 		// Ensures that x is in the range [-total/2, total/2].
