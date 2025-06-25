@@ -7,15 +7,16 @@ tags: ["#SoME4", "Theoretical Computer Science"]
 ---
 
 <script lang="ts">
-    import Ref from "$lib/Ref.svelte";
-    import ReferencesList from "$lib/ReferencesList.svelte";
-
     import EyeCatcher from "./lib/EyeCatcher.svelte";
     import Th2Circuit from "./lib/Th2Circuit.svelte";
     import GatesView from "./lib/GatesView.svelte";
     import FactorCircuit from "./lib/FactorCircuit.svelte";
 
-    let references = [];
+    import Ref from "$lib/Ref.svelte";
+    import ReferencesList from "$lib/ReferencesList.svelte";
+    import { NewReferenceList } from "$lib/ReferencesList.svelte";
+
+    let references = NewReferenceList();
 
     let highlightDependentOnBothVariables: () => any;
     let highlightDependentOnX1: () => any;
@@ -271,4 +272,4 @@ On $\textsf{P}/\textsf{poly}$.
     references={references}
 />
 
-<ReferencesList {references}/>
+<ReferencesList {references} />

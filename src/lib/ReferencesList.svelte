@@ -1,9 +1,21 @@
+<script lang="ts" context="module">
+	import { type Writable, writable } from 'svelte/store';
+
+	export type Reference = {
+		title: string;
+		url: string;
+		people?: string[] | string;
+	};
+
+	export const NewReferenceList = () => writable([] as Reference[]);
+</script>
+
 <script lang="ts">
-	export let references: { title: string; url: string; people: string[] | string }[];
+	export let references: Writable<Reference[]>;
 </script>
 
 <ol>
-	{#each references as ref, i}
+	{#each $references as ref, i}
 		<li id="ref{i + 1}">
 			<a href={ref.url} class="no-underline hover:underline">
 				{ref.title}
