@@ -1,16 +1,13 @@
 <script lang="ts">
 	import BooleanButton from '$lib/logic/BooleanButton.svelte';
 	import BooleanTag from '$lib/logic/BooleanTag.svelte';
+	import { toSubscript } from '$lib/strings/subscripts';
 
 	export let bits: boolean[] = [];
 	export let title: string = '';
 
 	// log2 of the smallest power of two that is greater or equal to the bits length.
 	$: variableCount = Math.ceil(Math.log2(bits.length));
-
-	const subscripts = '₀₁₂₃₄₅₆₇₈₉';
-	const toSubscript = (n: number): string =>
-		n === 0 ? '' : toSubscript(Math.floor(n / 10)) + subscripts[n % 10];
 
 	const variableName = (i: number) => 'x' + toSubscript(i + 1);
 

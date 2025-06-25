@@ -3,7 +3,7 @@
 	import { BinaryHeap } from 'structurae';
 	import blossom from 'edmonds-blossom-fixed';
 
-	import { GraphMode, type Edge, type Vertex } from '$lib/graphs/graphs';
+	import { GraphMode, type Edge, type Vertex } from '$lib/graphs/Graph.svelte';
 	import { Color } from '$lib/interfaces/color';
 	import Graph from '$lib/graphs/Graph.svelte';
 	import StepAnimation from '$lib/StepAnimation.svelte';

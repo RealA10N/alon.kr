@@ -2,7 +2,7 @@
 	import Graph from '$lib/graphs/Graph.svelte';
 	import Figure from '$lib/Figure.svelte';
 	import FullWidth from '$lib/FullWidth.svelte';
-	import type { Edge, Vertex } from '$lib/graphs/graphs';
+	import type { Edge, Vertex } from '$lib/graphs/Graph.svelte';
 	import { Color } from '$lib/interfaces/color';
 
 	export const prerender = true;

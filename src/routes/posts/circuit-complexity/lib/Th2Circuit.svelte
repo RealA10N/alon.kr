@@ -2,7 +2,7 @@
 	import Graph from '$lib/graphs/Graph.svelte';
 	import Figure from '$lib/Figure.svelte';
 	import FullWidth from '$lib/FullWidth.svelte';
-	import { GraphMode, type Edge, type Vertex } from '$lib/graphs/graphs';
+	import { GraphMode, type Edge, type Vertex } from '$lib/graphs/Graph.svelte';
 	import { Color } from '$lib/interfaces/color';
 	import { onMount } from 'svelte';
 	import BooleanButton from '$lib/logic/BooleanButton.svelte';

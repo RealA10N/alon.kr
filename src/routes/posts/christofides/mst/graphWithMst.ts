@@ -1,4 +1,4 @@
-import type { Edge, Vertex } from '$lib/graphs/graphs';
+import type { Edge, Vertex } from '$lib/graphs/Graph.svelte';
 import { Color } from '$lib/interfaces/color';
 
 export const prerender = true;
