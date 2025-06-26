@@ -100,7 +100,9 @@
 	const findOutputIndices = (vertices: Gate[], edges: Edge[]): number[] =>
 		vertices
 			.map((vertex, index) => ({ vertex, index }))
-			.filter(({ vertex }) => !edges.some((edge) => edge.source === vertex))
+			.filter(
+				({ vertex }) => !edges.some((edge) => edge.source === vertex.id || edge.source === vertex)
+			)
 			.map(({ index }) => index);
 
 	$: outputIndices = findOutputIndices(vertices, edges);
