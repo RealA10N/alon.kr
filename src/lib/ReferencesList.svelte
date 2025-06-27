@@ -17,7 +17,7 @@
 <ol>
 	{#each $references as ref, i}
 		<li id="ref{i + 1}">
-			<a href={ref.url} class="no-underline hover:underline">
+			<a href={ref.url} target="_blank" class="no-underline hover:underline">
 				{ref.title}
 				<span class="italic text-sm">
 					{#if typeof ref.people === 'string'}
