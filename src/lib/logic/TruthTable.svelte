@@ -28,7 +28,7 @@
 			{#each Array(variableCount) as _, i}
 				<th>{variableName(i)}</th>
 			{/each}
-			<th>{title}</th>
+			<th>{@html title}</th>
 		</tr>
 	</thead>
 	<tbody>
