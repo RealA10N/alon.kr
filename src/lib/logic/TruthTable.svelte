@@ -28,7 +28,9 @@
 			{#each Array(variableCount) as _, i}
 				<th>{variableName(i)}</th>
 			{/each}
-			<th>{@html title}</th>
+			<!-- We use custom width for the last (output) column, since the
+			 output expression is sometimes a bit longer then other columns. -->
+			<th class="w-24">{@html title}</th>
 		</tr>
 	</thead>
 	<tbody>
