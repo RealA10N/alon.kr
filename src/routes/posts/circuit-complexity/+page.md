@@ -249,8 +249,8 @@ Recall that there are only $2^{2^n}$ unique boolean functions of $n$ variables. 
 
 We now show that for certain functions with $n$ inputs, any gate computing them must consist of at least $\mathcal{O}(n)$ gates.
 
-We say that a function $f$ *depends* on a variable $x_i$ if there exists an assignment that fixes all other variables so that changing only $x_i$ from 0 to 1 makes the output of $f$ change.
-It is easy to see that in any circuit that computes $f$, there must be a path from all variables $x_i$ that $f$ depends on to the output vertex.
+We say that a function $f$ *depends* on a variable $x_i$ if there exists an assignment that fixes all other variables so that changing only $x_i$ from 0 to 1 changes the output of $f$.
+It is easy to see that in any circuit that computes $f$, there must be a path from every variable $x_i$ that $f$ depends on to the output vertex.
 Hence, each input vertex $x_i$ must have an out-degree of at least 1.
 Since in our model the in-degree of each gate is $\le 2$, just connecting all input vertices to arbitrary gates will require at least $\lceil n/2 \rceil$ gates, and hence the $\mathcal{O}(n)$ lower bound.
 
@@ -259,7 +259,7 @@ Since in our model the in-degree of each gate is $\le 2$, just connecting all in
 The bound above is not tight, and trying to improve it is a nice exercise!
 Surprisingly however, there is no explicit lower bound which *asymptotically* better! The current state-of-the-art is a bound of $5n - o(n)$ gates by Iwama and Morizumi (2002).<Ref title="An Explicit Lower Bound of 5n−o(n) for Boolean Circuits" people="Kazuo Iwama, Hiroki Morizumi" url="https://doi.org/10.1007/3-540-45687-2_29" references={references} /><Ref title="Boolean Function Complexity: Advances and Frontiers. Section 1.5.2: Explicit Lower Bounds" people="Stasys Jukna" url="https://doi.org/10.1007/978-3-642-24508-4" references={references} />
 
-I cannot stress enough on how absurd and mind-boggling that is: despite the fact that we know that almost all boolean functions are very complex, requiring at least $2^n / n$ gates as shown above, we do not know to point at a specific function and state that it requires more then a linear amount of gates to compute it! This misalignment is at the heart of the field, and over the last half a century many researches tried to tackle this problem without much success.
+I cannot stress enough how absurd and mind-boggling that is: despite the fact that we know that almost all boolean functions are very complex, requiring at least $2^n / n$ gates as shown above, we do not know how to point at a specific function and state that it requires more than a linear number of gates to compute it! This gap is at the heart of the field, and over the last half a century many researches have tried to tackle this problem without much success.
 
 ### Monotone Bounds
 
