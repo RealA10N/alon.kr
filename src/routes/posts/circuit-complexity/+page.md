@@ -101,14 +101,6 @@ Since the graph is acyclic, this process always terminates.
 Finally, we say that the circuit $C$ computes $f$ if for all input vectors $x$,
 the value of the output node $g_w(x)$ equals to $f(x)$.
 
-### Complete Bases
-
-Recall that a basis $\Phi$ is a collection of gates (boolean functions).
-We say that a basis $\Phi$ is *complete* if for every boolean function $f$ (with any number of variables) there exists a circuit $C_\Phi^f$ that computes the function $f$ over the basis $\Phi$.
-<!-- 
-It is easy to see that the basis $\{\wedge, \vee, \neg\}$ is complete;
-One can take any boolean function $f$, look at it's truth table, and construct a circuit that represents the CNF<Ref title="Conjunctive normal form" people="Wikipedia" url="https://en.wikipedia.org/wiki/Conjunctive_normal_form" references={references} /> -->
-
 ## Measuring Circuit Complexity
 
 It is common to measure the *complexity* of a circuit using two different metrics.
@@ -125,16 +117,33 @@ We denote by $C_\Phi(f)$ and $D_\Phi(f)$ the minimal size and depth, respectivel
 - How do restrictions on the circuit model affect complexity?
 - And many more!
 
-## Why Upper Bounds Are Important?
+### All Bases Are The Same
 
-### Efficiency of Computation
+Recall that a basis $\Phi$ is a collection of gates (boolean functions).
+We say that a basis $\Phi$ is *complete* if for every boolean function $f$ (with any number of variables) there exists a circuit $C_\Phi^f$ that computes the function $f$ over the basis $\Phi$.
 
-## Why Lower Bounds Are Important?
+<!-- 
+It is easy to see that the basis $\{\wedge, \vee, \neg\}$ is complete;
+One can take any boolean function $f$, look at it's truth table, and construct a circuit that represents the CNF<Ref title="Conjunctive normal form" people="Wikipedia" url="https://en.wikipedia.org/wiki/Conjunctive_normal_form" references={references} /> -->
 
-### Cryptographic Implications
+<!-- ## Circuit Size Lower Bounds
+
+### Why Lower Bounds Are Important?
+
+Proving that a certain function (or a family of functions) can not be computes using small or shallow circuits has wide implications. -->
+
+## Connections to Complexity Theory
 
 Boolean functions can represent very complex properties.
-The model described above can also be extended to functions that output multiple bits.
+For example, given a graph with $v$ vertices, we can describe a boolean function with $n = \binom{v}{2}$ inputs, one input bit for each possible edge, where the output is 1 if and only if some property of the input graph holds.
+One, commonly mentioned example is the $\text{CLIQUE}_k(x)$ function, which outputs 1 if and only if the provided graph has a clique subgraph of size $k$.
+This problem is NP-Complete, which in simple terms means that it is widely believed that finding the answer is computationally hard.<Ref title="Clique problem" url="https://en.wikipedia.org/wiki/Clique_problem" people="Wikipedia" references={references} />
+
+<!-- Add P/Poly (make it short!) and reduction to P=NP? -->
+
+## Connections to Cryptography
+
+The boolean function model can be extended to functions that output multiple bits.
 Given a function $f : \{0, 1\}^n \to \{0, 1\}^m$, we can define $m$ different functions $f_1, f_2, \dots, f_m$ where each $f_i : \{0, 1\}^n \to \{0, 1\}$ is defined such that $f_i(x) = 1$ if and only if the $i$-th bit of $f(x)$ is 1.
 I will use $y = (y_1, y_2, \dots, y_m)$ to denote the output vector of such functions, where $y_i$ is the $i$-th output bit.
 
@@ -261,21 +270,29 @@ Surprisingly however, there is no explicit lower bound which *asymptotically* be
 
 I cannot stress enough how absurd and mind-boggling that is: despite the fact that we know that almost all boolean functions are very complex, requiring at least $2^n / n$ gates as shown above, we do not know how to point at a specific function and state that it requires more than a linear number of gates to compute it! This gap is at the heart of the field, and over the last half a century many researches have tried to tackle this problem without much success.
 
+## The Complexity Of Not Gates
+
+It turns out that complexity of circuits 
+
+### How Many NOTs Are Enough?
+
+<!-- Thus one may hope to show P != NP by giving a super-polynomial lower bound on circuit size of an NP problem. (from boppana_sipser.pdf) -->
+
+<!-- On $\textsf{P}/\textsf{poly}$. -->
+
 ### Monotone Bounds
 
 ### Slice Bounds
 
-## Why Lower Bounds Are Hard?
 
-### The Complexity Of Not Gates
-
-## Connection To Classical Computational Theory
-
-On $\textsf{P}/\textsf{poly}$.
 
 ## Final Notes
 
 ### Other Models Of Computation
+<!-- 
+- Formulas
+- Unbounded fanin
+-->
 
 ## References and Further Reading
 
