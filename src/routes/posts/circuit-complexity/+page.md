@@ -10,6 +10,7 @@ tags: ["#SoME4", "Theoretical Computer Science"]
     import EyeCatcher from "./lib/EyeCatcher.svelte";
     import Th2Circuit from "./lib/Th2Circuit.svelte";
     import GatesView from "./lib/GatesView.svelte";
+    import CnfCircuit from "./lib/CnfCircuit.svelte";
     import FactorCircuit from "./lib/FactorCircuit.svelte";
 
     import Ref from "$lib/Ref.svelte";
@@ -120,17 +121,12 @@ We denote by $C_\Phi(f)$ and $D_\Phi(f)$ the minimal size and depth, respectivel
 ### All Bases Are The Same
 
 Recall that a basis $\Phi$ is a collection of gates (boolean functions).
-We say that a basis $\Phi$ is *complete* if for every boolean function $f$ (with any number of variables) there exists a circuit $C_\Phi^f$ that computes the function $f$ over the basis $\Phi$.
+We say that a basis $\Phi$ is *complete* if for every boolean function $f$ (with any number of variables) there exists a circuit that computes the function $f$ over the basis $\Phi$.
 
-<!-- 
-It is easy to see that the basis $\{\wedge, \vee, \neg\}$ is complete;
-One can take any boolean function $f$, look at it's truth table, and construct a circuit that represents the CNF<Ref title="Conjunctive normal form" people="Wikipedia" url="https://en.wikipedia.org/wiki/Conjunctive_normal_form" references={references} /> -->
+It is easy to see that the basis $\{\wedge, \vee, \neg\}$ is complete: any Boolean function $f$ can be written in conjunctive normal form (CNF), which is just an AND of ORs of variables and their negations.<Ref title="Conjunctive normal form" people="Wikipedia" url="https://en.wikipedia.org/wiki/Conjunctive_normal_form" references={references} />
+Thus, given the truth table of any function, you can always translate it into a circuit made only of AND, OR, and NOT gates.
 
-<!-- ## Circuit Size Lower Bounds
-
-### Why Lower Bounds Are Important?
-
-Proving that a certain function (or a family of functions) can not be computes using small or shallow circuits has wide implications. -->
+<CnfCircuit />
 
 ## Connections to Complexity Theory
 
