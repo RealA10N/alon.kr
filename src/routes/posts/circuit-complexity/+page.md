@@ -140,7 +140,7 @@ I will use $y = (y_1, y_2, \dots, y_m)$ to denote the output vector of such func
 
 ### Factorization
 
-A particularly interesting example of a function with multiple outputs bits is $\text{FACTOR}_n : \{0, 1\}^n \to \{0, 1\}^{\lceil n/2 \rceil}$, that takes a binary vector $(x_1, x_2, \dots, x_n)$, that encodes a binary integer $x^\star = \sum_{i=1}^n x_i 2^{i-1}$, and outputs a similarly encoded integer $y^\star = \sum_{i=1}^{\lceil n/2 \rceil} y_i 2^{i-1}$, where $y^\star$ is the smallest prime factor of $x^\star$ (or 1 if $x^\star$ is prime).
+A particularly interesting example of a function with multiple outputs bits is $\text{FACTOR}_n : \{0, 1\}^n \to \{0, 1\}^{\lceil n/2 \rceil}$, that takes a binary vector $(x_1, x_2, \dots, x_n)$, that encodes a binary integer $x^\star = \sum_{i=1}^n x_i 2^{i-1}$, and outputs a similarly encoded integer $y^\star = \sum_{i=1}^{\lceil n/2 \rceil} y_i 2^{i-1}$, where $y^\star$ is the smallest prime factor of $x^\star$ (or 0 if $x^\star$ is prime).
 Notice that since the smallest factor of $k$ is $\le \sqrt{k}$, we only need at most $\log(\sqrt{k}) \le \lceil n/2 \rceil$ bits to encode it.<Ref title="Integer factorization" url="https://en.wikipedia.org/wiki/Integer_factorization" people="Wikipedia" references={references} />
 This function is well-defined, and factoring large numbers is widely believed to be hard in general: many cryptographic schemes rely on this hardness to ensure their security.<Ref title="RSA cryptosystem" url="https://en.wikipedia.org/wiki/RSA_cryptosystem" people="Wikipedia" references={references} />
 
