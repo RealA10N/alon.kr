@@ -163,7 +163,7 @@ We can formalize this property using circuit complexity!
 Given a hash candidate $\text{hash}: \{0, 1\}^n \to \{0, 1\}^m$, we can define the inverse of it $\text{hash}^{-1}: \{0, 1\}^m \to \{0, 1\}^n$, that for each hashed value $h$ returns any $m$ such that $\text{hash}(m) = h$ (or the $0^n$ if such input does not exist).
 Then, proving a large lower bound on the complexity of $\text{hash}^{-1}$ would imply the pre-image resistance of $\text{hash}$!
 
-It is important to note that the state-of-the-art cryptographic hash functions (mainly, the *SHA family*<Ref title="Secure Hash Algorithms" url="https://en.wikipedia.org/wiki/Secure_Hash_Algorithms" references={references} />) have no such rigorous proof: Their security is based on empirical evidence only (decades of cryptanalysis trying to break them, without success). Providing such proof on existing hashes will be a major achievement!
+It is important to note that the state-of-the-art cryptographic hash functions (mainly, the *SHA family*<Ref title="Secure Hash Algorithms" people="Wikipedia" url="https://en.wikipedia.org/wiki/Secure_Hash_Algorithms" references={references} />) have no such rigorous proof: Their security is based on empirical evidence only (decades of cryptanalysis trying to break them, without success). Providing such proof on existing hashes will be a major achievement!
 
 ## Almost All Functions Are Complex
 
