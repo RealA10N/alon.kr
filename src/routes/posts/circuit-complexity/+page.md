@@ -261,7 +261,7 @@ We now show that for certain functions with $n$ inputs, any gate computing them 
 We say that a function $f$ *depends* on a variable $x_i$ if there exists an assignment that fixes all other variables so that changing only $x_i$ from 0 to 1 changes the output of $f$.
 It is easy to see that in any circuit that computes $f$, there must be a path from every variable $x_i$ that $f$ depends on to the output vertex.
 Hence, each input vertex $x_i$ must have an out-degree of at least 1.
-Since in our model the in-degree of each gate is $\le 2$, just connecting all input vertices to arbitrary gates will require at least $\lceil n/2 \rceil$ gates, and hence the $\mathcal{O}(n)$ lower bound.
+Since in our model the in-degree of each gate is $\le 2$, just connecting all input vertices to arbitrary gates will require at least $\lceil n/2 \rceil$ gates, and hence the $\mathcal{O}(n)$ lower bound.<Ref title="Boolean Function Complexity: Advances and Frontiers. Section 1.6: A 3n Lower Bound for Circuits" people="Stasys Jukna" url="https://www.doi.org/10.1007/978-3-642-24508-4" references={references}/>
 
 ## No Super-Linear Explicit Lower Bounds
 
