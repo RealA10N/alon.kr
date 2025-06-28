@@ -14,6 +14,9 @@ export const idToBits = (n: number, len: number) =>
 export const bitsToId = (bits: boolean[]) =>
 	bits.reduce((acc, bit, i) => acc | (bit ? 1 << i : 0), 0);
 
+export const indexToInputs = (index: number, n: number) =>
+	Array.from({ length: n }, (_, i) => (index & (1 << i)) !== 0);
+
 const renderKaTeX = (str: string) =>
 	str.replace(/\$([^$]+)\$/g, (_, mathContent) => {
 		return katex.renderToString(mathContent.trim(), {
