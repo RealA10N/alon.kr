@@ -148,7 +148,7 @@
 </script>
 
 <Figure>
-	<div class="flex flex-row items-center justify-center gap-4" slot="content">
+	<div class="flex md:flex-row flex-col items-center justify-center gap-4" slot="content">
 		<GatesTable gates={BooleanGates} bind:selectedGateIdx bind:highlightIndices bind:select />
 		<div class="flex flex-col justify-items items-center">
 			<TruthTable bind:select={selectBits} title={selectedGate.usage} bits={selectedGate.bits} />
