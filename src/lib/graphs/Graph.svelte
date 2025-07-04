@@ -69,14 +69,14 @@
 	// The svg tags is bounded to this variable.
 	let graphNodes: SVGGElement, graphLinks: SVGGElement;
 
-	function clamp(x: number, total: number) {
-		// Ensures that x is in the range [-total/2, total/2].
-		// Returns the closest endpoint of the range if the value if outside
-		// of it.
+	// Ensures that x is in the range [-total/2, total/2].
+	// Returns the closest endpoint of the range if the value if outside
+	// of it.
+	const viewboxClamp = (x: number, total: number) => {
 		const lo = -total / 2 + padding;
 		const hi = total / 2 - padding;
 		return x < lo ? lo : x > hi ? hi : x;
-	}
+	};
 
 	function lineLength(link: Edge) {
 		const dx = Math.abs(link.source.x - link.target.x);
@@ -84,13 +84,18 @@
 		return Math.sqrt(dx * dx + dy * dy);
 	}
 
-	function boundsForce() {
-		// A custom force that keeps all nodes inside the svg viewBox
-		for (let d of vertices) {
-			d.x = clamp(d.x ?? 0, width);
-			d.y = clamp(d.y ?? 0, height);
-		}
-	}
+	const viewboxClampVertex = (d: Vertex) => {
+		d.x = viewboxClamp(d.x ?? 0, width);
+		d.y = viewboxClamp(d.y ?? 0, height);
+
+		if (d.fx) d.fx = viewboxClamp(d.fx, width);
+		if (d.fy) d.fy = viewboxClamp(d.fy, height);
+	};
+
+	// A custom force that keeps all nodes inside the svg viewBox
+	const viewboxBoundsForce = () => {
+		for (let v of vertices) viewboxClampVertex(v);
+	};
 
 	function endNodeSelection(event, d) {
 		delete d.fx;
@@ -104,8 +109,8 @@
 	}
 
 	function dragNode(event, d) {
-		d.fx = clamp(event.x, width);
-		d.fy = clamp(event.y, height);
+		d.fx = viewboxClamp(event.x, width);
+		d.fy = viewboxClamp(event.y, height);
 		warmRefresh();
 	}
 
@@ -129,7 +134,7 @@
 			.nodes(vertices)
 			.force('center', d3.forceCenter())
 			.force('collide', d3.forceCollide(3 * radius))
-			.force('bounds', boundsForce)
+			.force('viewboxBounds', viewboxBoundsForce)
 			.on('tick', tick);
 
 		if (gravity)
@@ -206,7 +211,7 @@
 					.append('g')
 					.classed('node', true)
 					.classed('clickable', mode !== GraphMode.static)
-					.classed('fixed', (d) => d.fx !== undefined);
+					.classed('fixed', (d) => d.fx !== undefined || d.fy !== undefined);
 				g.append('circle').attr('r', radius);
 
 				if (vertexLabels)
