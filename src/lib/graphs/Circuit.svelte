@@ -39,9 +39,8 @@
 </script>
 
 <script lang="ts">
-	import Graph from '$lib/graphs/Graph.svelte';
 	import FullWidth from '$lib/FullWidth.svelte';
-	import { GraphMode, type Edge } from '$lib/graphs/Graph.svelte';
+	import Graph, { GraphMode, type Edge } from '$lib/graphs/Graph.svelte';
 	import { Color } from '$lib/interfaces/color';
 	import { onMount } from 'svelte';
 	import BooleanButton from '$lib/logic/BooleanButton.svelte';
@@ -75,6 +74,7 @@
 	};
 
 	let refresh = () => {};
+	let onInteraction = () => stop();
 
 	const computeFunction = (): boolean[] => {
 		let cachedGates = new Map<Gate, boolean>();
@@ -141,6 +141,7 @@
 			vertexLabels={true}
 			mode={GraphMode.sticky}
 			bind:refresh
+			bind:onInteraction
 		/>
 
 		<div class="flex flex-col items-center justify-center">

@@ -43,6 +43,8 @@
 	export let edges: Edge[];
 	export let vertices: Vertex[];
 
+	export let onInteraction = () => {};
+
 	type runOnTickFunc = { (): any };
 	export let runOnTick: runOnTickFunc | undefined = undefined;
 
@@ -105,6 +107,7 @@
 	}
 
 	function startNodeSelection() {
+		onInteraction();
 		d3.select(this).classed('fixed', true);
 	}
 
