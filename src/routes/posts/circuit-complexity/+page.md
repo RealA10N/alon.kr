@@ -13,6 +13,8 @@ tags: ["#SoME4", "Theoretical Computer Science"]
     import CnfCircuit from "./lib/CnfCircuit.svelte";
     import FactorCircuit from "./lib/FactorCircuit.svelte";
 
+    import Footnote from "$lib/Footnote.svelte";
+
     import Ref from "$lib/Ref.svelte";
     import ReferencesList from "$lib/ReferencesList.svelte";
     import { NewReferenceList } from "$lib/ReferencesList.svelte";
@@ -132,10 +134,11 @@ Thus, given the truth table of any function, you can always translate it into a 
 
 Boolean functions can represent very complex properties.
 For example, given a graph with $v$ vertices, we can describe a boolean function with $n = \binom{v}{2}$ inputs, one input bit for each possible edge, where the output is 1 if and only if some property of the input graph holds.
+
 One, commonly mentioned example is the $\text{CLIQUE}_k(x)$ function, which outputs 1 if and only if the provided graph has a clique subgraph of size $k$.
 This problem is NP-Complete, which in simple terms means that it is widely believed that finding the answer is computationally hard.<Ref title="Clique problem" url="https://en.wikipedia.org/wiki/Clique_problem" people="Wikipedia" references={references} />
+Since a circuit computation can be simulated by a turing machine in polynomial time, providing family of polynomial circuits to $\text{CLIQUE}_k(x)$ would imply that $\text{P}$ = $\text{NP}$. <Footnote>Furthermore, by the <a href="https://en.wikipedia.org/wiki/Karp%E2%80%93Lipton_theorem">Karp-Lipton Theorem</a>, it would imply the collapse of the polynomial hierarchy, but this is out of the scope of this post.</Footnote>
 
-<!-- Add P/Poly (make it short!) and reduction to P=NP? -->
 
 ## Connections to Cryptography
 
