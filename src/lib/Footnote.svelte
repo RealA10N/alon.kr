@@ -5,7 +5,9 @@
 	const toggle = () => (focus = !focus);
 </script>
 
-<button on:click={toggle} class:focus title="Show footnote"> ... </button>
+<button on:click={toggle} class:focus class="rounded-full" title="Show footnote">
+	<div class="-translate-y-1">...</div>
+</button>
 
 {#if focus}
 	<hr class="" transition:slide />
