@@ -69,14 +69,14 @@
 	const createInputVertex = (i: number) => ({ label: `x${toSubscript(i + 1)}` } as Vertex);
 
 	const createNegationVertex = (v: Vertex): { v: Vertex; e: Edge } => {
-		const neg = { label: '¬', color: Color.Yellow } as Vertex;
+		const neg = { label: '¬' } as Vertex;
 		const edge = { source: v, target: neg, direction: true } as Edge;
 		return { v: neg, e: edge };
 	};
 
 	const createTargetVertex = (): Vertex => ({ label: 'y₁' } as Vertex);
 
-	const createAndVertex = () => ({ label: '∧', color: Color.Green } as Vertex);
+	const createAndVertex = () => ({ label: '∧' } as Vertex);
 
 	const createFalseFunction = (): { vertices: Vertex[]; edges: Edge[] } => {
 		const input = createInputVertex(0);
@@ -151,9 +151,9 @@
 		}
 
 		const { vertices: orVertices, edges: orEdges } = createTree(orSources, {
-			label: '∧',
-			color: Color.Blue
+			label: '∨'
 		});
+
 		vertices.push(...orVertices);
 		edges.push(...orEdges);
 
