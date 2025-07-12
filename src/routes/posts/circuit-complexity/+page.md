@@ -121,17 +121,21 @@ We denote by $C_\Phi(f)$ and $D_\Phi(f)$ the minimal size and depth, respectivel
 - How do restrictions on the circuit model affect complexity?
 - And many more!
 
-### All Bases Are The Same
+## The Complete Basis
 
 Recall that a basis $\Phi$ is a collection of gates (boolean functions).
 We say that a basis $\Phi$ is *complete* if for every boolean function $f$ (with any number of variables) there exists a circuit that computes the function $f$ over the basis $\Phi$.
 
 It is easy to see that the basis $\{\wedge, \vee, \neg\}$ is complete: any Boolean function $f$ can be written in conjunctive normal form (CNF), which is just an AND of ORs of variables and their negations.<Ref title="Conjunctive normal form" people="Wikipedia" url="https://en.wikipedia.org/wiki/Conjunctive_normal_form" references={references} />
-Thus, given the truth table of any function, you can always translate it into a circuit made only of AND, OR, and NOT gates.
+Thus, given the truth table of any function, you can always translate it into a circuit made only of AND, OR, and NOT gates. <Footnote><!--TODO: About unbounded fanin models--></Footnote>
 
 <CnfCircuit />
 
-Then, to prove that a basis $\Phi'$ is complete, it is enough to show that all gates in an already known complete basis $\Phi$ can be computed by a circuit over $\Phi'$. If such translation is provided, given a circuit over $\Phi'$ one can convert each gate in it to the corresponding representation of the gate over $\Phi$, proving that $\Phi'$ is complete.<Ref title="Boolean Circuit Complexity: Scribe notes. Lecture 1, Section 1.4" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il//~zwick/scribe-boolean.html" references={references} /> Surprisingly, $\{\uparrow\}$ and $\{\downarrow\}$ are each complete on their own!
+From the construction above it is easy to see that each boolean function can be computed by a circuit over $\{\wedge, \vee, \neg\}$ of size at most $\mathcal{O}(n2^n)$. In 1956, Muller improved this bound to $\mathcal{O}(2^n/n)$ under any finite, complete basis.<Ref title="Complexity in Electronic Switching Circuits" people="Bodegas De Muller" url="https://doi.org/10.1109/TEC.1956.5219786" references={references} /> We will soon get back to this result!
+
+## All Bases Are The Same
+
+To prove that a basis $\Phi'$ is complete, it is enough to show that all gates in an already known complete basis $\Phi$ can be computed by a circuit over $\Phi'$. If such translation is provided, given a circuit over $\Phi'$ one can convert each gate in it to the corresponding representation of the gate over $\Phi$, proving that $\Phi'$ is complete.<Ref title="Boolean Circuit Complexity: Scribe notes. Lecture 1, Section 1.4" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il//~zwick/scribe-boolean.html" references={references} /> Surprisingly, $\{\uparrow\}$ and $\{\downarrow\}$ are each complete on their own!
 
 <NandBasisCircuit />
 
@@ -292,6 +296,7 @@ $$
 $$
 
 Recall that there are only $2^{2^n}$ unique boolean functions of $n$ variables. But the number of different circuits with $2^n/n$ gates is bounded above by a value that is $2^{\frac{2^n}{n} \log(n)}$ times smaller than that! Hence, clearly most boolean functions require at least $2^n/n$ gates to compute.
+Finally, recall that we already saw that $\mathcal{O}(2^n/n)$ is an upper bound for the size of a minimal circuit of any function with $n$ variables! Hence, this bound is asymptotically tight.
 
 ## An Explicit Linear Lower Bound
 
