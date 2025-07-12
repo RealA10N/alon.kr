@@ -1,7 +1,7 @@
 <script lang="ts">
 	import TruthTable from '$lib/logic/TruthTable.svelte';
 	import { type Edge, type Vertex } from '$lib/graphs/Graph.svelte';
-	import Graph from '$lib/graphs/DirectedAcyclicGraph.svelte';
+	import Graph from '$lib/graphs/Graph.svelte';
 	import Figure from '$lib/Figure.svelte';
 	import AnimationButton from '$lib/AnimationButton.svelte';
 	import { bitsToId, idToBits, indexToInputs } from '$lib/logic/booleanGates';
