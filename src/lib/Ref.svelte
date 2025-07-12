@@ -6,7 +6,7 @@
 
 	export let title: string;
 	export let url: string;
-	export let people: string | string[];
+	export let people: string;
 
 	let number: number;
 
@@ -28,4 +28,6 @@
 	}
 </script>
 
-<sup id="src{number}"><a class="no-underline" href="#ref{number}">[{number}]</a></sup>
+<sup id="src{number}">
+	<a title={`${title} (${people})`} class="no-underline" href="#ref{number}">[{number}]</a>
+</sup>
