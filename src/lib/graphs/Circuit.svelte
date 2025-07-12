@@ -79,15 +79,15 @@
 	let refresh = () => {};
 	let onInteraction = () => stop();
 
-	const computeFunction = (): boolean[] => {
+	const computeFunction = () => {
 		let cachedGates = new Map<Gate, boolean>();
 		for (const gate of vertices) {
 			const state = computeGate(gate, cachedGates);
 			setGateState(gate, state);
 		}
 
+		gateResults = vertices.map((g) => computeGate(g, cachedGates));
 		refresh();
-		return vertices.map((g) => computeGate(g, cachedGates));
 	};
 
 	export { computeFunction as refresh };
@@ -99,8 +99,8 @@
 		}
 	};
 
-	let gateResults = computeFunction();
-	$: inputs, vertices, edges, (gateResults = computeFunction());
+	let gateResults = [] as boolean[];
+	$: inputs, vertices, edges, computeFunction();
 
 	const findOutputIndices = (vertices: Gate[], edges: Edge[]): number[] =>
 		vertices
@@ -147,6 +147,7 @@
 			mode={GraphMode.sticky}
 			bind:refresh
 			bind:onInteraction
+			{...$$restProps}
 		/>
 
 		<div class="flex flex-col items-center justify-center">

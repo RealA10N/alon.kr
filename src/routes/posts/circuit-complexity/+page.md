@@ -12,6 +12,7 @@ tags: ["#SoME4", "Theoretical Computer Science"]
     import GatesView from "./lib/GatesView.svelte";
     import CnfCircuit from "./lib/CnfCircuit.svelte";
     import FactorCircuit from "./lib/FactorCircuit.svelte";
+    import NandBasisCircuit from "./lib/NandBasisCircuit.svelte";
 
     import Footnote from "$lib/Footnote.svelte";
 
@@ -129,6 +130,12 @@ It is easy to see that the basis $\{\wedge, \vee, \neg\}$ is complete: any Boole
 Thus, given the truth table of any function, you can always translate it into a circuit made only of AND, OR, and NOT gates.
 
 <CnfCircuit />
+
+Then, to prove that a basis $\Phi'$ is complete, it is enough to show that all gates in an already known complete basis $\Phi$ can be computed by a circuit over $\Phi'$. If such translation is provided, given a circuit over $\Phi'$ one can convert each gate in it to the corresponding representation of the gate over $\Phi$, proving that $\Phi'$ is complete.<Ref title="Boolean Circuit Complexity: Scribe notes. Lecture 1, Section 1.4" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il//~zwick/scribe-boolean.html" references={references} /> Surprisingly, $\{\uparrow\}$ and $\{\downarrow\}$ are each complete on their own!
+
+<NandBasisCircuit />
+
+Note that a corollary from the result above is that the choice of the basis impacts the complexity of the circuit by a constant factor only. Formally, we say that $C_{\Phi'}(f) = \Theta(C_\Phi(f))$ for any complete bases $\Phi, \Phi'$, where the constant factor is precisely the size of the largest circuit that translates a gate from $\Phi'$ to $\Phi$. Similarly, $D_{\Phi'}(f) = \Theta(D_\Phi(f))$. Thus, we usually omit the base entirely when talking about asymptotic bounds in circuit complexity.<Ref title="Big O notation" people="Wikipedia" url="https://en.wikipedia.org/wiki/Big_O_notation" references={references} />
 
 ## Connections to Complexity Theory
 
