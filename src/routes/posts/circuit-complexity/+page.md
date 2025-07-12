@@ -41,17 +41,13 @@ More specifically, if you have a function that takes a bunch of binary (yes/no) 
 Some functions are easy, and you can compute them with just a few gates; but others seem to require much more!
 The mystery is that, for many functions, we still don't know how simple they could be, or if there's a clever trick we’re missing.<Ref title="Circuit Complexity" people="Wikipedia" url="https://en.wikipedia.org/wiki/Circuit_complexity" references={references} />
 
-I first came across circuit complexity just a few weeks ago, and I was immediately hooked;
-The field has surprisingly deep and far-reaching implications, yet many of its most basic and fundamental questions remain open!
-Moreover, the models and problems are very *pure* - easy to grasp, experiment with, and surprisingly rich in depth.
-
 In this blog post I will try to introduce you to the field, and will walk you through the definitions, methods, main results, open problems, and implications.
-I intentionally avoid getting bogged down in technicalities; my goal is to convey the core ideas and intuition, rather than be perfectly rigorous.
+My goal is to convey the core ideas and intuition, rather than be perfectly rigorous.
 Happy reading!
 
 ## The Boolean Function
 
-A *boolean function* is a function $f : \{0,1\}^n \to \{0, 1\}$, which intuitively takes $n$ bits as inputs, and outputs a single bit.
+A *boolean function* is a function $f : \{0,1\}^n \to \{0, 1\}$, which takes $n$ bits as inputs, and outputs a single bit.
 We usually denote the input vector as $x = (x_1, x_2, ..., x_n)$, where $x_i$ is the $i$-th input bit.
 Examples of such functions are
 
