@@ -10,9 +10,12 @@ tags: ["#SoME3", "Algorithms", "Programming"]
    import GraphWithMst from "./mst/GraphWithMst.svelte";
    import GraphWithTsp from "./tsp/GraphWithTsp.svelte";
    import GraphCycleMatching from "./GraphCycleMatching.svelte";
-   let references = [];
+
    import Ref from "$lib/Ref.svelte";
    import ReferencesList from "$lib/ReferencesList.svelte";
+   import { NewReferenceList } from "$lib/ReferencesList.svelte";
+
+   let references = NewReferenceList();
 </script>
 
 The traveling salesman problem (or TSP for short) is a well-studied problem in computer science and graph theory: Given a graph $G=(V, E)$ and a cost function on the edges $c: E \to \R^+$, what is the cheapest cycle that visits all vertices of the graph?

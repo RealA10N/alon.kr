@@ -15,7 +15,7 @@ body {
 }
 
 h1 {
-	@apply text-4xl sm:text-5xl;
+	@apply text-3xl sm:text-4xl;
 }
 
 h2 {
@@ -40,7 +40,8 @@ p {
 }
 
 a {
-	@apply relative underline decoration-zinc-600 dark:decoration-zinc-400 underline-offset-[3px];
+	@apply cursor-pointer relative underline underline-offset-[3px]
+	decoration-zinc-600 dark:decoration-zinc-400;
 }
 
 button {
@@ -89,4 +90,33 @@ ol > li {
 input {
 	@apply tag bg-transparent transition-colors
 	focus:border-2 focus:dark:bg-zinc-700;
+}
+
+table {
+	@apply divide-y divide-zinc-800 dark:divide-zinc-200
+	overflow-hidden border-separate border-spacing-0
+	shadow dark:shadow-none rounded-md
+	border border-zinc-600 dark:border-zinc-400;
+}
+
+th {
+	@apply text-zinc-700 dark:text-zinc-300
+	bg-zinc-200 dark:bg-zinc-800;
+}
+
+td, th {
+	@apply px-2 py-1;
+}
+
+tr {
+	@apply hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors
+}
+
+code {
+	@apply bg-zinc-200 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200
+	rounded-md px-1 py-0.5 font-mono text-sm;
+}
+
+hr {
+	@apply my-2 border-zinc-600 dark:border-zinc-400;
 }

@@ -9,8 +9,9 @@
 	export let steps: Step[];
 	export let playOnMount: boolean = true;
 	export let interval: number = 2000;
+	export let showAnimationButton: boolean = true;
 
-	let current: number | undefined;
+	export let current: number | undefined;
 	let timeout: ReturnType<typeof setTimeout> | undefined;
 	$: playing = timeout !== undefined;
 
@@ -40,7 +41,9 @@
 	if (playOnMount) onMount(play);
 </script>
 
-<button on:click={toggle}>{playing ? 'Stop' : 'Restart'} Animation</button
->{#each steps as step, i}<button class:focus={current === i} on:click={() => set(i)}>
+{#if showAnimationButton}
+	<button on:click={toggle}>{playing ? 'Stop' : 'Restart'} Animation</button>
+{/if}
+{#each steps as step, i}<button class:focus={current === i} on:click={() => set(i)}>
 		{step.name}</button
 	>{/each}
