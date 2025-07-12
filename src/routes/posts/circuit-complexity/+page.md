@@ -37,7 +37,7 @@ Circuit complexity is a subbranch of computational complexity theory that studie
 
 <EyeCatcher />
 
-More specifically, if you have a function that takes a bunch of binary (yes/no) inputs and produces a binary output, how few logical steps (gates) do you need to compute it?
+More specifically, if you have a function that takes a bunch of binary inputs and produces a binary output, how few logical steps (gates) do you need to compute it?
 Some functions are easy, and you can compute them with just a few gates; but others seem to require much more!
 The mystery is that, for many functions, we still don't know how simple they could be, or if there's a clever trick we’re missing.<Ref title="Circuit Complexity" people="Wikipedia" url="https://en.wikipedia.org/wiki/Circuit_complexity" references={references} />
 
@@ -227,65 +227,40 @@ Also, note that the output vertex is not explicitly labeled. In a legal circuit,
 
 First, it is easy to see that there are exactly $16 (s+n)^2$ different ways to characterize a single gate vertex; There are 16 options for the gate label, and another $(s+n)$ options for each of the 2 incoming edges. We have exactly $s$ such vertices, and hence,
 
-{#if isMobile}
 $$
-\begin{aligned}
-\mathcal{\phi}(n, s) \le \left|\mathcal{A}\right|
-    &\le \left( 16 \cdot (s+n)^2 \right)^s \\
-    &= \left( 4^2 \cdot (2s)^2 \right)^s \\
-    &= \left( 8s \right)^{2s}
-\end{aligned}
-$$
-{:else}
-$$
-\begin{aligned}
 \mathcal{\phi}(n, s) \le \left|\mathcal{A}\right|
     \le \left( 16 \cdot (s+n)^2 \right)^s
-    = \left( 4^2 \cdot (2s)^2 \right)^s
-    = \left( 8s \right)^{2s}
-\end{aligned}
 $$
-{/if}
 
+After plugging $s=2^n/n$ and simplifying the expression above, we get <Footnote><p>
 For convenience, let's take the logarithm of both sides:
 
 $$
-\begin{aligned}
-    \log\left( \left|\mathcal{A}\right| \right) &\le \log\left( \left( 8s \right)^{2s} \right)
+    \log\left( \left|\mathcal{A}\right| \right) \le \log \left( 4^2 \cdot (2s)^2 \right)^s
+    = \log\left( \left( 8s \right)^{2s} \right)
     = 2s \log( 8s )
-\end{aligned}
 $$
 
 By plugging $s = 2^n / n$ we get:
 
-{#if isMobile}
-$$
-\begin{aligned}
-    \log\left( \left|\mathcal{A}\right| \right)
-    &\le 2 \frac{2^n}{n} \log\left( 8 \frac{2^n}{n} \right) \\
-    &= \frac{2^{n+1}}{n} \left( (n+3) - \log(n) \right)
-\end{aligned}
-$$
-{:else}
 $$
     \log\left( \left|\mathcal{A}\right| \right)
     \le 2 \frac{2^n}{n} \log\left( 8 \frac{2^n}{n} \right)
     = \frac{2^{n+1}}{n} \left( (n+3) - \log(n) \right)
 $$
-{/if}
 
 Assuming $n \ge 3$ gives us:
 
 $$
-\begin{aligned}
     \log\left( \left|\mathcal{A}\right| \right)
-    &\le \frac{2^{n+1}}{n} \left( 2n - \log(n) \right) \\
-    &= 2^{n+2} - \frac{2^{n+1}}{n} \log(n) \\
-    &\le 2^n - \frac{2^n}{n} \log(n) + \mathcal{O}(1)
-\end{aligned}
+    \le \frac{2^{n+1}}{n} \left( 2n - \log(n) \right) \\
+    = 2^{n+2} - \frac{2^{n+1}}{n} \log(n) \\
+    \le 2^n - \frac{2^n}{n} \log(n) + \mathcal{O}(1)
 $$
 
-Putting it all together, we got that:
+Bringing back the exponent gives as the desired value.
+
+</Footnote>
 
 $$
 \mathcal{\phi}(n, 2^n/n) \le \left|\mathcal{A}\right| \le 2^{2^n} \cdot 2^{- \frac{2^n}{n} \log(n)} \cdot \mathcal{O}(1)
@@ -316,7 +291,7 @@ I hope I managed to spark your curiosity. To conclude, I'd like to emphasize jus
 
 - *Complexity Of Formulas:* What happens when we restring circuits to trees, instead of DAGs?
 - *Unbounded Fanin Models*: What happens when we allow the $\vee$ and $\wedge$ gates to accept unlimited number of inputs?
-- *Monotone Complexity*: What happens if we disallow the $\neg$ gate? What functions can't we compute, how minimal circuit sizes are effected?
+- *Monotone Complexity*: What happens if we disallow the $\neg$ gate? What functions can't we compute, and how minimal circuit sizes are effected?
 - *Communication Complexity*: Surprisingly, there is a strong connection between circuits and certain models in Game Theory!
 
 My research relied extensively on the [Boolean Function Complexity book by Stasys Jukna](https://www.doi.org/10.1007/978-3-642-24508-4), and can highly recommend it if you want to dive deeper in the topics I've discussed, and further topics.
