@@ -6,6 +6,7 @@
 	import { bitsToId, idToBits, indexToInputs } from '$lib/logic/booleanGates';
 	import { Color } from '$lib/interfaces/color';
 	import { toSubscript } from '$lib/strings/subscripts';
+	import FullWidth from '$lib/FullWidth.svelte';
 
 	let bits = [true, true, true, false];
 	const k = bits.length;
@@ -118,17 +119,23 @@
 
 	$: vertices = [...inputs, ...negations, ...clauseVertices];
 	$: edges = [...negationEdges, ...clauseEdges];
+
+	let width: number;
+	$: responsiveWidth = Math.min(width - 280, 550);
+	$: graphWidth = responsiveWidth > 200 ? responsiveWidth : width;
 </script>
 
-<Figure>
-	<div slot="content" class="flex flex-row justify-center items-center">
-		<Graph {vertices} {edges} />
-		<div>
-			<TruthTable title="y₁" {select} {bits} />
-			<AnimationButton bind:stop {next} />
+<FullWidth bind:width>
+	<Figure>
+		<div slot="content" class="flex flex-wrap items-center justify-center">
+			<Graph width={graphWidth} {vertices} {edges} />
+			<div>
+				<TruthTable title="y₁" {select} {bits} />
+				<AnimationButton bind:stop {next} />
+			</div>
 		</div>
-	</div>
-	<svelte:fragment slot="caption">
-		CNF circuits over the basis &#123;∧, ∨, ¬&#125; computing all functions in B₂
-	</svelte:fragment>
-</Figure>
+		<svelte:fragment slot="caption">
+			CNF circuits over the basis &#123;∧, ∨, ¬&#125; computing all functions in B₂
+		</svelte:fragment>
+	</Figure>
+</FullWidth>
