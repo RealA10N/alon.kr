@@ -47,7 +47,7 @@ Happy reading!
 
 ## The Boolean Function
 
-A *boolean function* is a function $f : \{0,1\}^n \to \{0, 1\}$, which intuitively takes $n$ bits as inputs, and outputs a single bit.
+A *boolean function* is a function $f : \{0,1\}^n \to \{0, 1\}$, which takes $n$ bits as inputs, and outputs a single bit.
 We usually denote the input vector as $x = (x_1, x_2, ..., x_n)$, where $x_i$ is the $i$-th input bit.
 Examples of such functions are
 
