@@ -284,7 +284,7 @@ $$
 \mathcal{\phi}(n, 2^n/n) \le \left|\mathcal{A}\right| \le 2^{2^n} \cdot 2^{- \frac{2^n}{n} \log(n)} \cdot \mathcal{O}(1)
 $$
 
-Recall that there are only $2^{2^n}$ unique boolean functions of $n$ variables. But the number of different circuits with $2^n/n$ gates is bounded above by a value that is $2^{\frac{2^n}{n} \log(n)}$ times smaller than that! Hence, clearly most boolean functions require more than $2^n/n$ gates to compute.
+Recall that there are only $2^{2^n}$ unique boolean functions of $n$ variables. But the number of different circuits with $2^n/n$ gates is bounded above by a value that is $2^{\frac{2^n}{n} \log(n)}$ times smaller than that! Hence, clearly most boolean functions require at least $2^n/n$ gates to compute.
 
 ## An Explicit Linear Lower Bound
 
