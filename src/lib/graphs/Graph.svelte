@@ -343,6 +343,11 @@
 			fill-zinc-100 dark:fill-zinc-900;
 	}
 
+	#links :global(.line) {
+		/* path-specific styles: do not fill the space between curved lines */
+		@apply fill-none;
+	}
+
 	#nodes :global(.highlight),
 	#links :global(.highlight .line) {
 		/* highlight appearance */
