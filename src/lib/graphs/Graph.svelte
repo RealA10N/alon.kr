@@ -132,39 +132,40 @@
 		const x2 = link.target.x;
 		const y2 = link.target.y;
 
-		// If no curve, return simple midpoint
-		if (!link.curve || link.curve === 0) {
+		// If curved edge, calculate the actual midpoint on the curve
+		if (link.curve && link.curve !== 0) {
+			// Calculate the midpoint
+			const midX = (x1 + x2) / 2;
+			const midY = (y1 + y2) / 2;
+
+			// Calculate the perpendicular vector
+			const dx = x2 - x1;
+			const dy = y2 - y1;
+			const length = Math.sqrt(dx * dx + dy * dy);
+
+			// Avoid division by zero
+			if (length === 0) {
+				return { x: midX, y: midY };
+			}
+
+			// Normalize the perpendicular vector
+			const perpX = -dy / length;
+			const perpY = dx / length;
+
+			// Calculate control point using the curve distance directly
+			const controlX = midX + perpX * link.curve;
+			const controlY = midY + perpY * link.curve;
+
+			// For quadratic bezier, the point at t=0.5 is:
+			// B(0.5) = 0.25*P0 + 0.5*P1 + 0.25*P2
+			const curveX = 0.25 * x1 + 0.5 * controlX + 0.25 * x2;
+			const curveY = 0.25 * y1 + 0.5 * controlY + 0.25 * y2;
+
+			return { x: curveX, y: curveY };
+		} else {
+			// For straight edges, return simple midpoint
 			return { x: (x1 + x2) / 2, y: (y1 + y2) / 2 };
 		}
-
-		// Calculate the midpoint
-		const midX = (x1 + x2) / 2;
-		const midY = (y1 + y2) / 2;
-
-		// Calculate the perpendicular vector
-		const dx = x2 - x1;
-		const dy = y2 - y1;
-		const length = Math.sqrt(dx * dx + dy * dy);
-
-		// Avoid division by zero
-		if (length === 0) {
-			return { x: midX, y: midY };
-		}
-
-		// Normalize the perpendicular vector
-		const perpX = -dy / length;
-		const perpY = dx / length;
-
-		// Calculate control point using the curve distance directly
-		const controlX = midX + perpX * link.curve;
-		const controlY = midY + perpY * link.curve;
-
-		// For quadratic bezier, the point at t=0.5 is:
-		// B(0.5) = 0.25*P0 + 0.5*P1 + 0.25*P2
-		const labelX = 0.25 * x1 + 0.5 * controlX + 0.25 * x2;
-		const labelY = 0.25 * y1 + 0.5 * controlY + 0.25 * y2;
-
-		return { x: labelX, y: labelY };
 	}
 
 	const viewboxClampVertex = (d: Vertex) => {
@@ -273,7 +274,17 @@
 			.select('.label')
 			.text((d) => d.label?.toString() ?? '')
 			.attr('x', (d) => getCurvedMidpoint(d).x)
-			.attr('y', (d) => getCurvedMidpoint(d).y);
+			.attr('y', (d) => getCurvedMidpoint(d).y)
+			.attr(
+				'dx',
+				(d) =>
+					`${((d.source.x <= d.target.x ? 1 : -1) * (d.target.y - d.source.y)) / lineLength(d)}em`
+			)
+			.attr(
+				'dy',
+				(d) =>
+					`${((d.source.x <= d.target.x ? 1 : -1) * (d.source.x - d.target.x)) / lineLength(d)}em`
+			);
 
 		const node = d3
 			.select(graphNodes)
