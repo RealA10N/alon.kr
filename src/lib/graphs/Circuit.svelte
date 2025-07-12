@@ -36,6 +36,9 @@
 
 	const Not: GateFunction = (inputs: boolean[]): boolean => !inputs[0];
 	export const NewNotGate = () => ({ label: '¬', compute: Not });
+
+	const Nand: GateFunction = (inputs: boolean[]): boolean => !And(inputs);
+	export const NewNandGate = () => ({ label: '↑', compute: Nand });
 </script>
 
 <script lang="ts">
@@ -86,6 +89,8 @@
 		refresh();
 		return vertices.map((g) => computeGate(g, cachedGates));
 	};
+
+	export { computeFunction as refresh };
 
 	const setGateState = (gate: Gate, state: boolean) => {
 		gate.color = state ? Color.Red : undefined;
