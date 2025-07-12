@@ -127,7 +127,7 @@ Recall that a basis $\Phi$ is a collection of gates (boolean functions).
 We say that a basis $\Phi$ is *complete* if for every boolean function $f$ (with any number of variables) there exists a circuit that computes the function $f$ over the basis $\Phi$.
 
 It is easy to see that the basis $\{\wedge, \vee, \neg\}$ is complete: any Boolean function $f$ can be written in conjunctive normal form (CNF), which is just an AND of ORs of variables and their negations.<Ref title="Conjunctive normal form" people="Wikipedia" url="https://en.wikipedia.org/wiki/Conjunctive_normal_form" references={references} />
-Thus, given the truth table of any function, you can always translate it into a circuit made only of AND, OR, and NOT gates. <Footnote><!--TODO: About unbounded fanin models--></Footnote>
+Thus, given the truth table of any function, you can always translate it into a circuit made only of AND, OR, and NOT gates.
 
 <CnfCircuit />
 
@@ -147,7 +147,7 @@ Boolean functions can represent very complex properties.
 For example, given a graph with $v$ vertices, we can describe a boolean function with $n = \binom{v}{2}$ inputs, one input bit for each possible edge, where the output is 1 if and only if some property of the input graph holds.
 
 One, commonly mentioned example is the $\text{CLIQUE}_k(x)$ function, which outputs 1 if and only if the provided graph has a clique subgraph of size $k$.
-This problem is NP-Complete, which in simple terms means that it is widely believed that finding the answer is computationally hard.<Ref title="Clique problem" url="https://en.wikipedia.org/wiki/Clique_problem" people="Wikipedia" references={references} />
+This problem is $\textsf{NP-Complete}$, which in simple terms means that it is widely believed that finding the answer is computationally hard.<Ref title="Clique problem" url="https://en.wikipedia.org/wiki/Clique_problem" people="Wikipedia" references={references} />
 Since a circuit computation can be simulated by a turing machine in polynomial time, providing family of polynomial circuits to $\text{CLIQUE}_k(x)$ would imply that $\mathsf{P}$ = $\mathsf{NP}$. <Footnote>Furthermore, by the <a href="https://en.wikipedia.org/wiki/Karp%E2%80%93Lipton_theorem">Karp-Lipton Theorem</a>, it would imply the collapse of the polynomial hierarchy, but this is out of the scope of this post.</Footnote>
 
 ### The $\mathsf{P/poly}$ Complexity Class
@@ -192,7 +192,7 @@ I will use $y = (y_1, y_2, \dots, y_m)$ to denote the output vector of such func
 
 ### Factorization
 
-A particularly interesting example of a function with multiple outputs bits is $\text{FACTOR}_n : \{0, 1\}^n \to \{0, 1\}^{\lceil n/2 \rceil}$, that takes a binary vector $(x_1, x_2, \dots, x_n)$, that encodes a binary integer $x^\star = \sum_{i=1}^n x_i 2^{i-1}$, and outputs a similarly encoded integer $y^\star = \sum_{i=1}^{\lceil n/2 \rceil} y_i 2^{i-1}$, where $y^\star$ is the smallest prime factor of $x^\star$ (or 0 if $x^\star$ is prime).<Ref title="Integer factorization" url="https://en.wikipedia.org/wiki/Integer_factorization" people="Wikipedia" references={references} /> <Footnote>If $k=ab$, at least one of $a,b$ must be $\le \sqrt{n}$. Thus, the smallest factor of $k$ is $\le \sqrt{k}$, we only need at most $\log(\sqrt{k}) \le \lceil n/2 \rceil$ bits to encode it.</Footnote>
+A particularly interesting example of a function with multiple outputs bits is $\text{FACTOR}_n : \{0, 1\}^n \to \{0, 1\}^{\lceil n/2 \rceil}$, that takes a binary vector $(x_1, x_2, \dots, x_n)$, that encodes a binary integer $x^\star = \sum_{i=1}^n x_i 2^{i-1}$, and outputs a similarly encoded integer $y^\star = \sum_{i=1}^{\lceil n/2 \rceil} y_i 2^{i-1}$, where $y^\star$ is the smallest prime factor of $x^\star$ (or 0 if $x^\star$ is prime).<Ref title="Integer factorization" url="https://en.wikipedia.org/wiki/Integer_factorization" people="Wikipedia" references={references} /> <Footnote>If $k = p * q$, at least one of $p,q$ must be $\le \sqrt{n}$. Thus, the smallest factor of $k$ is $\le \sqrt{k}$, we only need at most $\log(\sqrt{k}) \le \lceil n/2 \rceil$ bits to encode it.</Footnote>
 
 This function is well-defined, and factoring large numbers is widely believed to be hard in general: many cryptographic schemes rely on this hardness to ensure their security.<Ref title="RSA cryptosystem" url="https://en.wikipedia.org/wiki/RSA_cryptosystem" people="Wikipedia" references={references} />
 
@@ -298,7 +298,7 @@ $$
 Recall that there are only $2^{2^n}$ unique boolean functions of $n$ variables. But the number of different circuits with $2^n/n$ gates is bounded above by a value that is $2^{\frac{2^n}{n} \log(n)}$ times smaller than that! Hence, clearly most boolean functions require at least $2^n/n$ gates to compute.
 Finally, recall that we already saw that $\mathcal{O}(2^n/n)$ is an upper bound for the size of a minimal circuit of any function with $n$ variables! Hence, this bound is asymptotically tight.
 
-## An Explicit Linear Lower Bound
+## On Lower Bounds
 
 We now show that for certain functions with $n$ inputs, any gate computing them must consist of at least $\mathcal{O}(n)$ gates.
 
@@ -307,40 +307,25 @@ It is easy to see that in any circuit that computes $f$, there must be a path fr
 Hence, each input vertex $x_i$ must have an out-degree of at least 1.
 Since in our model the in-degree of each gate is $\le 2$, just connecting all input vertices to arbitrary gates will require at least $\lceil n/2 \rceil$ gates, and hence the $\mathcal{O}(n)$ lower bound.<Ref title="Boolean Function Complexity: Advances and Frontiers. Section 1.6: A 3n Lower Bound for Circuits" people="Stasys Jukna" url="https://www.doi.org/10.1007/978-3-642-24508-4" references={references}/>
 
-## No Super-Linear Explicit Lower Bounds
+### No Super-Linear Explicit Lower Bounds
 
 The bound above is not tight, and trying to improve it is a nice exercise!
 Surprisingly however, there is no explicit lower bound which *asymptotically* better! The current state-of-the-art is a bound of $5n - o(n)$ gates by Iwama and Morizumi (2002).<Ref title="An Explicit Lower Bound of 5n−o(n) for Boolean Circuits" people="Kazuo Iwama, Hiroki Morizumi" url="https://doi.org/10.1007/3-540-45687-2_29" references={references} /><Ref title="Boolean Function Complexity: Advances and Frontiers. Section 1.5.2: Explicit Lower Bounds" people="Stasys Jukna" url="https://doi.org/10.1007/978-3-642-24508-4" references={references} />
 
 I cannot stress enough how absurd and mind-boggling that is: despite the fact that we know that almost all boolean functions are very complex, requiring at least $2^n / n$ gates as shown above, we do not know how to point at a specific function and state that it requires more than a linear number of gates to compute it! This gap is at the heart of the field, and over the last half a century many researches have tried to tackle this problem without much success.
 
-## The Complexity Of Not Gates
-
-It turns out that complexity of circuits 
-
-### How Many NOTs Are Enough?
-
-<!-- Thus one may hope to show P != NP by giving a super-polynomial lower bound on circuit size of an NP problem. (from boppana_sipser.pdf) -->
-
-<!-- On $\textsf{P}/\textsf{poly}$. -->
-
-### Monotone Bounds
-
-### Slice Bounds
-
-
-
-## Final Notes
-
-### Other Models Of Computation
-<!-- 
-- Formulas
-- Unbounded fanin
--->
-
 ## References and Further Reading
 
-My research relied extensively on the [Boolean Function Complexity book by Stasys Jukna](https://www.doi.org/10.1007/978-3-642-24508-4), and can highly recommend it if you want to dive deeper in the topics I've discussed.
+I hope I managed to spark your curiosity. To conclude, I'd like to emphasize just how rich this field of research is, and provide some possible follow-up research questions, that correspond to subfields or other fields that relate to it:
+
+- *Complexity Of Formulas:* What happens when we restring circuits to trees, instead of DAGs?
+- *Unbounded Fanin Models*: What happens when we allow the $\vee$ and $\wedge$ gates to accept unlimited number of inputs?
+- *Monotone Complexity*: What happens if we disallow the $\neg$ gate? What functions can't we compute, how minimal circuit sizes are effected?
+- *Communication Complexity*: Surprisingly, there is a strong connection between circuits and certain models in Game Theory!
+
+My research relied extensively on the [Boolean Function Complexity book by Stasys Jukna](https://www.doi.org/10.1007/978-3-642-24508-4), and can highly recommend it if you want to dive deeper in the topics I've discussed, and further topics.
 Proofreading was done by [Almog Ben Chen](https://www.youtube.com/@almogbenchen6282). Thanks!
+
+### Reference List
 
 <ReferencesList {references} />
