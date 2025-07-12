@@ -157,7 +157,7 @@ $$
 \mathsf{P/poly} = \bigcup_{c\in\N} \mathsf{SIZE}(n^c)
 $$
 
-In words, $\mathsf{P/poly}$ is the collection of all decision problems where for each problem, for each input length $n$ there exists a circuit $C_i$ of size polynomial in $n$, that decides the problem for all inputs of size $n$.<Ref title="P/poly" references={references} />
+In words, $\mathsf{P/poly}$ is the collection of all decision problems where for each problem, for each input length $n$ there exists a circuit $C_i$ of size polynomial in $n$, that decides the problem for all inputs of size $n$.<Ref title="P/poly" people="Wikipedia" url="https://en.wikipedia.org/wiki/P/poly" references={references} />
 
 ### $\mathsf{P}$ vs $\mathsf{P/poly}$
 
