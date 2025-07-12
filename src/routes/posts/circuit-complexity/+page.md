@@ -76,10 +76,10 @@ We denote by $B_n$ the set of all boolean functions with $n$ input variables.
 
 <GatesView bind:highlightDependentOnBothVariables bind:highlightDependentOnX1 bind:highlightDependentOnX2 bind:highlightConstants />
 
-Notice that out of the 16 gates of in $B_2$, only <a on:click={highlightDependentOnBothVariables}>10 gates</a> depend on both inputs, <a on:click={highlightDependentOnX1}>2 gates</a> depend strictly on $x_1$, <a on:click={highlightDependentOnX2}>another 2</a> depends only on $x_2$, and the final <a on:click={highlightConstants}>2 gates</a> depend on no inputs, and their outputs are constant.
+Notice that out of the 16 gates of in $B_2$, only <a role="button" on:click={highlightDependentOnBothVariables}>10 gates</a> depend on both inputs, <a role="button" on:click={highlightDependentOnX1}>2 gates</a> depend strictly on $x_1$, <a role="button" on:click={highlightDependentOnX2}>another 2</a> depends only on $x_2$, and the final <a role="button" on:click={highlightConstants}>2 gates</a> depend on no inputs, and their outputs are constant.
 Hence, this family of gates actually encapsulates all gates of *fanin* $\le 2$.
 
-We call a collection $\Phi$ of boolean functions a *basis*.
+We call a set $\Phi$ of boolean functions a *basis*.
 Then, a *circuit* $C$ over $\Phi$ is a directed acyclic graph $G = (V, E)$ where all nodes $v \in V$ with $\deg_\text{in}(v) = 0$ are labeled by a variable $(x_1, x_2, \dots)$, and are called the *inputs* of the circuit.
 Every other node $u \in V$ is labeled by a function (gate) from $\Phi$ of $\deg_\text{in}(u)$ variables.
 In addition, nodes $w \in V$ where $\deg_\text{out}(w) = 0$ are called the *outputs* of the circuit and are labeled by $(y_1, y_2, \dots)$.<Ref title="Boolean Circuit Complexity: Scribe notes. Lecture 1, Section 1.1" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il/~zwick/scribe-boolean.html" references={references} />
