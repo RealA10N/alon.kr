@@ -7,6 +7,7 @@
 		label?: number | string;
 		highlight?: boolean; // should the edge be bolder
 		direction?: boolean; // is the edge directed?
+		curve?: number; // curve distance in pixels (0 = straight, positive = clockwise curve, negative = counter-clockwise)
 	}
 
 	export interface Vertex extends SimulationNodeDatum {
@@ -84,6 +85,86 @@
 		const dx = Math.abs(link.source.x - link.target.x);
 		const dy = Math.abs(link.source.y - link.target.y);
 		return Math.sqrt(dx * dx + dy * dy);
+	}
+
+	// Calculate the curved path for an edge
+	function getCurvedPath(link: Edge): string {
+		const x1 = link.source.x;
+		const y1 = link.source.y;
+		const x2 = link.target.x;
+		const y2 = link.target.y;
+
+		// If no curve specified, return straight line
+		if (!link.curve || link.curve === 0) {
+			return `M ${x1} ${y1} L ${x2} ${y2}`;
+		}
+
+		// Calculate the midpoint
+		const midX = (x1 + x2) / 2;
+		const midY = (y1 + y2) / 2;
+
+		// Calculate the perpendicular vector
+		const dx = x2 - x1;
+		const dy = y2 - y1;
+		const length = Math.sqrt(dx * dx + dy * dy);
+
+		// Avoid division by zero for overlapping points
+		if (length === 0) {
+			return `M ${x1} ${y1} L ${x2} ${y2}`;
+		}
+
+		// Normalize the perpendicular vector
+		const perpX = -dy / length;
+		const perpY = dx / length;
+
+		// Calculate control point using the curve distance directly
+		const controlX = midX + perpX * link.curve;
+		const controlY = midY + perpY * link.curve;
+
+		// Return quadratic bezier curve
+		return `M ${x1} ${y1} Q ${controlX} ${controlY} ${x2} ${y2}`;
+	}
+
+	// Calculate the midpoint of a curved edge for label positioning
+	function getCurvedMidpoint(link: Edge): { x: number; y: number } {
+		const x1 = link.source.x;
+		const y1 = link.source.y;
+		const x2 = link.target.x;
+		const y2 = link.target.y;
+
+		// If no curve, return simple midpoint
+		if (!link.curve || link.curve === 0) {
+			return { x: (x1 + x2) / 2, y: (y1 + y2) / 2 };
+		}
+
+		// Calculate the midpoint
+		const midX = (x1 + x2) / 2;
+		const midY = (y1 + y2) / 2;
+
+		// Calculate the perpendicular vector
+		const dx = x2 - x1;
+		const dy = y2 - y1;
+		const length = Math.sqrt(dx * dx + dy * dy);
+
+		// Avoid division by zero
+		if (length === 0) {
+			return { x: midX, y: midY };
+		}
+
+		// Normalize the perpendicular vector
+		const perpX = -dy / length;
+		const perpY = dx / length;
+
+		// Calculate control point using the curve distance directly
+		const controlX = midX + perpX * link.curve;
+		const controlY = midY + perpY * link.curve;
+
+		// For quadratic bezier, the point at t=0.5 is:
+		// B(0.5) = 0.25*P0 + 0.5*P1 + 0.25*P2
+		const labelX = 0.25 * x1 + 0.5 * controlX + 0.25 * x2;
+		const labelY = 0.25 * y1 + 0.5 * controlY + 0.25 * y2;
+
+		return { x: labelX, y: labelY };
 	}
 
 	const viewboxClampVertex = (d: Vertex) => {
@@ -167,7 +248,7 @@
 			.join((enter) => {
 				const g = enter.append('g').classed('link', true);
 
-				g.append('line').classed('line', true);
+				g.append('path').classed('line', true);
 
 				if (edgeLabels)
 					g.filter((d) => Boolean(d.label))
@@ -183,27 +264,14 @@
 
 		link
 			.select('.line')
-			.attr('x1', (d) => d.source.x)
-			.attr('y1', (d) => d.source.y)
-			.attr('x2', (d) => d.target.x)
-			.attr('y2', (d) => d.target.y)
+			.attr('d', getCurvedPath)
 			.attr('marker-end', (d) => (d.direction ? 'url(#graph-arrow-head)' : ''));
 
 		link
 			.select('.label')
 			.text((d) => d.label?.toString() ?? '')
-			.attr('x', (d) => (d.source.x + d.target.x) / 2)
-			.attr('y', (d) => (d.source.y + d.target.y) / 2)
-			.attr(
-				'dx',
-				(d) =>
-					`${((d.source.x <= d.target.x ? 1 : -1) * (d.target.y - d.source.y)) / lineLength(d)}em`
-			)
-			.attr(
-				'dy',
-				(d) =>
-					`${((d.source.x <= d.target.x ? 1 : -1) * (d.source.x - d.target.x)) / lineLength(d)}em`
-			);
+			.attr('x', (d) => getCurvedMidpoint(d).x)
+			.attr('y', (d) => getCurvedMidpoint(d).y);
 
 		const node = d3
 			.select(graphNodes)
@@ -245,17 +313,19 @@
 	{height}
 	viewBox="{-width / 2} {-height / 2} {width} {height}"
 >
-	<marker
-		id="graph-arrow-head"
-		markerWidth="10"
-		markerHeight="10"
-		refX={10 + radius}
-		refY="5"
-		orient="auto"
-		markerUnits="userSpaceOnUse"
-	>
-		<polygon points="0 0, 10 5, 0 10" fill="context-stroke" />
-	</marker>
+	<defs>
+		<marker
+			id="graph-arrow-head"
+			markerWidth="10"
+			markerHeight="10"
+			refX={10 + radius}
+			refY="5"
+			orient="auto"
+			markerUnits="userSpaceOnUse"
+		>
+			<polygon points="0 0, 10 5, 0 10" fill="context-stroke" />
+		</marker>
+	</defs>
 
 	<g id="links" bind:this={graphLinks} />
 	<g id="nodes" bind:this={graphNodes} />
