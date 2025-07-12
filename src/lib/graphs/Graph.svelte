@@ -65,9 +65,9 @@
 		simulation?.alpha(1).restart();
 	};
 
-	// When one of the props updates, we reinitialize the whole simulation.
+	// When the graph structure updates, we reinitialize the whole simulation.
 	let simulation: d3.Simulation<Vertex, Edge> | undefined;
-	$: $$props, initSimulation();
+	$: vertices, edges, initSimulation();
 
 	// The svg tags is bounded to this variable.
 	let graphNodes: SVGGElement, graphLinks: SVGGElement;
@@ -234,8 +234,6 @@
 					.id((d) => d.id)
 			);
 	};
-
-	onMount(initSimulation);
 
 	function updateColorClass(this: any, d: { color?: Color }): void {
 		this.classList.remove(...Object.values(Color));
