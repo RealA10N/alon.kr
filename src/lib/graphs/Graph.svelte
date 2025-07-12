@@ -212,7 +212,11 @@
 		node.call(drag).on('click', endNodeSelection);
 	}
 
-	function initSimulation() {
+	export const initSimulation = () => {
+		simulation?.stop();
+		d3.select(graphNodes).selectAll('*').remove();
+		d3.select(graphLinks).selectAll('*').remove();
+
 		simulation = d3
 			.forceSimulation<Vertex, Edge>()
 			.nodes(vertices)
@@ -229,7 +233,7 @@
 					.distance(radius * 10)
 					.id((d) => d.id)
 			);
-	}
+	};
 
 	onMount(initSimulation);
 
