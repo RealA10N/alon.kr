@@ -14,17 +14,13 @@
 	export let references: Writable<Reference[]>;
 </script>
 
-<ol>
+<ol class="my-0">
 	{#each $references as ref, i}
 		<li id="ref{i + 1}">
 			<a href={ref.url} target="_blank" class="no-underline hover:underline">
 				{ref.title}
 				<span class="italic text-sm">
-					{#if typeof ref.people === 'string'}
-						{ref.people}
-					{:else}
-						{ref.people?.join(', ') ?? ''}
-					{/if}
+					{ref.people}
 				</span>
 			</a>
 			<a href="#src{i + 1}" class="no-underline text-sm">↩</a>
