@@ -2,7 +2,7 @@
 layout: post
 title: "Introduction To Circuit Complexity"
 description: "On the Power and Importance of Boolean Function Analysis, and why it is so Hard?"
-published: 2025-06-18
+published: 2025-07-13
 tags: ["#SoME4", "Theoretical Computer Science"]
 ---
 
