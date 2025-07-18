@@ -6,6 +6,11 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://alon.kr/posts/circuit-complexity</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://alon.kr/posts/christofides</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
