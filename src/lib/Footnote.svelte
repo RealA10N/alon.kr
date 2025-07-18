@@ -16,7 +16,7 @@
 
 {#if focus}
 	<hr class="" transition:slide />
-	<div class="italic text-sm" style="text-align-last: center;" transition:slide>
+	<div class="italic text-sm" {...$$restProps} style="text-align-last: center;" transition:slide>
 		<slot />
 	</div>
 	<hr class="" transition:slide />
