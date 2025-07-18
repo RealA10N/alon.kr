@@ -82,11 +82,11 @@ Hence, this family of gates actually encapsulates all gates of *fanin* $\le 2$.
 We call a set $\Phi$ of boolean functions a *basis*.
 Then, a *circuit* $C$ over $\Phi$ is a directed acyclic graph $G = (V, E)$ where all nodes $v \in V$ with $\deg_\text{in}(v) = 0$ are labeled by a variable $(x_1, x_2, \dots)$, and are called the *inputs* of the circuit.
 Every other node $u \in V$ is labeled by a function (gate) from $\Phi$ of $\deg_\text{in}(u)$ variables.
-In addition, nodes $w \in V$ where $\deg_\text{out}(w) = 0$ are called the *outputs* of the circuit and are labeled by $(y_1, y_2, \dots)$.<Ref title="Boolean Circuit Complexity: Scribe notes. Lecture 1, Section 1.1" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il/~zwick/scribe-boolean.html" references={references} />
+In addition, nodes $w \in V$ where $\deg_\text{out}(w) = 0$ are called the *outputs* of the circuit and are labeled by $(y_1, y_2, \dots)$. The standard definition allows only one output node; My definition in this post allows multiple output nodes for generality.<Ref title="Boolean Circuit Complexity: Scribe notes. Lecture 1, Section 1.1" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il/~zwick/scribe-boolean.html" references={references} />
 
 <Th2Circuit />
 
-### Circuits Computing Functions
+## Circuits Computing Functions
 
 The *value* $g_v(x)$ of a node $v \in V$ on input $x = (x_1, x_2 \dots, x_n)$, is defined inductively:
 
@@ -94,12 +94,9 @@ The *value* $g_v(x)$ of a node $v \in V$ on input $x = (x_1, x_2 \dots, x_n)$, i
 - Otherwise, let $\varphi \in \Phi$ be the function labeled by $v$, and let $\text{pred}(v) = (u_1, u_2, \dots)$ be the nodes with incoming edges to $v$.
 Then, $g_v(x) = \varphi(g_{u_1}(x), g_{u_2}(x), \dots)$.
 
-Intuitively, to compute the value of an internal node $v$, we first compute
-the value of all of it's predecessors $\text{pred}(v)$, and then apply the
-corresponding gate function $\varphi$ on the computed value of the predecessors.
+Intuitively, to compute the value of an internal node $v$, we first compute the value of all of it's predecessors $\text{pred}(v)$, and then apply the corresponding gate function $\varphi$ on the computed value of the predecessors.
 Since the graph is acyclic, this process always terminates.
-Finally, we say that the circuit $C$ computes $f$ if for all input vectors $x$,
-the value of the output node $g_w(x)$ equals to $f(x)$.
+Finally, we say that the circuit $C$ computes a boolean function with a single output $f$, if $C$ has a single output node $y_1$,and for all input vectors $x$, the value $g_{y_1}(x)$ equals to $f(x)$.
 
 ## Measuring Circuit Complexity
 
@@ -233,7 +230,7 @@ $$
 $$
 
 After plugging $s=2^n/n$ and simplifying the expression above, we get <Footnote><p>
-For convenience, let's take the logarithm of both sides:
+We assume that $s \ge n$. Then, for convenience, let's take the logarithm of both sides:
 
 $$
     \log\left( \left|\mathcal{A}\right| \right) \le \log \left( 4^2 \cdot (2s)^2 \right)^s
@@ -285,7 +282,7 @@ Surprisingly however, there is no explicit lower bound which *asymptotically* be
 
 I cannot stress enough how absurd and mind-boggling that is: despite the fact that we know that almost all boolean functions are very complex, requiring at least $2^n / n$ gates as shown above, we do not know how to point at a specific function and state that it requires more than a linear number of gates to compute it! This gap is at the heart of the field, and over the last half a century many researches have tried to tackle this problem without much success.
 
-## References and Further Reading
+## Final Notes
 
 I hope I managed to spark your curiosity. To conclude, I'd like to emphasize just how rich this field of research is, and provide some possible follow-up research questions, that correspond to subfields or other fields that relate to it:
 
@@ -294,9 +291,9 @@ I hope I managed to spark your curiosity. To conclude, I'd like to emphasize jus
 - *Monotone Complexity*: What happens if we disallow the $\neg$ gate? What functions can't we compute, and how minimal circuit sizes are effected?
 - *Communication Complexity*: Surprisingly, there is a strong connection between circuits and certain models in Game Theory!
 
+## References and Further Reading
+
 My research relied extensively on the [Boolean Function Complexity book by Stasys Jukna](https://www.doi.org/10.1007/978-3-642-24508-4), and can highly recommend it if you want to dive deeper in the topics I've discussed, and further topics.
 Proofreading was done by [Almog Ben Chen](https://www.youtube.com/@almogbenchen6282). Thanks!
-
-### Reference List
 
 <ReferencesList {references} />
