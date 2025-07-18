@@ -89,7 +89,7 @@
 </script>
 
 <Figure>
-	<Circuit height={250} slot="content" bind:vertices bind:edges bind:inputs bind:refresh />
+	<Circuit height={260} slot="content" bind:vertices bind:edges bind:inputs bind:refresh />
 	<StepAnimation
 		{steps}
 		current={0}
