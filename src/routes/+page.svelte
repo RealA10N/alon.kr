@@ -9,12 +9,14 @@
 	export let data;
 </script>
 
-<link
-	rel="alternate"
-	type="application/rss+xml"
-	title="Alon Krymgand"
-	href="https://alon.kr/rss.xml"
-/>
+<svelte:head>
+	<link
+		rel="alternate"
+		type="application/rss+xml"
+		title="Alon Krymgand"
+		href="https://alon.kr/rss.xml"
+	/>
+</svelte:head>
 
 <Metadata {description} />
 
