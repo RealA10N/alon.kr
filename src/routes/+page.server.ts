@@ -18,7 +18,7 @@ const metadataToPost = (metadata: any, url: string): Post => {
 	} as Post;
 };
 
-export const getPublishedPosts = async () => {
+export const _getPublishedPosts = async () => {
 	const globs = import.meta.glob('./posts/*/+page.md');
 
 	const contents = await Promise.all(
@@ -34,5 +34,5 @@ export const getPublishedPosts = async () => {
 };
 
 export const load = (async () => {
-	return { posts: await getPublishedPosts() };
+	return { posts: await _getPublishedPosts() };
 }) satisfies PageServerLoad;

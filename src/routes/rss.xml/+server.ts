@@ -1,10 +1,10 @@
 // This follows the tutorial in:
 // https://gebna.gg/blog/how-to-add-rss-feed-to-sveltekit-app
 
-import { Feed, Item } from 'feed';
+import { Feed, type Item } from 'feed';
 import { description } from '$src/routes/+page.svelte';
-import { getPublishedPosts } from '$src/routes/+page.server';
-import { Post } from '$src/lib/interfaces/post';
+import { _getPublishedPosts } from '$src/routes/+page.server';
+import type { Post } from '$lib/interfaces/post';
 
 const createFeed = () =>
 	new Feed({
@@ -26,17 +26,20 @@ const createFeed = () =>
 		ttl: 60
 	});
 
+const home = new URL('https://alon.kr');
+const makeAbsoluteUrl = (relativeUrl: string) => new URL(relativeUrl, home).toString();
+
 const postToFeedItem = (post: Post): Item => ({
 	title: post.title,
 	description: post.description,
-	id: post.url,
-	link: post.url,
+	id: makeAbsoluteUrl(post.url),
+	link: makeAbsoluteUrl(post.url),
 	date: new Date(post.published || Date.now())
 });
 
 export async function GET() {
 	const feed = createFeed();
-	const posts = await getPublishedPosts();
+	const posts = await _getPublishedPosts();
 	for (const post of posts) feed.addItem(postToFeedItem(post));
 	return new Response(feed.rss2(), {
 		headers: {
