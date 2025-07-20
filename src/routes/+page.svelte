@@ -9,6 +9,13 @@
 	export let data;
 </script>
 
+<link
+	rel="alternate"
+	type="application/rss+xml"
+	title="Alon Krymgand"
+	href="https://alon.kr/rss.xml"
+/>
+
 <Metadata {description} />
 
 <h1>...Hello World! 👋</h1>
