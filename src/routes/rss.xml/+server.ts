@@ -1,0 +1,46 @@
+// This follows the tutorial in:
+// https://gebna.gg/blog/how-to-add-rss-feed-to-sveltekit-app
+
+import { Feed, Item } from 'feed';
+import { description } from '$src/routes/+page.svelte';
+import { getPublishedPosts } from '$src/routes/+page.server';
+import { Post } from '$src/lib/interfaces/post';
+
+const createFeed = () =>
+	new Feed({
+		title: 'Alon Krymgand',
+		description: description,
+		id: 'https://alon.kr/',
+		link: 'https://alon.kr/',
+		language: 'en', // optional, used only in RSS 2.0, possible values: http://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
+		favicon: 'https://alon.kr/favicon.ico',
+		copyright: `Copyright ${new Date().getFullYear().toString()}, Alon Krymgand`,
+		generator: '🙂', // optional, default = 'Feed for Node.js'
+		feedLinks: {
+			rss: 'https://alon.kr/rss.xml'
+		},
+		author: {
+			name: 'Alon Krymgand',
+			link: 'https://alon.kr/'
+		},
+		ttl: 60
+	});
+
+const postToFeedItem = (post: Post): Item => ({
+	title: post.title,
+	description: post.description,
+	id: post.url,
+	link: post.url,
+	date: new Date(post.published || Date.now())
+});
+
+export async function GET() {
+	const feed = createFeed();
+	const posts = await getPublishedPosts();
+	for (const post of posts) feed.addItem(postToFeedItem(post));
+	return new Response(feed.rss2(), {
+		headers: {
+			'Content-Type': 'application/xml; charset=utf-8'
+		}
+	});
+}

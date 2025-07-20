@@ -1,10 +1,12 @@
+<script lang="ts" context="module">
+	export const description = `My name is Alon Krymgand. This is my site. I write about stuff that I find interesting, and I hope you find it interesting too!`;
+</script>
+
 <script lang="ts">
 	import Metadata from '$lib/Metadata.svelte';
 	import PostCard from '$lib/PostCard.svelte';
 	import { toTaglist } from '$src/lib/interfaces/post.js';
 	export let data;
-
-	let description = `My name is Alon Krymgand. This is my site. I write about stuff that I find interesting, and I hope you find it interesting too!`;
 </script>
 
 <Metadata {description} />
