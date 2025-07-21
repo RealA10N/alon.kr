@@ -4,6 +4,7 @@ title: "Introduction To Circuit Complexity"
 description: "A look at the importance of circuit complexity, main results, and how it shapes cryptography, complexity theory, and our grasp of the true limits of computation."
 published: 2025-07-18
 tags: ["#SoME4", "Theoretical Computer Science"]
+thumbnail: thumbnail.png
 ---
 
 <script lang="ts">

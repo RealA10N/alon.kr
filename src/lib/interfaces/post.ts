@@ -8,6 +8,7 @@ export interface Post {
 	published?: number;
 	readingTime: ReadTimeResults;
 	tags: string[];
+	thumbnail?: string;
 }
 
 const formatDuration = (dateUnix: number, specific: boolean) => {
@@ -20,7 +21,7 @@ export const countWords = (element: HTMLElement) =>
 	Math.ceil(element.innerText.split(' ').length / 200);
 
 export const toTaglist = (post: Post, specific: boolean = false): string[] => [
-	formatDuration(post.published, specific),
+	formatDuration(post.published || 0, specific),
 	`${post.readingTime.text}`,
 	...post.tags
 ];

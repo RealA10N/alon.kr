@@ -1,6 +1,7 @@
 <script lang="ts">
 	export let title: string | null = null;
 	export let description: string | null = null;
+	export let thumbnail: string | null = null;
 
 	let pagetitle = title ? `${title} - Alon Krymgand` : 'Alon Krymgand';
 </script>
@@ -15,5 +16,14 @@
 	{#if description}
 		<meta name="description" content={description} />
 		<meta property="og:description" content={description} />
+	{/if}
+
+	{#if thumbnail}
+		<meta property="og:image" content={thumbnail} />
+		<meta name="twitter:image" content={thumbnail} />
+		<meta property="og:image:type" content="image/png" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta name="twitter:card" content="summary_large_image" />
 	{/if}
 </svelte:head>

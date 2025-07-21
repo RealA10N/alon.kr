@@ -8,7 +8,7 @@
 	export const prerender = true;
 </script>
 
-<Metadata title={post.title} description={post.description} />
+<Metadata title={post.title} description={post.description} thumbnail={post.thumbnail} />
 
 <Header title={post.title} description={post.description} tags={toTaglist(post, true)} />
 
