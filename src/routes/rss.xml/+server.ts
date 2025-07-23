@@ -29,13 +29,15 @@ const createFeed = () =>
 const home = new URL('https://alon.kr');
 const makeAbsoluteUrl = (relativeUrl: string) => new URL(relativeUrl, home).toString();
 
-const postToFeedItem = (post: Post): Item => ({
-	title: post.title,
-	description: post.description,
-	id: makeAbsoluteUrl(post.url),
-	link: makeAbsoluteUrl(post.url),
-	date: new Date(post.published || Date.now())
-});
+const postToFeedItem = (post: Post) =>
+	({
+		title: post.title,
+		description: post.description,
+		id: makeAbsoluteUrl(post.url),
+		link: makeAbsoluteUrl(post.url),
+		image: post.thumbnail ? makeAbsoluteUrl(post.thumbnail) : undefined,
+		date: new Date(post.published || Date.now())
+	} as Item);
 
 export async function GET() {
 	const feed = createFeed();
