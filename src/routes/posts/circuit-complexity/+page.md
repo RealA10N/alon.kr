@@ -42,7 +42,7 @@ More specifically, if you have a function that takes a bunch of binary inputs an
 Some functions are easy, and you can compute them with just a few gates; but others seem to require much more!
 The mystery is that, for many functions, we still don't know how simple they could be, or if there's a clever trick we’re missing.<Ref title="Circuit Complexity" people="Wikipedia" url="https://en.wikipedia.org/wiki/Circuit_complexity" references={references} />
 
-In this blog post I will try to introduce you to the field, and will walk you through the definitions, methods, main results, open problems, and implications.
+In this blog post, I'll introduce you to the field, walking you through its definitions, methods, main results, open problems, and implications.
 My goal is to convey the core ideas and intuition, rather than be perfectly rigorous.
 Happy reading!
 
@@ -56,7 +56,7 @@ $$
 \oplus_n(x) \coloneqq \sum_{i=1}^n{x_i} \mod 2
 $$
 
-which outputs 1 if and only if the number of on inputs bits is odd (and is usually called the *parity* function),<Ref title="Parity function" url="https://en.wikipedia.org/wiki/Parity_function" people="Wikipedia" references={references} /> and
+which outputs 1 if and only if the number of *on* input bits is odd (and is usually called the *parity* function),<Ref title="Parity function" url="https://en.wikipedia.org/wiki/Parity_function" people="Wikipedia" references={references} /> and
 
 $$
 \text{Th}^n_k(x) =
@@ -70,20 +70,21 @@ which outputs 1 if and only if the number of on inputs bits is greater than some
 
 ## The Boolean Circuit
 
-Intuitively, a *boolean circuit* is a description of a computation of a large boolean function $f : \{0, 1\}^n \to \{0,1\}$, that meticulously concatenates the outputs of *weaker* boolean functions $g : \{0, 1\}^k \to \{0, 1\}$, which we call *gates*.
-The number of input bits $k$ in a given gate is sometimes called the *fanin* or *in-degree* of the gate, and for the purpose of this post, all gates are of fanin of at most 2.
-It is easy to show that there are $2^{2^k}$ different gates of *fanin* $k$, and in particular, there are exactly $2^{2^2} = 16$ unique gates with two inputs.
+Intuitively, a *boolean circuit* is a description of a computation of a large boolean function $f : \{0, 1\}^n \to \{0,1\}$, by meticulously concatenating the outputs of *weaker* boolean functions $g : \{0, 1\}^k \to \{0, 1\}$, which we call *gates*.
+The number of input bits $k$ in a given gate is sometimes called the *fanin* or *in-degree* of the gate.
+For this post, all gates have a fanin of at most 2.
+It is easy to show that there are $2^{2^k}$ different gates with *fanin* $k$, and in particular, there are exactly $2^{2^2} = 16$ unique gates with two inputs.
 We denote by $B_n$ the set of all boolean functions with $n$ input variables.
 
 <GatesView bind:highlightDependentOnBothVariables bind:highlightDependentOnX1 bind:highlightDependentOnX2 bind:highlightConstants />
 
-Notice that out of the 16 gates of in $B_2$, only <a role="button" on:click={highlightDependentOnBothVariables}>10 gates</a> depend on both inputs, <a role="button" on:click={highlightDependentOnX1}>2 gates</a> depend strictly on $x_1$, <a role="button" on:click={highlightDependentOnX2}>another 2</a> depends only on $x_2$, and the final <a role="button" on:click={highlightConstants}>2 gates</a> depend on no inputs, and their outputs are constant.
+Notice that out of the 16 gates in $B_2$, only <a role="button" on:click={highlightDependentOnBothVariables}>10 gates</a> depend on both inputs, <a role="button" on:click={highlightDependentOnX1}>2 gates</a> depend strictly on $x_1$, <a role="button" on:click={highlightDependentOnX2}>another 2</a> depend only on $x_2$, and the final <a role="button" on:click={highlightConstants}>2 gates</a> depend on no inputs, resulting in constant outputs.
 Hence, this family of gates actually encapsulates all gates of *fanin* $\le 2$.
 
 We call a set $\Phi$ of boolean functions a *basis*.
-Then, a *circuit* $C$ over $\Phi$ is a directed acyclic graph $G = (V, E)$ where all nodes $v \in V$ with $\deg_\text{in}(v) = 0$ are labeled by a variable $(x_1, x_2, \dots)$, and are called the *inputs* of the circuit.
-Every other node $u \in V$ is labeled by a function (gate) from $\Phi$ of $\deg_\text{in}(u)$ variables.
-In addition, nodes $w \in V$ where $\deg_\text{out}(w) = 0$ are called the *outputs* of the circuit and are labeled by $(y_1, y_2, \dots)$. The standard definition allows only one output node; My definition in this post allows multiple output nodes for generality.<Ref title="Boolean Circuit Complexity: Scribe notes. Lecture 1, Section 1.1" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il/~zwick/scribe-boolean.html" references={references} />
+Then, a *circuit* $C$ over $\Phi$ is a directed acyclic graph $G = (V, E)$ where all nodes $v \in V$ with $\deg_\text{in}(v) = 0$ are labeled with a variable $(x_1, x_2, \dots)$, and are called the *inputs* of the circuit.
+Every other node $u \in V$ is labeled by a function (gate) from $\Phi$ that takes $\deg_\text{in}(u)$ variables as input.
+In addition, nodes $w \in V$ where $\deg_\text{out}(w) = 0$ are called the *outputs* of the circuit and are labeled with $(y_1, y_2, \dots)$. The standard definition allows only one output node; My definition in this post allows multiple output nodes for generality.<Ref title="Boolean Circuit Complexity: Scribe notes. Lecture 1, Section 1.1" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il/~zwick/scribe-boolean.html" references={references} />
 
 <Th2Circuit />
 
@@ -95,18 +96,18 @@ The *value* $g_v(x)$ of a node $v \in V$ on input $x = (x_1, x_2 \dots, x_n)$, i
 - Otherwise, let $\varphi \in \Phi$ be the function labeled by $v$, and let $\text{pred}(v) = (u_1, u_2, \dots)$ be the nodes with incoming edges to $v$.
 Then, $g_v(x) = \varphi(g_{u_1}(x), g_{u_2}(x), \dots)$.
 
-Intuitively, to compute the value of an internal node $v$, we first compute the value of all of it's predecessors $\text{pred}(v)$, and then apply the corresponding gate function $\varphi$ on the computed value of the predecessors.
+Intuitively, to compute the value of an internal node $v$, we first compute the value of all of its predecessors $\text{pred}(v)$, and then apply the corresponding gate function $\varphi$ to the computed values of the predecessors.
 Since the graph is acyclic, this process always terminates.
-Finally, we say that the circuit $C$ computes a boolean function with a single output $f$, if $C$ has a single output node $y_1$,and for all input vectors $x$, the value $g_{y_1}(x)$ equals to $f(x)$.
+Finally, we say that the circuit $C$ computes a boolean function with a single output $f$, if $C$ has a single output node $y_1$, and for all input vectors $x$, the value $g_{y_1}(x)$ equals $f(x)$.
 
 ## Measuring Circuit Complexity
 
 It is common to measure the *complexity* of a circuit using two different metrics.
 
-1. The first is the *size* of a circuit, measured by the *number of gates* in it. This measure is fairly straightforward: if we stick with the analogy of gates as very simple pieces of logic, then the more gates a circuit has, the more complex the functions it can represent. When talking about hardware circuits, this directly correlates to the cost, and size, of the corresponding hardware.
+1. The first is the *size* of a circuit, measured by the *number of gates* in it. This measure is fairly straightforward: if we stick with the analogy of gates as very simple pieces of logic, then the more gates a circuit has, the more complex the functions it can represent. When talking about hardware circuits, this directly correlates to the cost and size of the corresponding hardware.
 2. The second one is called the *depth* of the circuit, and is the length of the longest path in the circuit. Intuitively, this measure indicates how *parallelizable* the computation is. With real hardware as an analogy, this correlates to how fast the computation can be performed.
 
-We denote by $C_\Phi(f)$ and $D_\Phi(f)$ the minimal size and depth, respectively, across all circuits that computes $f$ over $\Phi$. The main point of interest in circuit complexity is the behavior of those complexity measures on different functions and families of functions. Mainly, one can ask himself:
+We denote by $C_\Phi(f)$ and $D_\Phi(f)$ the minimal size and depth, respectively, across all circuits that computes $f$ over $\Phi$. The main point of interest in circuit complexity is how these complexity measures behave for different functions and families of functions. Mainly, one might ask:
 
 - Are there families of functions that require super-polynomial size or depth?
 - Can we prove strong lower bounds on circuit size or depth for explicit functions?
@@ -129,27 +130,27 @@ From the construction above it is easy to see that each boolean function can be 
 
 ## All Bases Are The Same
 
-To prove that a basis $\Phi'$ is complete, it is enough to show that all gates in an already known complete basis $\Phi$ can be computed by a circuit over $\Phi'$. If such translation is provided, given a circuit over $\Phi'$ one can convert each gate in it to the corresponding representation of the gate over $\Phi$, proving that $\Phi'$ is complete.<Ref title="Boolean Circuit Complexity: Scribe notes. Lecture 1, Section 1.4" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il//~zwick/scribe-boolean.html" references={references} /> Surprisingly, $\{\uparrow\}$ and $\{\downarrow\}$ are each complete on their own!
+To prove that a basis $\Phi'$ is complete, it is enough to show that all gates in an already known complete basis $\Phi$ can be computed by a circuit over $\Phi'$. If such translation is provided, a circuit over $\Phi'$ can be converted by replacing each gate with its corresponding representation over $\Phi$, thus proving that $\Phi'$ is complete.<Ref title="Boolean Circuit Complexity: Scribe notes. Lecture 1, Section 1.4" people="Uri Zwick, Omer Shibolet" url="https://www.cs.tau.ac.il//~zwick/scribe-boolean.html" references={references} /> Surprisingly, $\{\uparrow\}$ and $\{\downarrow\}$ are each complete on their own!
 
 <NandBasisCircuit />
 
-Note that a corollary from the result above is that the choice of the basis impacts the complexity of the circuit by a constant factor only. Formally, we say that $C_{\Phi'}(f) = \Theta(C_\Phi(f))$ for any complete bases $\Phi, \Phi'$, where the constant factor is precisely the size of the largest circuit that translates a gate from $\Phi'$ to $\Phi$. Similarly, $D_{\Phi'}(f) = \Theta(D_\Phi(f))$. Thus, we usually omit the base entirely when talking about asymptotic bounds in circuit complexity.<Ref title="Big O notation" people="Wikipedia" url="https://en.wikipedia.org/wiki/Big_O_notation" references={references} />
+A corollary of the above result is that the choice of basis impacts circuit complexity by only a constant factor. Formally, we say that $C_{\Phi'}(f) = \Theta(C_\Phi(f))$ for any complete basis $\Phi, \Phi'$, where the constant factor is precisely the size of the largest circuit that translates a gate from $\Phi'$ to $\Phi$. Similarly, $D_{\Phi'}(f) = \Theta(D_\Phi(f))$. Thus, we usually omit the basis entirely when talking about asymptotic bounds in circuit complexity.<Ref title="Big O notation" people="Wikipedia" url="https://en.wikipedia.org/wiki/Big_O_notation" references={references} />
 
 ## Connections to Complexity Theory
 
 Boolean functions can represent very complex properties.
 For example, given a graph with $v$ vertices, we can describe a boolean function with $n = \binom{v}{2}$ inputs, one input bit for each possible edge, where the output is 1 if and only if some property of the input graph holds.
 
-One, commonly mentioned example is the $\text{CLIQUE}_k(x)$ function, which outputs 1 if and only if the provided graph has a clique subgraph of size $k$.
+One commonly mentioned example is the $\text{CLIQUE}_k(x)$ function, which outputs 1 if and only if the provided graph has a clique subgraph of size $k$.
 This problem is $\textsf{NP-Complete}$, which in simple terms means that it is widely believed that finding the answer is computationally hard.<Ref title="Clique problem" url="https://en.wikipedia.org/wiki/Clique_problem" people="Wikipedia" references={references} />
-Since a circuit computation can be simulated by a turing machine in polynomial time, providing family of polynomial circuits to $\text{CLIQUE}_k(x)$ would imply that $\mathsf{P}$ = $\mathsf{NP}$. <Footnote>Furthermore, by the <a href="https://en.wikipedia.org/wiki/Karp%E2%80%93Lipton_theorem">Karp-Lipton Theorem</a>, it would imply the collapse of the polynomial hierarchy, but this is out of the scope of this post.</Footnote>
+Since a circuit computation can be simulated by a Turing machine in polynomial time, providing family of polynomial circuits for $\text{CLIQUE}_k(x)$ would imply that $\mathsf{P}$ = $\mathsf{NP}$. <Footnote>Furthermore, by the <a href="https://en.wikipedia.org/wiki/Karp%E2%80%93Lipton_theorem">Karp-Lipton Theorem</a>, it would imply the collapse of the polynomial hierarchy, but this is out of the scope of this post.</Footnote>
 
 ### The $\mathsf{P/poly}$ Complexity Class
 
-In Classical Complexity Theory, we try to classify problems by their difficulty, and try to analyze and understand the the differences between different computational models. The most fundamental complexity class is probably $\mathsf{P}$, which is defined to contain all decision problems that can be solved in polynomial time using a turing machine.<Ref title="P (complexity)" people="Wikipedia" url="https://en.wikipedia.org/wiki/P_(complexity)" references={references} />
+In Classical Complexity Theory, we try to classify problems by their difficulty, and try to analyze and understand the differences between different computational models. The most fundamental complexity class is probably $\mathsf{P}$, which is defined to contain all decision problems that can be solved in polynomial time using a turing machine.<Ref title="P (complexity)" people="Wikipedia" url="https://en.wikipedia.org/wiki/P_(complexity)" references={references} />
 
 The equivalent class in circuit complexity is $\mathsf{P/poly}$.
-Since a specific circuit is designed to handle inputs of exactly $n$ bits (unlike a turing machine which can process inputs of all lengths), we define that a decision problem is in $\mathsf{SIZE}(f(n))$ if there exists an infinite family of circuits $\{C_1, C_2, \dots\}$ such that $C_i$ is a circuit that solves the instance of the problem for exactly $n$ inputs, and the size of the circuit is $\mathcal{O}(f(n))$. Then, we define
+Since a specific circuit is designed to handle inputs of exactly $n$ bits (unlike a Turing machine which can process inputs of all lengths), we define that a decision problem is in $\mathsf{SIZE}(f(n))$ if there exists an infinite family of circuits $\{C_1, C_2, \dots\}$ such that $C_i$ is a circuit that solves the instance of the problem for exactly $n$ inputs, and the size of the circuit is $\mathcal{O}(f(n))$. Then, we define
 
 $$
 \mathsf{P/poly} = \bigcup_{c\in\N} \mathsf{SIZE}(n^c)
@@ -159,13 +160,14 @@ In words, $\mathsf{P/poly}$ is the collection of all decision problems where for
 
 ### $\mathsf{P}$ vs $\mathsf{P/poly}$
 
-First, it is not hard to show that $\mathsf{P} \subseteq \mathsf{P/poly}$ by showing a polynomial reduction from a polynomial turing machine to a polynomial circuit family. I won't go into the details here, and you can take it as a nice exercise. <Footnote>The idea is to simulate a turing machine using a circuit: Assuming the machine terminates after at most $n^c$ steps, it also must use at most $n^c$ memory cells on the tape.
+First, it is not hard to show that $\mathsf{P} \subseteq \mathsf{P/poly}$ by showing a polynomial reduction from a polynomial Turing machine to a polynomial circuit family. I won't go into the details here, and you can take it as a nice exercise. <Footnote>The idea is to simulate a Turing machine using a circuit: Assuming the machine terminates after at most $n^c$ steps, it also must use at most $n^c$ memory cells on the tape.
 The simulating circuit can then be of size $\mathcal{O}(n^{2c})$, where in each of the $n^c$ steps we also store and propagate all of the $\mathcal{O}(n^c)$ accessible tape cells, in addition to the position of the head and the state of the internal state machine.</Footnote>
 
-On the other hand, $\mathsf{P/poly}$ is strictly more powerful than $\mathsf{P}$ because it permits *non-uniformity*: it allows a different polynomial-size circuit for each input length, with no requirement that these circuits be generated by a single, efficiently computable process. <Footnote>The way to define uniform circuit complexity classes is to require a single turing machine to generate an encoding of the circuits, provided the number of inputs variables of the circuit as input to the turing machine. We then restrict the turing machine (by time and space), to restrict the uniformity. A commonly used uniformity type is polytime-uniformity, which requires the turing machine to run in polynomial time. Logspace-uniformity is exactly P.</Footnote>
+On the other hand, $\mathsf{P/poly}$ is strictly more powerful than $\mathsf{P}$ because it permits *non-uniformity*: it allows a different polynomial-size circuit for each input length, with no requirement that these circuits be generated by a single, efficiently computable process. <Footnote>The way to define uniform circuit complexity classes is to require a single Turing machine to generate an encoding of the circuits, provided with the number of input variables of the circuit as input to the Turing machine. We then restrict the Turing machine (by time and space), to constrain the uniformity. A commonly used uniformity type is polytime-uniformity, which requires the Turing machine to run in polynomial time. Logspace-uniformity is equivalent to P.</Footnote>
 
 Suppose that $L \notin \mathsf{P}$ is a language over a countable alphabet $\Sigma$.
-Since $\Sigma^* \subseteq L$ is also countable, let $\{w_1, w_2, \dots \}$ be an arbitrary enumeration of the words in $L$.
+Since $L$ is a language over a countable alphabet $\Sigma$, we can enumerate its words.
+Let $\{w_1, w_2, \dots \}$ be such arbitrary enumeration.
 We now define a new language
 
 $$
@@ -174,9 +176,9 @@ $$
 
 which simply includes all strings of length $i$ iff $w_i$ is $\in L$.
 We now can easily construct a family of circuits $\{C_1, C_2, \dots\}$ that is in $\mathsf{P/poly}$ that decides $L'$.
-The circuit $C_i$ would simply yield True on all inputs if $w_i \in L$, or False on all inputs if $w_i \notin L$.
-The size of all circuits in the family is $\mathcal{O}(1)$, and thus $L' \in \mathsf{P/poly}$ by definition. On the other hand $L' \notin \mathsf{P}$, since if there was a polynomial turing machine computing $L'$, a simple reduction would have provided a polynomial algorithm for $L$, which is not in $\mathsf{P}$ by it's definition.
-We have showed that $L' \in \mathsf{P/poly}$ but $L' \notin \mathsf{P}$ and thus $\mathsf{P} \subset \mathsf{P/poly}$.<Ref title="Computational Complexity: A Modern Approach. Section 6.1." people="Sanjeev Arora, Boaz Barak" url="https://people.irisa.fr/Nicolas.Markey/PDF/Papers/AB09-CCMA.pdf" references={references}/> <Footnote>In particular, $L$ can be any undecidable language. A concrete example is the unary halting problem, which is $\in \mathsf{P/poly}$.</Footnote>
+The circuit $C_i$ would simply output 1 on all inputs if $w_i \in L$, or 0 on all inputs if $w_i \notin L$.
+The size of all circuits in the family is $\mathcal{O}(1)$, and thus $L' \in \mathsf{P/poly}$ by definition. On the other hand $L' \notin \mathsf{P}$, since if there was a polynomial turing machine computing $L'$, a simple reduction would have provided a polynomial algorithm for $L$, which is not in $\mathsf{P}$ by its definition.
+We have shown that $L' \in \mathsf{P/poly}$ but $L' \notin \mathsf{P}$ and thus $\mathsf{P} \subset \mathsf{P/poly}$.<Ref title="Computational Complexity: A Modern Approach. Section 6.1." people="Sanjeev Arora, Boaz Barak" url="https://people.irisa.fr/Nicolas.Markey/PDF/Papers/AB09-CCMA.pdf" references={references}/> <Footnote>In particular, $L$ can be any undecidable language. A concrete example is the unary halting problem, which is in $\mathsf{P/poly}$.</Footnote>
 
 ## Connections to Cryptography
 
