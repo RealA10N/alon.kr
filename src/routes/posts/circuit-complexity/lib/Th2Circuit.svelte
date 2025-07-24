@@ -10,14 +10,14 @@
 		NewOutputGate
 	} from '$lib/graphs/Circuit.svelte';
 	import { type Edge } from '$lib/graphs/Graph.svelte';
+	import { writable, type Writable } from 'svelte/store';
 
-	let inputs: boolean[] = [false, false, false];
-	const getInputs = () => inputs;
+	let inputs: Writable<boolean[]> = writable([false, false, false]);
 
 	let vertices: Gate[] = [
-		{ id: 1, x: -92, y: -127, ...NewInputGate(getInputs, 0) },
-		{ id: 2, x: -57, y: -65, ...NewInputGate(getInputs, 1) },
-		{ id: 3, x: -38, y: 151, ...NewInputGate(getInputs, 2) },
+		{ id: 1, x: -92, y: -127, ...NewInputGate(inputs, 0) },
+		{ id: 2, x: -57, y: -65, ...NewInputGate(inputs, 1) },
+		{ id: 3, x: -38, y: 151, ...NewInputGate(inputs, 2) },
 		{ id: 4, x: 40, y: -136, ...NewAndGate() },
 		{ id: 5, x: -165, y: -16, ...NewOrGate() },
 		{ id: 6, x: 16, y: -14, ...NewNotGate() },

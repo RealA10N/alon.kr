@@ -1,10 +1,12 @@
-<script lang="ts">
-	import { onMount } from 'svelte';
-
-	interface Step {
+<script lang="ts" context="module">
+	export interface Step {
 		name: string;
 		func: () => void;
 	}
+</script>
+
+<script lang="ts">
+	import { onMount } from 'svelte';
 
 	export let steps: Step[];
 	export let playOnMount: boolean = true;

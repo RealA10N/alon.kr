@@ -11,15 +11,15 @@
 		NewOrGate,
 		NewOutputGate
 	} from '$lib/graphs/Circuit.svelte';
+	import { writable, type Writable } from 'svelte/store';
 
-	let inputs: boolean[] = [false, false, false, false];
-	const getInputs = () => inputs;
+	let inputs = writable([false, false, false, false]);
 
 	let vertices: Gate[] = [
-		{ id: 1, ...NewInputGate(getInputs, 0), x: -92, y: -127 },
-		{ id: 2, ...NewInputGate(getInputs, 1), x: -57, y: -65 },
-		{ id: 3, ...NewInputGate(getInputs, 2), x: -38, y: 151 },
-		{ id: 4, ...NewInputGate(getInputs, 3), x: -38, y: 151 },
+		{ id: 1, ...NewInputGate(inputs, 0), x: -92, y: -127 },
+		{ id: 2, ...NewInputGate(inputs, 1), x: -57, y: -65 },
+		{ id: 3, ...NewInputGate(inputs, 2), x: -38, y: 151 },
+		{ id: 4, ...NewInputGate(inputs, 3), x: -38, y: 151 },
 		{ id: 5, ...NewAndGate(), x: 40, y: -136 },
 		{ id: 6, ...NewOrGate(), x: -165, y: -16 },
 		{ id: 7, ...NewAndGate(), x: 16, y: -14 },

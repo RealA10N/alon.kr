@@ -1,6 +1,7 @@
 <script lang="ts" context="module">
 	import { toSubscript } from '$lib/strings/subscripts';
 	import { type Vertex } from '$lib/graphs/Graph.svelte';
+	import { get, type Readable } from 'svelte/store';
 
 	export type GateFunction = (inputs: boolean[]) => boolean;
 
@@ -11,14 +12,14 @@
 		compute: GateFunction;
 	}
 
-	const NthInput =
-		(getInputs: () => boolean[], n: number): GateFunction =>
+	export const NthInput =
+		(inputs: Readable<boolean[]>, n: number): GateFunction =>
 		(_: boolean[]): boolean =>
-			getInputs()[n];
+			get(inputs)[n];
 
-	export const NewInputGate = (getInputs: () => boolean[], n: number) => ({
+	export const NewInputGate = (inputs: Readable<boolean[]>, n: number) => ({
 		label: `x${toSubscript(n + 1)}`,
-		compute: NthInput(getInputs, n)
+		compute: NthInput(inputs, n)
 	});
 
 	const Id: GateFunction = (inputs: boolean[]): boolean => inputs[0];
@@ -49,10 +50,11 @@
 	import BooleanButton from '$lib/logic/BooleanButton.svelte';
 	import BooleanTag from '$lib/logic/BooleanTag.svelte';
 	import AnimationButton from '$lib/AnimationButton.svelte';
+	import { writable, type Writable } from 'svelte/store';
 
 	export const prerender = true;
 
-	export let inputs: boolean[] = [];
+	export let inputs: Writable<boolean[]> = writable([]);
 	export let vertices: Gate[] = [];
 	export let edges: Edge[] = [];
 
@@ -100,7 +102,7 @@
 	};
 
 	let gateResults = [] as boolean[];
-	$: inputs, vertices, edges, computeFunction();
+	$: $inputs, vertices, edges, computeFunction();
 
 	const findOutputIndices = (vertices: Gate[], edges: Edge[]): number[] =>
 		vertices
@@ -116,15 +118,14 @@
 		return inputs.reduce((acc, input, i) => acc + (input ? 1 << i : 0), 0);
 	};
 
-	const numberToInputs = (number: number): boolean[] => {
-		return Array.from({ length: inputs.length }, (_, i) => Boolean(number & (1 << i)));
-	};
+	const numberToInputs = (number: number): boolean[] =>
+		Array.from({ length: $inputs.length }, (_, i) => Boolean(number & (1 << i)));
 
 	const next = () => {
-		let n = inputsToNumber(inputs);
+		let n = inputsToNumber($inputs);
 		n += 1;
-		n %= 1 << inputs.length;
-		inputs = numberToInputs(n);
+		n %= 1 << $inputs.length;
+		$inputs = numberToInputs(n);
 	};
 
 	let stop = () => {};
@@ -160,7 +161,7 @@
 					<th class="text-center">Input</th>
 					<th class="text-center">Value</th>
 				</tr>
-				{#each inputs as input, i}
+				{#each $inputs as input, i}
 					<tr>
 						<td class="text-center">x<sub>{i + 1}</sub></td>
 						<td>
