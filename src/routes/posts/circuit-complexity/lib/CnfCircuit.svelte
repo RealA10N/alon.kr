@@ -177,7 +177,7 @@
 <FullWidth bind:width>
 	<Figure>
 		<div slot="content" class="flex flex-wrap items-center justify-center">
-			<Graph width={graphWidth} {vertices} {edges} bind:refresh />
+			<Graph width={graphWidth} {vertices} {edges} bind:refresh onInteraction={stop} />
 			<div>
 				<TruthTable title="y₁" {select} {bits} />
 				<AnimationButton bind:stop {next} />
