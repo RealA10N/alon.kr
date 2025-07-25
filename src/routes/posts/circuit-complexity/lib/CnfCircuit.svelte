@@ -184,7 +184,7 @@
 			</div>
 		</div>
 		<svelte:fragment slot="caption"
-			>CNF circuits over the basis &#123;∧, ∨, ¬&#125; computing computing all functions in B₂.
+			>CNF circuits over the basis &#123;∧, ∨, ¬&#125; computing all functions in B₂.
 		</svelte:fragment>
 	</Figure>
 </FullWidth>
