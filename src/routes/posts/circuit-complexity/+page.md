@@ -297,6 +297,6 @@ I hope I managed to spark your curiosity. To conclude, I'd like to emphasize jus
 ## References and Further Reading
 
 My research relied extensively on the [Boolean Function Complexity book by Stasys Jukna](https://www.doi.org/10.1007/978-3-642-24508-4), and can highly recommend it if you want to dive deeper in the topics I've discussed, and further topics.
-Proofreading was done by [Almog Ben Chen](https://www.youtube.com/@almogbenchen6282). Thanks!
+Proofreading was done by [Almog Ben Chen](https://www.youtube.com/@almogbenchen6282) (& LLMs). Thanks!
 
 <ReferencesList {references} />
