@@ -39,5 +39,5 @@
 		playOnMount={false}
 		slot="buttons"
 	/>
-	<slot name="caption" />
+	<slot name="caption" slot="caption" />
 </Figure>
