@@ -8,19 +8,19 @@
 		const inputs = writable([false, false]);
 
 		const vertices = [
-			{ id: 1, ...NewInputGate(inputs, 0), x: -150, y: -75 },
-			{ id: 2, ...NewInputGate(inputs, 1), x: -150, y: 75 },
-			{ id: 3, ...NewNandGate(), x: -50, y: 0 },
-			{ id: 4, ...NewNandGate(), x: 50, y: 0 },
-			{ id: 5, ...NewOutputGate(0), x: 150, y: 0 }
+			{ id: 0, ...NewInputGate(inputs, 0), x: -150, y: -75 },
+			{ id: 1, ...NewInputGate(inputs, 1), x: -150, y: 75 },
+			{ id: 2, ...NewNandGate(), x: -50, y: 0 },
+			{ id: 3, ...NewNandGate(), x: 50, y: 0 },
+			{ id: 4, ...NewOutputGate(0), x: 150, y: 0 }
 		] as Gate[];
 
 		const edges = [
-			{ source: 1, target: 3 },
-			{ source: 2, target: 3 },
-			{ source: 3, target: 4, curve: 30 },
-			{ source: 3, target: 4, curve: -30 },
-			{ source: 4, target: 5 }
+			{ source: vertices[0], target: vertices[2] },
+			{ source: vertices[1], target: vertices[2] },
+			{ source: vertices[2], target: vertices[3], curve: 30 },
+			{ source: vertices[2], target: vertices[3], curve: -30 },
+			{ source: vertices[3], target: vertices[4] }
 		].map((e) => ({ ...e, direction: true } as Edge));
 
 		return {
@@ -35,22 +35,22 @@
 		const inputs = writable([false, false]);
 
 		const vertices = [
-			{ id: 1, ...NewInputGate(inputs, 0), x: -150, y: -100 },
-			{ id: 2, ...NewInputGate(inputs, 1), x: -150, y: 100 },
-			{ id: 3, ...NewNandGate(), x: -50, y: -100 },
-			{ id: 4, ...NewNandGate(), x: -50, y: 100 },
-			{ id: 5, ...NewNandGate(), x: 50, y: 0 },
-			{ id: 6, ...NewOutputGate(0), x: 150, y: 0 }
+			{ id: 0, ...NewInputGate(inputs, 0), x: -150, y: -100 },
+			{ id: 1, ...NewInputGate(inputs, 1), x: -150, y: 100 },
+			{ id: 2, ...NewNandGate(), x: -50, y: -100 },
+			{ id: 3, ...NewNandGate(), x: -50, y: 100 },
+			{ id: 4, ...NewNandGate(), x: 50, y: 0 },
+			{ id: 5, ...NewOutputGate(0), x: 150, y: 0 }
 		] as Gate[];
 
 		const edges = [
-			{ source: 1, target: 3, curve: 30 },
-			{ source: 1, target: 3, curve: -30 },
-			{ source: 2, target: 4, curve: 30 },
-			{ source: 2, target: 4, curve: -30 },
-			{ source: 3, target: 5 },
-			{ source: 4, target: 5 },
-			{ source: 5, target: 6 }
+			{ source: vertices[0], target: vertices[2], curve: 30 },
+			{ source: vertices[0], target: vertices[2], curve: -30 },
+			{ source: vertices[1], target: vertices[3], curve: 30 },
+			{ source: vertices[1], target: vertices[3], curve: -30 },
+			{ source: vertices[2], target: vertices[4] },
+			{ source: vertices[3], target: vertices[4] },
+			{ source: vertices[4], target: vertices[5] }
 		].map((e) => ({ ...e, direction: true } as Edge));
 
 		return {
@@ -65,15 +65,15 @@
 		const inputs = writable([false]);
 
 		const vertices = [
-			{ id: 1, ...NewInputGate(inputs, 0), x: -100, y: 0 },
-			{ id: 2, ...NewNandGate(), x: 0, y: 0 },
-			{ id: 3, ...NewOutputGate(0), x: 100, y: 0 }
+			{ id: 0, ...NewInputGate(inputs, 0), x: -100, y: 0 },
+			{ id: 1, ...NewNandGate(), x: 0, y: 0 },
+			{ id: 2, ...NewOutputGate(0), x: 100, y: 0 }
 		] as Gate[];
 
 		const edges = [
-			{ source: 1, target: 2, curve: 30 },
-			{ source: 1, target: 2, curve: -30 },
-			{ source: 2, target: 3 }
+			{ source: vertices[0], target: vertices[1], curve: 30 },
+			{ source: vertices[0], target: vertices[1], curve: -30 },
+			{ source: vertices[1], target: vertices[2] }
 		].map((e) => ({ ...e, direction: true } as Edge));
 
 		return {

@@ -46,7 +46,6 @@
 	import FullWidth from '$lib/FullWidth.svelte';
 	import Graph, { GraphMode, type Edge } from '$lib/graphs/Graph.svelte';
 	import { Color } from '$lib/interfaces/color';
-	import { onMount } from 'svelte';
 	import BooleanButton from '$lib/logic/BooleanButton.svelte';
 	import BooleanTag from '$lib/logic/BooleanTag.svelte';
 	import AnimationButton from '$lib/AnimationButton.svelte';
@@ -65,9 +64,9 @@
 	const getBackwardGates = (g: Gate): Gate[] => getBackwardEdges(g).map((e) => e.source) as Gate[];
 
 	const computeGate = (g: Gate, gateCaches: Map<Gate, boolean>) => {
-		const cachedGates = gateCaches.get(g);
-		if (cachedGates !== undefined) {
-			return cachedGates;
+		const cachedValue = gateCaches.get(g);
+		if (cachedValue !== undefined) {
+			return cachedValue;
 		}
 
 		const inputGates = getBackwardGates(g);
@@ -129,8 +128,6 @@
 	};
 
 	let stop = () => {};
-
-	onMount(computeFunction);
 
 	let width: number;
 	$: responsiveWidth = Math.min(width - 280, 550);

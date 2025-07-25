@@ -26,12 +26,7 @@
 	let vertices: Gate[] = [];
 	let edges: Edge[] = [];
 
-	const select = (g: GraphDesc) => {
-		vertices = g.vertices;
-		edges = g.edges;
-		inputs = g.inputs;
-	};
-
+	const select = (g: GraphDesc) => ({ vertices, edges, inputs } = g);
 	select(graphs[0]);
 </script>
 
