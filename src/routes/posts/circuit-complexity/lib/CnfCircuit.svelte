@@ -94,6 +94,35 @@
 		};
 	};
 
+	const removeUnusedNodes = (
+		vertices: Vertex[],
+		edges: Edge[]
+	): { vertices: Vertex[]; edges: Edge[] } => {
+		const reverseAdjacency = new Map<Vertex, Vertex[]>();
+		vertices.forEach((v) => reverseAdjacency.set(v, []));
+		for (const e of edges) {
+			reverseAdjacency.get(e.target as Vertex)!.push(e.source as Vertex);
+		}
+
+		const visited = new Set<Vertex>();
+		const dfs = (node: Vertex) => {
+			if (visited.has(node)) return;
+			visited.add(node);
+
+			const sources = reverseAdjacency.get(node) || [];
+			for (const source of sources) dfs(source);
+		};
+
+		// Target is guaranteed to be the last vertex in the list
+		const target = vertices[vertices.length - 1];
+		dfs(target);
+
+		return {
+			vertices: vertices.filter((v) => visited.has(v)),
+			edges: edges.filter((e) => visited.has(e.source as Vertex) && visited.has(e.target as Vertex))
+		};
+	};
+
 	const createCnfGraph = (bits: boolean[]): { vertices: Vertex[]; edges: Edge[] } => {
 		if (isFalseFunction(bits)) return createFalseFunction();
 
@@ -108,10 +137,9 @@
 			negationVertices
 		);
 
-		return {
-			vertices: [...inputs, ...negationVertices, ...clauseVertices],
-			edges: [...negationEdges, ...clauseEdges]
-		};
+		const vertices = [...inputs, ...negationVertices, ...clauseVertices];
+		const edges = [...negationEdges, ...clauseEdges];
+		return removeUnusedNodes(vertices, edges);
 	};
 
 	const createAndClause = (
