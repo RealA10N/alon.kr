@@ -77,6 +77,7 @@
 	const createTargetVertex = (): Vertex => ({ label: 'y₁' } as Vertex);
 
 	const createAndVertex = () => ({ label: '∧' } as Vertex);
+	const createOrVertex = () => ({ label: '∨' } as Vertex);
 
 	const createFalseFunction = (): { vertices: Vertex[]; edges: Edge[] } => {
 		const input = createInputVertex(0);
@@ -178,9 +179,7 @@
 			orSources.push(clauseVertices[clauseVertices.length - 1]);
 		}
 
-		const { vertices: orVertices, edges: orEdges } = createTree(orSources, {
-			label: '∨'
-		});
+		const { vertices: orVertices, edges: orEdges } = createTree(orSources, createOrVertex());
 
 		vertices.push(...orVertices);
 		edges.push(...orEdges);
