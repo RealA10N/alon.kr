@@ -75,7 +75,6 @@
 	};
 
 	const createTargetVertex = (): Vertex => ({ label: 'y₁' } as Vertex);
-
 	const createAndVertex = () => ({ label: '∧' } as Vertex);
 	const createOrVertex = () => ({ label: '∨' } as Vertex);
 
@@ -95,28 +94,31 @@
 		};
 	};
 
-	const removeUnusedNodes = (
-		vertices: Vertex[],
-		edges: Edge[]
-	): { vertices: Vertex[]; edges: Edge[] } => {
+	const dfs = (node: Vertex, visited: Set<Vertex>, adjacency: Map<Vertex, Vertex[]>) => {
+		if (visited.has(node)) return;
+		visited.add(node);
+
+		const sources = adjacency.get(node) || [];
+		for (const source of sources) dfs(source, visited, adjacency);
+	};
+
+	const createReverseAdjacency = (vertices: Vertex[], edges: Edge[]): Map<Vertex, Vertex[]> => {
 		const reverseAdjacency = new Map<Vertex, Vertex[]>();
 		vertices.forEach((v) => reverseAdjacency.set(v, []));
 		for (const e of edges) {
 			reverseAdjacency.get(e.target as Vertex)!.push(e.source as Vertex);
 		}
+		return reverseAdjacency;
+	};
 
-		const visited = new Set<Vertex>();
-		const dfs = (node: Vertex) => {
-			if (visited.has(node)) return;
-			visited.add(node);
-
-			const sources = reverseAdjacency.get(node) || [];
-			for (const source of sources) dfs(source);
-		};
-
-		// Target is guaranteed to be the last vertex in the list
+	const removeUnusedNodes = (
+		vertices: Vertex[],
+		edges: Edge[]
+	): { vertices: Vertex[]; edges: Edge[] } => {
+		const reverseAdjacency = createReverseAdjacency(vertices, edges);
 		const target = vertices[vertices.length - 1];
-		dfs(target);
+		const visited = new Set<Vertex>();
+		dfs(target, visited, reverseAdjacency);
 
 		return {
 			vertices: vertices.filter((v) => visited.has(v)),
