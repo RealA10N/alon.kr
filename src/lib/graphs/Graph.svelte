@@ -28,6 +28,8 @@
 	import * as d3 from 'd3';
 	import { Color } from '$lib/interfaces/color';
 
+	const graphId = Math.random().toString(36).substring(2, 9);
+
 	export let width: number = 500;
 	export let height: number = 350;
 
@@ -69,7 +71,7 @@
 	$: vertices, edges, initSimulation();
 
 	// The svg tags is bounded to this variable.
-	let graphNodes: SVGGElement, graphLinks: SVGGElement;
+	let graphNodes: SVGGElement, graphLinks: SVGGElement, graphDefs: SVGElement;
 
 	// Ensures that x is in the range [-total/2, total/2].
 	// Returns the closest endpoint of the range if the value if outside
@@ -264,10 +266,47 @@
 			.classed('highlight', (e) => e.highlight ?? false)
 			.each(updateColorClass);
 
+		const defs = d3
+			.select(graphDefs)
+			.selectAll('marker')
+			.data(edges)
+			.join((enter) => {
+				const marker = enter
+					.append('marker')
+					.attr('id', (d) => `graph-arrow-head-${graphId}-${d.index}`)
+					.attr('markerWidth', 10)
+					.attr('markerHeight', 10)
+					.attr('refX', 10 + radius)
+					.attr('refY', 5)
+					.attr('orient', 'auto')
+					.attr('markerUnits', 'userSpaceOnUse');
+
+				marker.append('polygon').attr('points', '0 0, 10 5, 0 10');
+
+				return marker;
+			});
+
+		defs.select('polygon').attr('fill', (d) => {
+			switch (d.color) {
+				case Color.Red:
+					return '#ef4444';
+				case Color.Blue:
+					return '#3b82f6';
+				case Color.Green:
+					return '#22c55e';
+				case Color.Yellow:
+					return '#eab308';
+				default:
+					return 'currentColor';
+			}
+		});
+
 		link
 			.select('.line')
 			.attr('d', getCurvedPath)
-			.attr('marker-end', (d) => (d.direction ? 'url(#graph-arrow-head)' : ''));
+			.attr('marker-end', (d) =>
+				d.direction ? `url(#graph-arrow-head-${graphId}-${d.index})` : ''
+			);
 
 		link
 			.select('.label')
@@ -325,20 +364,7 @@
 	{height}
 	viewBox="{-width / 2} {-height / 2} {width} {height}"
 >
-	<defs>
-		<marker
-			id="graph-arrow-head"
-			markerWidth="10"
-			markerHeight="10"
-			refX={10 + radius}
-			refY="5"
-			orient="auto"
-			markerUnits="userSpaceOnUse"
-		>
-			<polygon points="0 0, 10 5, 0 10" fill="context-stroke" />
-		</marker>
-	</defs>
-
+	<defs bind:this={graphDefs} />
 	<g id="links" bind:this={graphLinks} />
 	<g id="nodes" bind:this={graphNodes} />
 </svg>
