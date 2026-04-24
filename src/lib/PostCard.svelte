@@ -29,7 +29,6 @@
 	</div>
 
 	{#if href}
-		<!-- svelte-ignore a11y-missing-content -->
-		<a {href} class="absolute left-0 right-0 top-0 bottom-0" />
+		<a {href} aria-label={title} class="absolute left-0 right-0 top-0 bottom-0" />
 	{/if}
 </div>
