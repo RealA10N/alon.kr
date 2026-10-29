@@ -21,7 +21,7 @@
 						{#if row.value === undefined || row.value === ''}
 							—
 						{:else if row.href}
-							<a href={row.href}>{row.value}</a>
+							<a href={row.href} class="inline-block py-0.5">{row.value}</a>
 						{:else}
 							{row.value}
 						{/if}

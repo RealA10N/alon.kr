@@ -42,13 +42,15 @@
 				<tr>
 					<td>
 						{row.label}
-						{#if row.km !== undefined}
-							<span class="text-zinc-500 text-sm">({row.km.toFixed(1)} km)</span>
+						{#if row.km !== undefined && !/^[\d.]+\s?k(m)?$/i.test(row.label)}
+							<span class="block sm:inline text-zinc-500 text-sm">{row.km.toFixed(1)} km</span>
 						{/if}
 					</td>
-					<td class="text-right">{formatTime(parseTime(row.time))}</td>
-					<td class="text-right">{formatTime(row.split)}</td>
-					<td class="text-right">{row.pace !== undefined ? `${formatPace(row.pace)} /km` : '—'}</td>
+					<td class="text-right whitespace-nowrap">{formatTime(parseTime(row.time))}</td>
+					<td class="text-right whitespace-nowrap">{formatTime(row.split)}</td>
+					<td class="text-right whitespace-nowrap"
+						>{row.pace !== undefined ? `${formatPace(row.pace)} /km` : '—'}</td
+					>
 				</tr>
 			{/each}
 		</tbody>

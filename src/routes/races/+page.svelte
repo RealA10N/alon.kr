@@ -7,6 +7,7 @@
 	import Metadata from '$lib/Metadata.svelte';
 	import ProgressChart from '$lib/races/ProgressChart.svelte';
 	import SeasonGrid from '$lib/races/SeasonGrid.svelte';
+	import RowList from '$lib/races/RowList.svelte';
 	import {
 		finishSeconds,
 		formatDate,
@@ -63,7 +64,26 @@
 
 {#if upcoming.length > 0}
 	<h2>Up next</h2>
-	<div class="overflow-x-auto">
+	<div class="sm:hidden">
+		<RowList
+			items={upcoming.map((race) => {
+				const target = targetSeconds(race);
+				const goalPace = targetPace(race);
+				const days = daysLeft(race, today);
+				return {
+					href: `/races/${race.slug}`,
+					title: race.name,
+					value: target ? formatTime(target) : undefined,
+					meta: [
+						formatDate(race.date),
+						...(goalPace ? [`${formatPace(goalPace)} /km`] : []),
+						...(days !== undefined ? [`${days} days`] : [])
+					]
+				};
+			})}
+		/>
+	</div>
+	<div class="hidden sm:block overflow-x-auto">
 		<table class="w-full text-base tabular-nums whitespace-nowrap">
 			<thead>
 				<tr>
@@ -110,7 +130,17 @@
 	{#each [{ title: 'Official', bests: data.officialBests }, { title: 'Unofficial (Strava)', bests: data.unofficialBests }] as group}
 		{#if group.bests.length > 0}
 			<h3>{group.title}</h3>
-			<div class="overflow-x-auto">
+			<div class="sm:hidden">
+				<RowList
+					items={group.bests.map((best) => ({
+						href: `/races/${best.slug}`,
+						title: best.label,
+						value: formatTime(best.seconds),
+						meta: [pace(best.seconds, best.km), best.name]
+					}))}
+				/>
+			</div>
+			<div class="hidden sm:block overflow-x-auto">
 				<!-- Fixed column widths so the official and unofficial tables line up. -->
 				<table class="w-full text-base tabular-nums whitespace-nowrap table-fixed min-w-[34rem]">
 					<thead>
@@ -139,7 +169,26 @@
 
 {#if results.length > 0}
 	<h2>Results</h2>
-	<div class="overflow-x-auto">
+	<div class="sm:hidden">
+		<RowList
+			items={results.map((race) => {
+				const time = finishSeconds(race) ?? 0;
+				const place = formatPlacement(race.official?.overall);
+				return {
+					href: `/races/${race.slug}`,
+					title: race.name,
+					value: formatTime(time),
+					meta: [
+						formatDate(race.date),
+						pace(time, race.distance.km),
+						...(place ? [`#${place}`] : []),
+						...(race.isPersonalBest ? ['PB'] : [])
+					]
+				};
+			})}
+		/>
+	</div>
+	<div class="hidden sm:block overflow-x-auto">
 		<table class="w-full text-base tabular-nums whitespace-nowrap">
 			<thead>
 				<tr>

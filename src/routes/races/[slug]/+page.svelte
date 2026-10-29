@@ -127,7 +127,7 @@
 
 <Metadata title={race.name} description="{race.distance.label} · {formatDate(race.date)}" />
 
-<p class="text-sm mb-0"><a href="/races">← All races</a></p>
+<p class="text-sm mb-0"><a href="/races" class="inline-block py-2">← All races</a></p>
 
 <Header title={race.name} />
 
@@ -162,7 +162,7 @@
 		<h3>Strava splits</h3>
 		<SplitsChart splits={strava.splits} />
 		<details class="text-base">
-			<summary class="cursor-pointer text-sm">Table</summary>
+			<summary class="cursor-pointer text-sm py-2">Table</summary>
 			<StravaSplits splits={strava.splits} />
 		</details>
 	{/if}

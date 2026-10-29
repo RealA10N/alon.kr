@@ -11,22 +11,11 @@
 
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { formatDate, formatPace, formatTime } from './race';
+	import { distanceColor, formatDate, formatPace, formatTime } from './race';
 
 	// Official results over time, one line per distance. Pace is the y-axis so every distance
 	// shares one scale; faster is higher.
 	export let results: Result[];
-
-	// Colors follow the distance, never its position, so adding a race never repaints a line.
-	// Slots are the dataviz reference categorical order; unknown distances take the next free slot.
-	const SLOTS = 8;
-	const FIXED: Record<string, number> = {
-		'5K': 0,
-		'10K': 1,
-		'15K': 2,
-		'Half Marathon': 3,
-		Marathon: 4
-	};
 
 	let width = 0;
 	let hidden = new Set<string>();
@@ -39,12 +28,7 @@
 	$: distances = [...new Map(rows.map((r) => [r.label, r.km])).entries()]
 		.sort((a, b) => a[1] - b[1])
 		.map(([label]) => label);
-	$: slot = (() => {
-		const taken = new Set(Object.values(FIXED));
-		const extra = distances.filter((d) => !(d in FIXED));
-		const free = Array.from({ length: SLOTS }, (_, i) => i).filter((i) => !taken.has(i));
-		return (label: string) => FIXED[label] ?? free[extra.indexOf(label) % free.length];
-	})();
+	$: color = (label: string) => distanceColor(label, distances);
 
 	$: shown = rows.filter((r) => !hidden.has(r.label));
 	$: years = rows.map((r) => Number(r.date.slice(0, 4)));
@@ -91,15 +75,12 @@
 	<div class="flex flex-wrap gap-1 mb-2" role="group" aria-label="Distances">
 		{#each distances as label}
 			<button
-				class="chip m-0 inline-flex items-center gap-1.5"
+				class="chip m-0 inline-flex items-center gap-1.5 py-1 px-3"
 				class:opacity-40={hidden.has(label)}
 				aria-pressed={!hidden.has(label)}
 				on:click={() => toggle(label)}
 			>
-				<span
-					class="inline-block w-2.5 h-2.5 rounded-full"
-					style="background: var(--s{slot(label)})"
-				/>
+				<span class="inline-block w-2.5 h-2.5 rounded-full" style="background: {color(label)}" />
 				{label}
 			</button>
 		{/each}
@@ -147,7 +128,7 @@
 						<polyline
 							points={line.points.map((p) => `${p.x},${p.y}`).join(' ')}
 							fill="none"
-							stroke="var(--s{slot(line.label)})"
+							stroke={color(line.label)}
 							stroke-width="2"
 							stroke-linejoin="round"
 							stroke-linecap="round"
@@ -175,7 +156,7 @@
 								cy={point.y}
 								r={hovered?.slug === point.slug ? 6.5 : 5}
 								stroke-width="2"
-								fill="var(--s{slot(line.label)})"
+								fill={color(line.label)}
 								class="stroke-zinc-100 dark:stroke-zinc-900"
 							/>
 						</g>
@@ -207,28 +188,5 @@
 	}
 	.chip {
 		border-radius: 9999px;
-	}
-	/* Categorical slots from the dataviz reference palette (validated for lines in both modes). */
-	.progress-chart {
-		--s0: #2a78d6;
-		--s1: #eb6834;
-		--s2: #1baf7a;
-		--s3: #eda100;
-		--s4: #e87ba4;
-		--s5: #008300;
-		--s6: #6250d6;
-		--s7: #e34948;
-	}
-	@media (prefers-color-scheme: dark) {
-		.progress-chart {
-			--s0: #3987e5;
-			--s1: #d95926;
-			--s2: #199e70;
-			--s3: #c98500;
-			--s4: #d55181;
-			--s5: #008300;
-			--s6: #9085e9;
-			--s7: #e66767;
-		}
 	}
 </style>

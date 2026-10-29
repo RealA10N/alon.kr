@@ -26,6 +26,7 @@
 				<!-- The #t fragment shows a frame from the clip instead of a black first frame. -->
 				<video
 					src="{photo.url}#t=3"
+					poster={photo.poster}
 					muted
 					playsinline
 					preload="metadata"
@@ -61,6 +62,7 @@
 				<!-- svelte-ignore a11y-media-has-caption -->
 				<video
 					src={photos[open].url}
+					poster={photos[open].poster}
 					controls
 					autoplay
 					playsinline

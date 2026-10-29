@@ -10,7 +10,8 @@ import {
 
 // Everything is bundled at build time: each race is a folder under src/races/
 //   src/races/<slug>/race.json     race details, results, splits, Strava stats
-//   src/races/<slug>/official/*    official photos and finish-line videos
+//   src/races/<slug>/official/*    official photos and finish-line videos (<name>.poster.jpg
+//                                  beside <name>.mp4 is that video's thumbnail)
 //   src/races/<slug>/photos/*      my own photos
 const dataGlobs = import.meta.glob<RaceData>('/src/races/*/race.json', {
 	eager: true,
@@ -24,15 +25,29 @@ const imageGlobs = import.meta.glob<string>(
 
 const slugOf = (path: string) => path.split('/')[3];
 
-const photosOf = (slug: string, kind: 'official' | 'photos'): Photo[] =>
-	Object.entries(imageGlobs)
-		.filter(([path]) => path.startsWith(`/src/races/${slug}/${kind}/`))
-		.map(([path, url]) => ({
-			url,
-			file: path.split('/').pop() as string,
-			video: /\.(mp4|webm)$/i.test(path)
-		}))
+const isPoster = (path: string) => /\.poster\.[a-z]+$/i.test(path);
+
+const photosOf = (slug: string, kind: 'official' | 'photos'): Photo[] => {
+	const files = Object.entries(imageGlobs).filter(([path]) =>
+		path.startsWith(`/src/races/${slug}/${kind}/`)
+	);
+	const posterFor = (path: string) =>
+		files.find(
+			([other]) => isPoster(other) && other.startsWith(path.replace(/\.[a-z0-9]+$/i, '.poster.'))
+		)?.[1];
+	return files
+		.filter(([path]) => !isPoster(path))
+		.map(([path, url]) => {
+			const video = /\.(mp4|webm)$/i.test(path);
+			return {
+				url,
+				file: path.split('/').pop() as string,
+				video,
+				...(video ? { poster: posterFor(path) } : {})
+			};
+		})
 		.sort((a, b) => a.file.localeCompare(b.file));
+};
 
 export const loadRaces = (): Race[] => {
 	const races: Race[] = Object.entries(dataGlobs).map(([path, data]) => {

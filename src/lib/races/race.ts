@@ -77,6 +77,8 @@ export interface Photo {
 	file: string;
 	/** Short clips (e.g. the timing company's finish-line video) sit in the gallery with photos. */
 	video: boolean;
+	/** A still for a video's thumbnail, from "<name>.poster.jpg" beside "<name>.mp4". */
+	poster?: string;
 }
 
 export interface RaceData {
@@ -202,3 +204,22 @@ export const formatPlacement = (p?: Placement) =>
 
 /** Shows a link by its site name, e.g. "4sport-live.com". */
 export const linkLabel = (url: string) => new URL(url).hostname.replace(/^(www|my|gallery)\./, '');
+
+// Colors follow the distance, never its position, so adding a race never repaints anything.
+// Unknown distances take the next free slot, in order of distance.
+const DISTANCE_SLOTS: Record<string, number> = {
+	'5K': 0,
+	'10K': 1,
+	'15K': 2,
+	'Half Marathon': 3,
+	Marathon: 4
+};
+
+/** The CSS color for a distance label (see the --dist-* variables in app.css). */
+export const distanceColor = (label: string, allLabels: string[]) => {
+	const taken = new Set(Object.values(DISTANCE_SLOTS));
+	const free = [0, 1, 2, 3, 4, 5, 6, 7].filter((i) => !taken.has(i));
+	const extra = allLabels.filter((l) => !(l in DISTANCE_SLOTS));
+	const slot = DISTANCE_SLOTS[label] ?? free[extra.indexOf(label) % free.length];
+	return `var(--dist-${slot})`;
+};
