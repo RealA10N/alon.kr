@@ -4,7 +4,6 @@
 	import Header from '$lib/Header.svelte';
 	import DataTable, { type Row } from '$lib/races/DataTable.svelte';
 	import OfficialSplits from '$lib/races/OfficialSplits.svelte';
-	import StravaLink from '$lib/races/StravaLink.svelte';
 	import SplitsChart from '$lib/races/SplitsChart.svelte';
 	import ElevationProfile from '$lib/races/ElevationProfile.svelte';
 	import RouteMap from '$lib/races/RouteMap.svelte';
@@ -24,9 +23,6 @@
 	} from '$lib/races/race';
 
 	export let data;
-
-	// How the Strava activity link looks; see StravaLink for the options.
-	const STRAVA_LINK = 'text';
 	$: race = data.race;
 
 	// Every race page shows the same sections and rows; missing values are shown as "—".
@@ -107,11 +103,11 @@
 	finishTime={official?.chipTime ?? official?.gunTime}
 />
 
-<!-- Races without Strava data skip the section entirely. -->
+<!-- Per-km details from Strava; races without Strava data skip the section entirely. -->
 {#if strava}
 	<div class="flex items-baseline justify-between gap-4">
-		<h2>Strava</h2>
-		{#if strava.url}<StravaLink href={strava.url} variant={STRAVA_LINK} />{/if}
+		<h2>Details</h2>
+		{#if strava.url}<a href={strava.url} class="inline-block py-1 text-base">View on Strava</a>{/if}
 	</div>
 	{#if strava.splits && strava.splits.length > 0}
 		<SplitsChart splits={strava.splits} />
