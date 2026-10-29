@@ -24,8 +24,6 @@
 		"movingTime": "1:09:47",
 		"elevationGain": 55,
 		"avgHr": 172,
-		"calories": 1109,
-		"extra": { "Shoes": "ASICS GT-2000 14", "Plan": "Runna, Tel Aviv Marathon plan (week 8/25)" },
 		"splits": [
 			{ "km": 1, "time": "5:02", "avgHr": 161 },
 			{ "km": 1, "time": "4:52", "elevLoss": 2, "avgHr": 169 },
@@ -44,8 +42,6 @@
 			{ "km": 1, "time": "4:29", "elevLoss": 2, "avgHr": 175 }
 		]
 	},
-	"target": {
-		"pace": "4:45",
-		"note": "Runna plan target: 4:45–5:00 /km, as week 8 of 25 of my Tel Aviv Marathon plan."
-	}
+	"target": { "pace": "4:45" },
+	"officialPhotosUrl": "https://gallery.pixoner.com/he/Event/Search/4KQYVF?Bib=1357"
 }

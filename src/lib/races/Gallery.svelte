@@ -21,15 +21,10 @@
 
 <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 my-4">
 	{#each photos as photo, i}
-		<a
-			href={photo.url}
-			class="block no-underline"
-			on:click|preventDefault={() => show(i)}
-			title={photo.caption}
-		>
+		<a href={photo.url} class="block no-underline" on:click|preventDefault={() => show(i)}>
 			<img
 				src={photo.url}
-				alt={photo.caption ?? alt}
+				{alt}
 				loading="lazy"
 				class="w-full aspect-[4/3] object-cover rounded-md shadow-sm hover:shadow-md transition-shadow"
 			/>
@@ -45,21 +40,14 @@
 	>
 		<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
 		<div class="absolute inset-0" on:click={close} />
-		<img
-			src={photos[open].url}
-			alt={photos[open].caption ?? alt}
-			class="relative max-h-[80vh] max-w-full rounded-md"
-		/>
+		<img src={photos[open].url} {alt} class="relative max-h-[80vh] max-w-full rounded-md" />
 		<div class="relative mt-3 flex items-center gap-2 text-zinc-200">
 			{#if photos.length > 1}
 				<button class="text-zinc-200 border-zinc-200" on:click={() => show((open ?? 0) - 1)}>
 					←
 				</button>
 			{/if}
-			<span class="text-sm italic px-2">
-				{photos[open].caption ?? ''}
-				<span class="text-zinc-400 not-italic">{open + 1} / {photos.length}</span>
-			</span>
+			<span class="text-sm text-zinc-400 px-2 tabular-nums">{open + 1} / {photos.length}</span>
 			{#if photos.length > 1}
 				<button class="text-zinc-200 border-zinc-200" on:click={() => show((open ?? 0) + 1)}>
 					→

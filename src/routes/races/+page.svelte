@@ -9,8 +9,8 @@
 	import {
 		finishSeconds,
 		formatDate,
-		formatDelta,
 		formatPace,
+		formatPlacement,
 		formatTime,
 		isFinished,
 		targetPace,
@@ -30,40 +30,33 @@
 	let today: Date | null = null;
 	onMount(() => (today = new Date()));
 
-	const countdown = (race: Race, now: Date | null) => {
-		if (!now) return [];
-		const days = Math.ceil((new Date(`${race.date}T00:00:00`).getTime() - now.getTime()) / 864e5);
-		if (days < 0) return ['Results pending'];
-		if (days === 0) return ['Today!'];
-		return [days === 1 ? 'Tomorrow' : `In ${days} days`];
-	};
+	// Every card shows the same fields in the same order.
+	const daysLeft = (race: Race, now: Date | null) =>
+		now
+			? [`${Math.ceil((new Date(`${race.date}T00:00:00`).getTime() - now.getTime()) / 864e5)} days`]
+			: [];
 
-	const targetText = (race: Race) => {
+	const upcomingTags = (race: Race, now: Date | null) => {
 		const time = targetSeconds(race);
 		const pace = targetPace(race);
-		if (!time || !pace) return 'No target set yet.';
-		return `Target ${formatTime(time)} (${formatPace(pace)} /km)`;
+		return [
+			formatDate(race.date),
+			race.distance.label,
+			`Target ${time ? formatTime(time) : '—'}`,
+			`${pace ? formatPace(pace) : '—'} /km`,
+			...daysLeft(race, now)
+		];
 	};
-
-	const upcomingTags = (race: Race, now: Date | null) => [
-		formatDate(race.date),
-		race.distance.label,
-		...(race.location ? [race.location] : []),
-		...countdown(race, now)
-	];
 
 	const resultTags = (race: Race) => {
 		const time = finishSeconds(race) as number;
-		const target = targetSeconds(race);
-		const photos = race.officialPhotos.length + race.photos.length;
 		return [
 			formatDate(race.date),
 			race.distance.label,
 			formatTime(time),
 			`${formatPace(time / race.distance.km)} /km`,
-			...(race.isPersonalBest ? ['PB'] : []),
-			...(target ? [`${formatDelta(time - target)} vs target`] : []),
-			...(photos > 0 ? [`${photos} photo${photos === 1 ? '' : 's'}`] : [])
+			`#${formatPlacement(race.official?.overall) ?? '—'}`,
+			...(race.isPersonalBest ? ['PB'] : [])
 		];
 	};
 </script>
@@ -71,7 +64,6 @@
 <Metadata title="Races" {description} />
 
 <h1>Races 🏃</h1>
-<p>{description}</p>
 
 {#if featured.length + registered.length > 0}
 	<h2>Up next</h2>
@@ -79,7 +71,7 @@
 		<div class="border-l-4 border-red-500 rounded-lg">
 			<PostCard
 				title={race.name}
-				description={targetText(race)}
+				description={race.location}
 				tags={upcomingTags(race, today)}
 				href="/races/{race.slug}"
 			/>
@@ -88,7 +80,7 @@
 	{#each registered as race}
 		<PostCard
 			title={race.name}
-			description={targetText(race)}
+			description={race.location}
 			tags={upcomingTags(race, today)}
 			href="/races/{race.slug}"
 		/>

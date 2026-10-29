@@ -2,7 +2,6 @@
 	import { formatPace, parseTime, type StravaSplit } from './race';
 
 	export let splits: StravaSplit[];
-	export let targetPace: number | undefined = undefined;
 
 	$: rows = splits.map((split, i) => ({
 		...split,
@@ -36,14 +35,13 @@
 			</tr>
 		</thead>
 		<tbody>
+			{#if rows.length === 0}
+				<tr><td>—</td><td>—</td><td /></tr>
+			{/if}
 			{#each rows as row}
 				<tr>
 					<td>{row.km === 1 ? row.index : (row.index - 1 + row.km).toFixed(2)}</td>
-					<td
-						class:font-bold={row.pace === fastest}
-						class:text-green-600={targetPace !== undefined && row.pace <= targetPace}
-						class:dark:text-green-400={targetPace !== undefined && row.pace <= targetPace}
-					>
+					<td class:font-bold={row.pace === fastest}>
 						{formatPace(row.pace)}
 					</td>
 					<td>
@@ -66,8 +64,3 @@
 		</tbody>
 	</table>
 </div>
-{#if targetPace !== undefined}
-	<p class="text-sm text-zinc-500 mt-1">
-		Paces in green were at or faster than the {formatPace(targetPace)} /km target.
-	</p>
-{/if}

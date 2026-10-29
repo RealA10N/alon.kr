@@ -4,7 +4,6 @@ import { finishSeconds, isFinished, type Photo, type Race, type RaceData } from 
 //   src/races/<slug>/race.json     race details, results, splits, Strava stats
 //   src/races/<slug>/official/*    photos by the event photographers
 //   src/races/<slug>/photos/*      my own photos
-//   src/races/<slug>/report.md     optional race report
 const dataGlobs = import.meta.glob<RaceData>('/src/races/*/race.json', {
 	eager: true,
 	import: 'default'
@@ -15,17 +14,12 @@ const imageGlobs = import.meta.glob<string>(
 	{ eager: true, as: 'url' }
 );
 
-const reportGlobs = import.meta.glob('/src/races/*/report.md');
-
 const slugOf = (path: string) => path.split('/')[3];
 
-const photosOf = (slug: string, kind: 'official' | 'photos', data: RaceData): Photo[] =>
+const photosOf = (slug: string, kind: 'official' | 'photos'): Photo[] =>
 	Object.entries(imageGlobs)
 		.filter(([path]) => path.startsWith(`/src/races/${slug}/${kind}/`))
-		.map(([path, url]) => {
-			const file = path.split('/').pop() as string;
-			return { url, file, caption: data.captions?.[file] };
-		})
+		.map(([path, url]) => ({ url, file: path.split('/').pop() as string }))
 		.sort((a, b) => a.file.localeCompare(b.file));
 
 export const loadRaces = (): Race[] => {
@@ -34,9 +28,8 @@ export const loadRaces = (): Race[] => {
 		return {
 			...data,
 			slug,
-			officialPhotos: photosOf(slug, 'official', data),
-			photos: photosOf(slug, 'photos', data),
-			hasReport: `/src/races/${slug}/report.md` in reportGlobs
+			officialPhotos: photosOf(slug, 'official'),
+			photos: photosOf(slug, 'photos')
 		};
 	});
 

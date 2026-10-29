@@ -31,6 +31,13 @@
 			</tr>
 		</thead>
 		<tbody>
+			{#if rows.length === 0}
+				<tr
+					><td>—</td><td class="text-right">—</td><td class="text-right">—</td><td
+						class="text-right">—</td
+					></tr
+				>
+			{/if}
 			{#each rows as row}
 				<tr>
 					<td>
@@ -41,7 +48,7 @@
 					</td>
 					<td class="text-right">{formatTime(parseTime(row.time))}</td>
 					<td class="text-right">{formatTime(row.split)}</td>
-					<td class="text-right">{row.pace !== undefined ? `${formatPace(row.pace)} /km` : '–'}</td>
+					<td class="text-right">{row.pace !== undefined ? `${formatPace(row.pace)} /km` : '—'}</td>
 				</tr>
 			{/each}
 		</tbody>

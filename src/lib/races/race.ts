@@ -13,7 +13,6 @@ export interface Target {
 	time?: string;
 	/** Target pace per km, "m:ss". If only one of time/pace is set, the other is derived. */
 	pace?: string;
-	note?: string;
 }
 
 export interface OfficialSplit {
@@ -66,11 +65,6 @@ export interface StravaActivity {
 	avgHr?: number;
 	maxHr?: number;
 	cadence?: number;
-	calories?: number;
-	avgPower?: number;
-	temperature?: number;
-	/** Anything else worth keeping (shoes, weather, relative effort...). */
-	extra?: Record<string, string>;
 	splits?: StravaSplit[];
 	/** [km, elevation in meters] samples, generated from a GPX file by `npm run race:gpx`. */
 	profile?: [number, number][];
@@ -81,7 +75,6 @@ export interface StravaActivity {
 export interface Photo {
 	url: string;
 	file: string;
-	caption?: string;
 }
 
 export interface RaceData {
@@ -96,18 +89,14 @@ export interface RaceData {
 	target?: Target;
 	official?: OfficialResult;
 	strava?: StravaActivity;
-	/** Credit for the official photos, e.g. the event photography company. */
-	officialPhotosCredit?: string;
+	/** The event photographers' gallery for my bib. Its photos are for sale, so only the link is kept. */
 	officialPhotosUrl?: string;
-	/** Captions keyed by image file name, for both official and personal photos. */
-	captions?: Record<string, string>;
 }
 
 export interface Race extends RaceData {
 	slug: string;
 	officialPhotos: Photo[];
 	photos: Photo[];
-	hasReport: boolean;
 	/** Set on finished races that were the fastest for their distance label (at that time or ever). */
 	isPersonalBest?: boolean;
 }
@@ -170,3 +159,6 @@ export const formatDate = (date: string) =>
 
 export const formatPlacement = (p?: Placement) =>
 	p ? (p.of ? `${p.place} / ${p.of}` : `${p.place}`) : undefined;
+
+/** Shows a link by its site name, e.g. "4sport-live.com". */
+export const linkLabel = (url: string) => new URL(url).hostname.replace(/^(www|my|gallery)\./, '');
