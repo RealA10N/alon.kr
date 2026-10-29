@@ -5,6 +5,7 @@
 	import DataTable, { type Row } from '$lib/races/DataTable.svelte';
 	import OfficialSplits from '$lib/races/OfficialSplits.svelte';
 	import StravaSplits from '$lib/races/StravaSplits.svelte';
+	import SplitsChart from '$lib/races/SplitsChart.svelte';
 	import ElevationProfile from '$lib/races/ElevationProfile.svelte';
 	import RouteMap from '$lib/races/RouteMap.svelte';
 	import PacePlan from '$lib/races/PacePlan.svelte';
@@ -156,7 +157,15 @@
 {/if}
 
 <h3>Strava splits</h3>
-<StravaSplits splits={strava?.splits ?? []} />
+{#if strava?.splits && strava.splits.length > 0}
+	<SplitsChart splits={strava.splits} />
+	<details class="text-base">
+		<summary class="cursor-pointer text-sm">Table</summary>
+		<StravaSplits splits={strava.splits} />
+	</details>
+{:else}
+	<StravaSplits splits={[]} />
+{/if}
 
 {#if finish === undefined && goalPace !== undefined}
 	<h2>Pace plan</h2>
