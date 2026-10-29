@@ -10,9 +10,13 @@
 		...(finishTime ? [{ label: 'Finish', km: finishKm, time: finishTime }] : [])
 	];
 	$: rows = checkpoints.map((checkpoint, i) => {
-		const previous = i > 0 ? checkpoints[i - 1] : { km: 0, time: '0' };
+		const previous: OfficialSplit =
+			i > 0 ? checkpoints[i - 1] : { label: 'Start', km: 0, time: '0' };
 		const split = parseTime(checkpoint.time) - parseTime(previous.time);
-		return { ...checkpoint, split, pace: split / (checkpoint.km - previous.km) };
+		// Some timers name checkpoints by street without a distance; pace needs both ends.
+		const known = checkpoint.km !== undefined && previous.km !== undefined;
+		const pace = known ? split / ((checkpoint.km as number) - (previous.km as number)) : undefined;
+		return { ...checkpoint, split, pace };
 	});
 </script>
 
@@ -29,10 +33,15 @@
 		<tbody>
 			{#each rows as row}
 				<tr>
-					<td>{row.label} <span class="text-zinc-500 text-sm">({row.km.toFixed(1)} km)</span></td>
+					<td>
+						{row.label}
+						{#if row.km !== undefined}
+							<span class="text-zinc-500 text-sm">({row.km.toFixed(1)} km)</span>
+						{/if}
+					</td>
 					<td class="text-right">{formatTime(parseTime(row.time))}</td>
 					<td class="text-right">{formatTime(row.split)}</td>
-					<td class="text-right">{formatPace(row.pace)} /km</td>
+					<td class="text-right">{row.pace !== undefined ? `${formatPace(row.pace)} /km` : '–'}</td>
 				</tr>
 			{/each}
 		</tbody>

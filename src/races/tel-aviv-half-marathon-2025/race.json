@@ -1,0 +1,23 @@
+{
+	"name": "Tel Aviv Marathon",
+	"date": "2025-02-28",
+	"location": "Tel Aviv",
+	"distance": { "label": "Half Marathon", "km": 21.0975 },
+	"eventUrl": "https://www.4sport-live.com/results/home2?event=3831&lan=H",
+	"official": {
+		"resultsUrl": "https://www.4sport-live.com/personal/home3?event=3831&bib=22231&lan=H",
+		"chipTime": "1:53:43",
+		"bib": "22231",
+		"category": "M open",
+		"overall": { "place": 2721, "of": 7099 },
+		"categoryPlace": { "place": 1462, "of": 3361 },
+		"splits": [
+			{ "label": "Geula", "time": "35:19" },
+			{ "label": "Dizengoff / Expo", "time": "52:48" },
+			{ "label": "Dizengoff 10K", "km": 10, "time": "55:01" },
+			{ "label": "Frishman / Malchei Israel", "time": "1:05:47" },
+			{ "label": "Rothschild / Bar Ilan", "time": "1:14:23" },
+			{ "label": "David Elazar", "time": "1:22:49" }
+		]
+	}
+}

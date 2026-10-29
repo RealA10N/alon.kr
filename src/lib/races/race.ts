@@ -19,8 +19,8 @@ export interface Target {
 export interface OfficialSplit {
 	/** Checkpoint name, e.g. "5K" or "Halfway". */
 	label: string;
-	/** Distance of the checkpoint from the start. */
-	km: number;
+	/** Distance of the checkpoint from the start, when the timer published it. */
+	km?: number;
 	/** Cumulative time at the checkpoint, "h:mm:ss" or "mm:ss". */
 	time: string;
 }

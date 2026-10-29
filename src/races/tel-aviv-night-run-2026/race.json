@@ -1,0 +1,24 @@
+{
+	"name": "Tel Aviv Night Run",
+	"date": "2026-10-28",
+	"location": "Tel Aviv",
+	"distance": { "label": "15K", "km": 15 },
+	"eventUrl": "https://www.4sport-live.com/results/home2?event=4045&lan=H",
+	"official": {
+		"resultsUrl": "https://www.4sport-live.com/personal/home3?event=4045&bib=1357&lan=H",
+		"chipTime": "1:10:02",
+		"bib": "1357",
+		"category": "M 20-39",
+		"overall": { "place": 190, "of": 2361 },
+		"categoryPlace": { "place": 147, "of": 1434 },
+		"splits": [
+			{ "label": "Trust", "km": 7, "time": "33:27" },
+			{ "label": "Ben Gurion", "km": 8.9, "time": "42:48" },
+			{ "label": "Ibn Gabirol 37", "time": "47:21" },
+			{ "label": "Ibn Gabirol 65", "time": "49:05" }
+		]
+	},
+	"strava": {
+		"url": "https://www.strava.com/activities/20770212205"
+	}
+}

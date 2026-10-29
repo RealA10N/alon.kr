@@ -1,0 +1,22 @@
+{
+	"name": "Tel Aviv Marathon",
+	"date": "2026-02-27",
+	"location": "Tel Aviv",
+	"distance": { "label": "Half Marathon", "km": 21.0975 },
+	"eventUrl": "https://www.4sport-live.com/results/home2?event=3988&lan=H",
+	"official": {
+		"resultsUrl": "https://www.4sport-live.com/personal/home3?event=3988&bib=14233&lan=H",
+		"chipTime": "1:50:41",
+		"bib": "14233",
+		"category": "M up to 39",
+		"overall": { "place": 3335, "of": 9439 },
+		"categoryPlace": { "place": 2176, "of": 5511 },
+		"splits": [
+			{ "label": "6.8K", "km": 6.8, "time": "35:48" },
+			{ "label": "10K", "km": 10, "time": "52:36" },
+			{ "label": "11.2K", "km": 11.2, "time": "59:49" },
+			{ "label": "14.2K", "km": 14.2, "time": "1:14:21" },
+			{ "label": "16.2K", "km": 16.2, "time": "1:25:59" }
+		]
+	}
+}
