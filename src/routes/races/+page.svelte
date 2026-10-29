@@ -5,7 +5,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Metadata from '$lib/Metadata.svelte';
-	import PaceChart from '$lib/races/PaceChart.svelte';
+	import ProgressChart from '$lib/races/ProgressChart.svelte';
 	import {
 		finishSeconds,
 		formatDate,
@@ -13,6 +13,7 @@
 		formatPlacement,
 		formatTime,
 		isFinished,
+		parseTime,
 		targetPace,
 		targetSeconds,
 		type Race
@@ -25,6 +26,22 @@
 		.reverse()
 		.sort((a, b) => Number(b.featured ?? false) - Number(a.featured ?? false));
 	$: results = data.races.filter(isFinished);
+	// The progress chart uses official full-race times only.
+	$: official = results.flatMap((race) => {
+		const time = race.official?.chipTime ?? race.official?.gunTime;
+		return time
+			? [
+					{
+						slug: race.slug,
+						name: race.name,
+						date: race.date,
+						label: race.distance.label,
+						km: race.distance.km,
+						seconds: parseTime(time)
+					}
+			  ]
+			: [];
+	});
 
 	// Countdowns depend on the current date, so they are only rendered in the browser.
 	let today: Date | null = null;
@@ -78,9 +95,13 @@
 	</div>
 {/if}
 
-{#if data.efforts.length > 0}
+{#if official.length > 0}
+	<h2>Progress</h2>
+	<ProgressChart results={official} />
+{/if}
+
+{#if data.officialBests.length + data.unofficialBests.length > 0}
 	<h2>Personal bests</h2>
-	<PaceChart points={data.efforts} />
 
 	{#each [{ title: 'Official', bests: data.officialBests }, { title: 'Unofficial (Strava)', bests: data.unofficialBests }] as group}
 		{#if group.bests.length > 0}
