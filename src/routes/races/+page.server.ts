@@ -9,7 +9,8 @@ export const load = (async () => {
 	const bests = personalBests(races).map(({ race, ...best }) => ({
 		...best,
 		slug: race.slug,
-		name: race.name
+		name: race.name,
+		date: race.date
 	}));
 	return { races, bests };
 }) satisfies PageServerLoad;

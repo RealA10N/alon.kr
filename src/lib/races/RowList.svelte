@@ -4,7 +4,9 @@
 		title: string;
 		/** The headline number, shown on the right (e.g. the finish time). */
 		value?: string;
-		/** Secondary facts, joined with dots under the title. */
+		/** A smaller line under the value (e.g. the pace). */
+		valueSub?: string;
+		/** Secondary facts, one line each under the title. */
 		meta: string[];
 	};
 </script>
@@ -29,11 +31,14 @@
 					>
 						{item.title}
 					</span>
-					<span class="block text-sm tabular-nums">{item.meta.join(' · ')}</span>
+					{#each item.meta as line}
+						<span class="block text-sm tabular-nums">{line}</span>
+					{/each}
 				</span>
 				{#if item.value}
-					<span class="font-bold tabular-nums text-zinc-800 dark:text-zinc-200 shrink-0">
-						{item.value}
+					<span class="text-right tabular-nums shrink-0">
+						<span class="block font-bold text-zinc-800 dark:text-zinc-200">{item.value}</span>
+						{#if item.valueSub}<span class="block text-sm">{item.valueSub}</span>{/if}
 					</span>
 				{/if}
 			</a>

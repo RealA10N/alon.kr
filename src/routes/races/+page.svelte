@@ -74,11 +74,8 @@
 					href: `/races/${race.slug}`,
 					title: race.name,
 					value: target ? formatTime(target) : undefined,
-					meta: [
-						formatDate(race.date),
-						...(goalPace ? [`${formatPace(goalPace)} /km`] : []),
-						...(days !== undefined ? [`${days} days`] : [])
-					]
+					valueSub: goalPace ? `${formatPace(goalPace)} /km` : undefined,
+					meta: [formatDate(race.date), ...(days !== undefined ? [`${days} days`] : [])]
 				};
 			})}
 		/>
@@ -132,7 +129,8 @@
 				href: `/races/${best.slug}`,
 				title: best.label,
 				value: formatTime(best.seconds),
-				meta: [pace(best.seconds, best.km), best.name]
+				valueSub: pace(best.seconds, best.km),
+				meta: [best.name, formatDate(best.date)]
 			}))}
 		/>
 	</div>
@@ -166,17 +164,12 @@
 		<RowList
 			items={results.map((race) => {
 				const time = finishSeconds(race) ?? 0;
-				const place = formatPlacement(race.official?.overall);
 				return {
 					href: `/races/${race.slug}`,
 					title: race.name,
 					value: formatTime(time),
-					meta: [
-						formatDate(race.date),
-						pace(time, race.distance.km),
-						...(place ? [`#${place}`] : []),
-						...(race.isPersonalBest ? ['PB'] : [])
-					]
+					valueSub: pace(time, race.distance.km),
+					meta: [formatDate(race.date)]
 				};
 			})}
 		/>

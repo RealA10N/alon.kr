@@ -106,7 +106,7 @@
 <!-- Per-km details from Strava; races without Strava data skip the section entirely. -->
 {#if strava}
 	<div class="flex items-baseline justify-between gap-4">
-		<h2>Details</h2>
+		<h2>By kilometer</h2>
 		{#if strava.url}<a href={strava.url} class="inline-block py-1 text-base">View on Strava</a>{/if}
 	</div>
 	{#if strava.splits && strava.splits.length > 0}
