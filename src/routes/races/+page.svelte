@@ -6,6 +6,7 @@
 	import { onMount } from 'svelte';
 	import Metadata from '$lib/Metadata.svelte';
 	import ProgressChart from '$lib/races/ProgressChart.svelte';
+	import SeasonGrid from '$lib/races/SeasonGrid.svelte';
 	import {
 		finishSeconds,
 		formatDate,
@@ -98,6 +99,9 @@
 {#if official.length > 0}
 	<h2>Progress</h2>
 	<ProgressChart results={official} />
+
+	<h2>Season bests</h2>
+	<SeasonGrid results={official} />
 {/if}
 
 {#if data.officialBests.length + data.unofficialBests.length > 0}
