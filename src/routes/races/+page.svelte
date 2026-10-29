@@ -124,47 +124,40 @@
 	<SeasonGrid results={official} />
 {/if}
 
-{#if data.officialBests.length + data.unofficialBests.length > 0}
+{#if data.bests.length > 0}
 	<h2>Personal bests</h2>
-
-	{#each [{ title: 'Official', bests: data.officialBests }, { title: 'Unofficial (Strava)', bests: data.unofficialBests }] as group}
-		{#if group.bests.length > 0}
-			<h3>{group.title}</h3>
-			<div class="sm:hidden">
-				<RowList
-					items={group.bests.map((best) => ({
-						href: `/races/${best.slug}`,
-						title: best.label,
-						value: formatTime(best.seconds),
-						meta: [pace(best.seconds, best.km), best.name]
-					}))}
-				/>
-			</div>
-			<div class="hidden sm:block overflow-x-auto">
-				<!-- Fixed column widths so the official and unofficial tables line up. -->
-				<table class="w-full text-base tabular-nums whitespace-nowrap table-fixed min-w-[34rem]">
-					<thead>
-						<tr>
-							<th class="text-left w-1/5">Distance</th>
-							<th class="text-right w-1/6">Time</th>
-							<th class="text-right w-1/6">Pace</th>
-							<th class="text-left pl-4">Race</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each group.bests as best}
-							<tr>
-								<td>{best.label}</td>
-								<td class="text-right font-bold">{formatTime(best.seconds)}</td>
-								<td class="text-right">{pace(best.seconds, best.km)}</td>
-								<td class="pl-4 truncate"><a href="/races/{best.slug}">{best.name}</a></td>
-							</tr>
-						{/each}
-					</tbody>
-				</table>
-			</div>
-		{/if}
-	{/each}
+	<div class="sm:hidden">
+		<RowList
+			items={data.bests.map((best) => ({
+				href: `/races/${best.slug}`,
+				title: best.label,
+				value: formatTime(best.seconds),
+				meta: [pace(best.seconds, best.km), best.name]
+			}))}
+		/>
+	</div>
+	<div class="hidden sm:block overflow-x-auto">
+		<table class="w-full text-base tabular-nums whitespace-nowrap">
+			<thead>
+				<tr>
+					<th class="text-left">Distance</th>
+					<th class="text-right">Time</th>
+					<th class="text-right">Pace</th>
+					<th class="text-left pl-4">Race</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each data.bests as best}
+					<tr>
+						<td>{best.label}</td>
+						<td class="text-right font-bold">{formatTime(best.seconds)}</td>
+						<td class="text-right">{pace(best.seconds, best.km)}</td>
+						<td class="pl-4"><a href="/races/{best.slug}">{best.name}</a></td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 {/if}
 
 {#if results.length > 0}

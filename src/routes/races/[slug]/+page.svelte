@@ -4,14 +4,13 @@
 	import Header from '$lib/Header.svelte';
 	import DataTable, { type Row } from '$lib/races/DataTable.svelte';
 	import OfficialSplits from '$lib/races/OfficialSplits.svelte';
-	import StravaSplits from '$lib/races/StravaSplits.svelte';
+	import StravaLink from '$lib/races/StravaLink.svelte';
 	import SplitsChart from '$lib/races/SplitsChart.svelte';
 	import ElevationProfile from '$lib/races/ElevationProfile.svelte';
 	import RouteMap from '$lib/races/RouteMap.svelte';
 	import PacePlan from '$lib/races/PacePlan.svelte';
 	import Gallery from '$lib/races/Gallery.svelte';
 	import {
-		bestEfforts,
 		finishSeconds,
 		formatDate,
 		formatDelta,
@@ -25,6 +24,9 @@
 	} from '$lib/races/race';
 
 	export let data;
+
+	// How the Strava activity link looks; see StravaLink for the options.
+	const STRAVA_LINK = 'text';
 	$: race = data.race;
 
 	// Every race page shows the same sections and rows; missing values are shown as "—".
@@ -34,7 +36,6 @@
 	$: official = race.official;
 	$: strava = race.strava;
 	$: photos = [...race.officialPhotos, ...race.photos];
-	$: efforts = bestEfforts(race);
 
 	let today: Date | null = null;
 	onMount(() => (today = new Date()));
@@ -77,40 +78,6 @@
 		{ label: 'Days to race', value: daysLeft !== undefined && daysLeft >= 0 ? daysLeft : undefined }
 	] satisfies Row[];
 
-	$: stravaRows = [
-		{ label: 'Distance', value: strava?.distanceKm && `${strava.distanceKm.toFixed(2)} km` },
-		{ label: 'Moving time', value: time(strava?.movingTime) },
-		{ label: 'Elapsed time', value: time(strava?.elapsedTime) },
-		{
-			label: 'Avg pace',
-			value:
-				strava?.distanceKm && (strava.movingTime || strava.elapsedTime)
-					? `${formatPace(
-							parseTime(strava.movingTime ?? strava.elapsedTime ?? '0') / strava.distanceKm
-					  )} /km`
-					: undefined
-		},
-		{
-			label: 'Elevation gain',
-			value: strava?.elevationGain !== undefined ? `${strava.elevationGain} m` : undefined
-		},
-		{
-			label: 'Elevation loss',
-			value: strava?.elevationLoss !== undefined ? `${strava.elevationLoss} m` : undefined
-		},
-		{ label: 'Avg heart rate', value: strava?.avgHr && `${strava.avgHr} bpm` },
-		{ label: 'Max heart rate', value: strava?.maxHr && `${strava.maxHr} bpm` },
-		{ label: 'Cadence', value: strava?.cadence && `${strava.cadence} spm` },
-		...['5K', '10K'].map((label) => {
-			const effort = efforts.find((effort) => effort.label === label);
-			return {
-				label: `Best ${label}`,
-				value:
-					effort && `${formatTime(effort.seconds)} (${formatPace(effort.seconds / effort.km)} /km)`
-			};
-		})
-	] satisfies Row[];
-
 	const link = (label: string, href?: string): Row => ({
 		label,
 		value: href && linkLabel(href),
@@ -120,7 +87,6 @@
 	$: links = [
 		link('Official results', official?.resultsUrl),
 		link('Event', race.eventUrl),
-		...(strava ? [link('Strava activity', strava.url)] : []),
 		link('Photo gallery', race.officialPhotosUrl)
 	];
 </script>
@@ -143,8 +109,13 @@
 
 <!-- Races without Strava data skip the section entirely. -->
 {#if strava}
-	<h2>Strava</h2>
-	<DataTable rows={stravaRows} />
+	<div class="flex items-baseline justify-between gap-4">
+		<h2>Strava</h2>
+		{#if strava.url}<StravaLink href={strava.url} variant={STRAVA_LINK} />{/if}
+	</div>
+	{#if strava.splits && strava.splits.length > 0}
+		<SplitsChart splits={strava.splits} />
+	{/if}
 	{#if strava.route || strava.profile}
 		<div class="grid sm:grid-cols-3 gap-4 items-center">
 			{#if strava.route}
@@ -156,15 +127,6 @@
 				</div>
 			{/if}
 		</div>
-	{/if}
-
-	{#if strava.splits && strava.splits.length > 0}
-		<h3>Strava splits</h3>
-		<SplitsChart splits={strava.splits} />
-		<details class="text-base">
-			<summary class="cursor-pointer text-sm py-2">Table</summary>
-			<StravaSplits splits={strava.splits} />
-		</details>
 	{/if}
 {/if}
 

@@ -1,12 +1,4 @@
-import {
-	bestEfforts,
-	finishSeconds,
-	isFinished,
-	type Effort,
-	type Photo,
-	type Race,
-	type RaceData
-} from './race';
+import { officialSeconds, type Effort, type Photo, type Race, type RaceData } from './race';
 
 // Everything is bundled at build time: each race is a folder under src/races/
 //   src/races/<slug>/race.json     race details, results, splits, Strava stats
@@ -61,34 +53,26 @@ export const loadRaces = (): Race[] => {
 	});
 
 	// Mark the races whose official time is the fastest for their distance.
-	for (const effort of personalBests(races, 'Official')) effort.race.isPersonalBest = true;
+	for (const best of personalBests(races)) best.race.isPersonalBest = true;
 
 	return races.sort((a, b) => b.date.localeCompare(a.date));
 };
 
-/** Every timed effort: official finishes, plus best efforts inside longer runs from Strava. */
-export const allEfforts = (races: Race[]): Effort[] =>
-	races.flatMap((race) => [
-		...(isFinished(race)
-			? [
-					{
-						label: race.distance.label,
-						km: race.distance.km,
-						seconds: finishSeconds(race) as number,
-						source: 'Official' as const,
-						race
-					}
-			  ]
-			: []),
-		...bestEfforts(race)
-	]);
-
-/** The fastest effort per distance from one source, shortest distance first. */
-export const personalBests = (races: Race[], source: Effort['source']): Effort[] => {
+/** The fastest official finish per distance, shortest distance first. */
+export const personalBests = (races: Race[]): Effort[] => {
 	const best = new Map<string, Effort>();
-	for (const effort of allEfforts(races).filter((effort) => effort.source === source)) {
-		const current = best.get(effort.label);
-		if (!current || effort.seconds < current.seconds) best.set(effort.label, effort);
+	for (const race of races) {
+		const seconds = officialSeconds(race);
+		if (seconds === undefined) continue;
+		const current = best.get(race.distance.label);
+		if (!current || seconds < current.seconds) {
+			best.set(race.distance.label, {
+				label: race.distance.label,
+				km: race.distance.km,
+				seconds,
+				race
+			});
+		}
 	}
 	return [...best.values()].sort((a, b) => a.km - b.km);
 };
