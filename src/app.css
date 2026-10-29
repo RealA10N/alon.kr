@@ -121,8 +121,8 @@ hr {
 	@apply my-2 border-zinc-600 dark:border-zinc-400;
 }
 
-/* Race distance colors (dataviz reference categorical palette). A distance keeps its color
-   everywhere: the progress chart lines and the season grid shading. */
+/* Race distance colors (dataviz reference categorical palette), used by the progress chart.
+   A distance keeps its color however many races or distances are added. */
 :root {
 	--dist-0: #2a78d6;
 	--dist-1: #eb6834;

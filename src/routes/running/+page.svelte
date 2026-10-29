@@ -6,7 +6,6 @@
 	import { onMount } from 'svelte';
 	import Metadata from '$lib/Metadata.svelte';
 	import ProgressChart from '$lib/races/ProgressChart.svelte';
-	import SeasonGrid from '$lib/races/SeasonGrid.svelte';
 	import RowList from '$lib/races/RowList.svelte';
 	import {
 		finishSeconds,
@@ -150,11 +149,7 @@
 {/if}
 
 {#if official.length > 0}
-	<h2>Progress</h2>
 	<ProgressChart results={official} />
-
-	<h2>Season bests</h2>
-	<SeasonGrid results={official} />
 {/if}
 
 {#each [{ title: 'Personal bests', rows: bestRows }, { title: 'Results', rows: resultRows }] as section}
