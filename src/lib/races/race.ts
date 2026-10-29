@@ -75,6 +75,8 @@ export interface StravaActivity {
 export interface Photo {
 	url: string;
 	file: string;
+	/** Short clips (e.g. the timing company's finish-line video) sit in the gallery with photos. */
+	video: boolean;
 }
 
 export interface RaceData {

@@ -10,7 +10,7 @@ import {
 
 // Everything is bundled at build time: each race is a folder under src/races/
 //   src/races/<slug>/race.json     race details, results, splits, Strava stats
-//   src/races/<slug>/official/*    photos by the event photographers
+//   src/races/<slug>/official/*    official photos and finish-line videos
 //   src/races/<slug>/photos/*      my own photos
 const dataGlobs = import.meta.glob<RaceData>('/src/races/*/race.json', {
 	eager: true,
@@ -18,7 +18,7 @@ const dataGlobs = import.meta.glob<RaceData>('/src/races/*/race.json', {
 });
 
 const imageGlobs = import.meta.glob<string>(
-	'/src/races/*/{official,photos}/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG}',
+	'/src/races/*/{official,photos}/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,mp4,webm,MP4}',
 	{ eager: true, as: 'url' }
 );
 
@@ -27,7 +27,11 @@ const slugOf = (path: string) => path.split('/')[3];
 const photosOf = (slug: string, kind: 'official' | 'photos'): Photo[] =>
 	Object.entries(imageGlobs)
 		.filter(([path]) => path.startsWith(`/src/races/${slug}/${kind}/`))
-		.map(([path, url]) => ({ url, file: path.split('/').pop() as string }))
+		.map(([path, url]) => ({
+			url,
+			file: path.split('/').pop() as string,
+			video: /\.(mp4|webm)$/i.test(path)
+		}))
 		.sort((a, b) => a.file.localeCompare(b.file));
 
 export const loadRaces = (): Race[] => {
