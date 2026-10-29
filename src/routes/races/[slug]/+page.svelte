@@ -120,7 +120,7 @@
 	$: links = [
 		link('Official results', official?.resultsUrl),
 		link('Event', race.eventUrl),
-		link('Strava activity', strava?.url),
+		...(strava ? [link('Strava activity', strava.url)] : []),
 		link('Photo gallery', race.officialPhotosUrl)
 	];
 </script>
@@ -141,30 +141,31 @@
 	finishTime={official?.chipTime ?? official?.gunTime}
 />
 
-<h2>Strava</h2>
-<DataTable rows={stravaRows} />
-{#if strava?.route || strava?.profile}
-	<div class="grid sm:grid-cols-3 gap-4 items-center">
-		{#if strava.route}
-			<div class="sm:col-span-1"><RouteMap route={strava.route} /></div>
-		{/if}
-		{#if strava.profile}
-			<div class={strava.route ? 'sm:col-span-2' : 'sm:col-span-3'}>
-				<ElevationProfile profile={strava.profile} />
-			</div>
-		{/if}
-	</div>
-{/if}
+<!-- Races without Strava data skip the section entirely. -->
+{#if strava}
+	<h2>Strava</h2>
+	<DataTable rows={stravaRows} />
+	{#if strava.route || strava.profile}
+		<div class="grid sm:grid-cols-3 gap-4 items-center">
+			{#if strava.route}
+				<div class="sm:col-span-1"><RouteMap route={strava.route} /></div>
+			{/if}
+			{#if strava.profile}
+				<div class={strava.route ? 'sm:col-span-2' : 'sm:col-span-3'}>
+					<ElevationProfile profile={strava.profile} />
+				</div>
+			{/if}
+		</div>
+	{/if}
 
-<h3>Strava splits</h3>
-{#if strava?.splits && strava.splits.length > 0}
-	<SplitsChart splits={strava.splits} />
-	<details class="text-base">
-		<summary class="cursor-pointer text-sm">Table</summary>
-		<StravaSplits splits={strava.splits} />
-	</details>
-{:else}
-	<StravaSplits splits={[]} />
+	{#if strava.splits && strava.splits.length > 0}
+		<h3>Strava splits</h3>
+		<SplitsChart splits={strava.splits} />
+		<details class="text-base">
+			<summary class="cursor-pointer text-sm">Table</summary>
+			<StravaSplits splits={strava.splits} />
+		</details>
+	{/if}
 {/if}
 
 {#if finish === undefined && goalPace !== undefined}

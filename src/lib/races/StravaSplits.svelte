@@ -35,9 +35,6 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#if rows.length === 0}
-				<tr><td>—</td><td>—</td><td /></tr>
-			{/if}
 			{#each rows as row}
 				<tr>
 					<td>{row.km === 1 ? row.index : (row.index - 1 + row.km).toFixed(2)}</td>
