@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import Metadata from '$lib/Metadata.svelte';
 	import Header from '$lib/Header.svelte';
 	import DataTable, { type Row } from '$lib/races/DataTable.svelte';
@@ -12,33 +11,24 @@
 	import {
 		finishSeconds,
 		formatDate,
-		formatDelta,
 		formatPace,
 		formatPlacement,
 		formatTime,
 		linkLabel,
 		parseTime,
-		targetPace,
-		targetSeconds
+		targetPace
 	} from '$lib/races/race';
 
 	export let data;
 	$: race = data.race;
 
 	// Every race page shows the same sections and rows; missing values are shown as "—".
+	// The result is kept raw: only what the timing company published, plus pace.
 	$: finish = finishSeconds(race);
-	$: target = targetSeconds(race);
 	$: goalPace = targetPace(race);
 	$: official = race.official;
 	$: strava = race.strava;
 	$: photos = [...race.officialPhotos, ...race.photos];
-
-	let today: Date | null = null;
-	onMount(() => (today = new Date()));
-	$: daysLeft =
-		today && finish === undefined
-			? Math.ceil((new Date(`${race.date}T00:00:00`).getTime() - today.getTime()) / 864e5)
-			: undefined;
 
 	const time = (value?: string) => (value ? formatTime(parseTime(value)) : undefined);
 	const km = (value: number) => `${Number.isInteger(value) ? value : value.toFixed(1)} km`;
@@ -57,21 +47,7 @@
 		},
 		{ label: 'Overall place', value: formatPlacement(official?.overall) },
 		{ label: 'Gender place', value: formatPlacement(official?.gender) },
-		{ label: 'Category place', value: formatPlacement(official?.categoryPlace) },
-		{
-			label: 'Personal best',
-			value: finish !== undefined ? (race.isPersonalBest ? 'Yes' : 'No') : undefined
-		},
-		{ label: 'Target time', value: target !== undefined ? formatTime(target) : undefined },
-		{
-			label: 'Target pace',
-			value: goalPace !== undefined ? `${formatPace(goalPace)} /km` : undefined
-		},
-		{
-			label: 'Vs target',
-			value: target !== undefined && finish !== undefined ? formatDelta(finish - target) : undefined
-		},
-		{ label: 'Days to race', value: daysLeft !== undefined && daysLeft >= 0 ? daysLeft : undefined }
+		{ label: 'Category place', value: formatPlacement(official?.categoryPlace) }
 	] satisfies Row[];
 
 	const link = (label: string, href?: string): Row => ({

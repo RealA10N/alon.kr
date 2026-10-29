@@ -183,7 +183,6 @@
 					<th class="text-right">Time</th>
 					<th class="text-right">Pace</th>
 					<th class="text-right">Place</th>
-					<th class="text-left">PB</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -195,7 +194,6 @@
 						<td class="text-right">{formatTime(time)}</td>
 						<td class="text-right">{pace(time, race.distance.km)}</td>
 						<td class="text-right">{or(formatPlacement(race.official?.overall))}</td>
-						<td>{race.isPersonalBest ? 'PB' : ''}</td>
 					</tr>
 				{/each}
 			</tbody>

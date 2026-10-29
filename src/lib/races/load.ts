@@ -52,9 +52,6 @@ export const loadRaces = (): Race[] => {
 		};
 	});
 
-	// Mark the races whose official time is the fastest for their distance.
-	for (const best of personalBests(races)) best.race.isPersonalBest = true;
-
 	return races.sort((a, b) => b.date.localeCompare(a.date));
 };
 

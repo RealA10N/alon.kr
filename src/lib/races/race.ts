@@ -101,8 +101,6 @@ export interface Race extends RaceData {
 	slug: string;
 	officialPhotos: Photo[];
 	photos: Photo[];
-	/** Set on finished races whose official time is the fastest for their distance label. */
-	isPersonalBest?: boolean;
 }
 
 /** An official finish time at one distance, used for personal bests. */
