@@ -37,6 +37,6 @@
 		stroke-linejoin="round"
 		stroke-linecap="round"
 	/>
-	<circle cx={start[0]} cy={start[1]} r="6" class="fill-green-600" />
+	<circle cx={start[0]} cy={start[1]} r="6" class="fill-zinc-500" />
 	<circle cx={finish[0]} cy={finish[1]} r="6" class="fill-red-500" />
 </svg>

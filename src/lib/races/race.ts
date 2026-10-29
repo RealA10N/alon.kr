@@ -97,9 +97,47 @@ export interface Race extends RaceData {
 	slug: string;
 	officialPhotos: Photo[];
 	photos: Photo[];
-	/** Set on finished races that were the fastest for their distance label (at that time or ever). */
+	/** Set on finished races whose official time is the fastest for their distance label. */
 	isPersonalBest?: boolean;
 }
+
+/** A timed distance: a race finish, or the fastest stretch of a longer run. */
+export interface Effort {
+	label: string;
+	km: number;
+	seconds: number;
+	source: 'Official' | 'Strava';
+	race: Race;
+}
+
+/** Distances checked for best efforts inside longer runs. */
+const EFFORT_DISTANCES = [
+	{ label: '5K', km: 5 },
+	{ label: '10K', km: 10 }
+];
+
+/**
+ * Best efforts from Strava's per-km splits: the fastest run of consecutive full kilometers.
+ * Strava's own best efforts use the GPS track, so they can differ by a few seconds.
+ */
+export const bestEfforts = (race: Race): Effort[] => {
+	const splits = race.strava?.splits ?? [];
+	const partial = splits.findIndex((split) => split.km !== 1);
+	const full = partial === -1 ? splits : splits.slice(0, partial);
+	const seconds = full.map((split) => parseTime(split.time));
+	return EFFORT_DISTANCES.filter(({ km }) => km <= seconds.length && km < race.distance.km).map(
+		({ label, km }) => {
+			let best = Infinity;
+			for (let start = 0; start + km <= seconds.length; start++) {
+				best = Math.min(
+					best,
+					seconds.slice(start, start + km).reduce((a, b) => a + b, 0)
+				);
+			}
+			return { label, km, seconds: best, source: 'Strava', race };
+		}
+	);
+};
 
 /** Parses "h:mm:ss", "mm:ss" or "ss" into seconds. */
 export const parseTime = (time: string): number =>

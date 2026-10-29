@@ -1,4 +1,12 @@
-import { finishSeconds, isFinished, type Photo, type Race, type RaceData } from './race';
+import {
+	bestEfforts,
+	finishSeconds,
+	isFinished,
+	type Effort,
+	type Photo,
+	type Race,
+	type RaceData
+} from './race';
 
 // Everything is bundled at build time: each race is a folder under src/races/
 //   src/races/<slug>/race.json     race details, results, splits, Strava stats
@@ -33,17 +41,36 @@ export const loadRaces = (): Race[] => {
 		};
 	});
 
-	// Mark the fastest finish for each distance.
-	const best = new Map<string, Race>();
-	for (const race of races.filter(isFinished)) {
-		const current = best.get(race.distance.label);
-		if (!current || (finishSeconds(race) as number) < (finishSeconds(current) as number)) {
-			best.set(race.distance.label, race);
-		}
+	// Mark the official finishes that are still the fastest for their distance.
+	for (const effort of personalBests(races)) {
+		if (effort.source === 'Official') effort.race.isPersonalBest = true;
 	}
-	for (const race of best.values()) race.isPersonalBest = true;
 
 	return races.sort((a, b) => b.date.localeCompare(a.date));
+};
+
+/** The fastest effort per distance, from official finishes and best efforts inside longer runs. */
+export const personalBests = (races: Race[]): Effort[] => {
+	const best = new Map<string, Effort>();
+	const efforts: Effort[] = races.flatMap((race) => [
+		...(isFinished(race)
+			? [
+					{
+						label: race.distance.label,
+						km: race.distance.km,
+						seconds: finishSeconds(race) as number,
+						source: 'Official' as const,
+						race
+					}
+			  ]
+			: []),
+		...bestEfforts(race)
+	]);
+	for (const effort of efforts) {
+		const current = best.get(effort.label);
+		if (!current || effort.seconds < current.seconds) best.set(effort.label, effort);
+	}
+	return [...best.values()].sort((a, b) => a.km - b.km);
 };
 
 export const loadRace = (slug: string) => loadRaces().find((race) => race.slug === slug);

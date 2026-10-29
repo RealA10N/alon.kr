@@ -4,8 +4,6 @@
 		/** Missing values are shown as "—", so every race has the same rows. */
 		value?: string | number;
 		href?: string;
-		/** Highlights a value, e.g. a personal best or a time ahead of target. */
-		good?: boolean;
 	};
 </script>
 
@@ -19,11 +17,7 @@
 			{#each rows as row}
 				<tr>
 					<th class="text-left font-normal w-1/2 sm:w-2/5">{row.label}</th>
-					<td
-						class:text-green-600={row.good}
-						class:dark:text-green-400={row.good}
-						class:font-bold={row.good}
-					>
+					<td>
 						{#if row.value === undefined || row.value === ''}
 							—
 						{:else if row.href}

@@ -10,6 +10,7 @@
 	import PacePlan from '$lib/races/PacePlan.svelte';
 	import Gallery from '$lib/races/Gallery.svelte';
 	import {
+		bestEfforts,
 		finishSeconds,
 		formatDate,
 		formatDelta,
@@ -32,6 +33,7 @@
 	$: official = race.official;
 	$: strava = race.strava;
 	$: photos = [...race.officialPhotos, ...race.photos];
+	$: efforts = bestEfforts(race);
 
 	let today: Date | null = null;
 	onMount(() => (today = new Date()));
@@ -49,7 +51,7 @@
 		{ label: 'Location', value: race.location },
 		{ label: 'Bib', value: official?.bib },
 		{ label: 'Category', value: official?.category },
-		{ label: 'Chip time', value: time(official?.chipTime), good: race.isPersonalBest },
+		{ label: 'Chip time', value: time(official?.chipTime) },
 		{ label: 'Gun time', value: time(official?.gunTime) },
 		{
 			label: 'Pace',
@@ -60,8 +62,7 @@
 		{ label: 'Category place', value: formatPlacement(official?.categoryPlace) },
 		{
 			label: 'Personal best',
-			value: finish !== undefined ? (race.isPersonalBest ? 'Yes' : 'No') : undefined,
-			good: race.isPersonalBest
+			value: finish !== undefined ? (race.isPersonalBest ? 'Yes' : 'No') : undefined
 		},
 		{ label: 'Target time', value: target !== undefined ? formatTime(target) : undefined },
 		{
@@ -70,9 +71,7 @@
 		},
 		{
 			label: 'Vs target',
-			value:
-				target !== undefined && finish !== undefined ? formatDelta(finish - target) : undefined,
-			good: target !== undefined && finish !== undefined && finish <= target
+			value: target !== undefined && finish !== undefined ? formatDelta(finish - target) : undefined
 		},
 		{ label: 'Days to race', value: daysLeft !== undefined && daysLeft >= 0 ? daysLeft : undefined }
 	] satisfies Row[];
@@ -100,7 +99,15 @@
 		},
 		{ label: 'Avg heart rate', value: strava?.avgHr && `${strava.avgHr} bpm` },
 		{ label: 'Max heart rate', value: strava?.maxHr && `${strava.maxHr} bpm` },
-		{ label: 'Cadence', value: strava?.cadence && `${strava.cadence} spm` }
+		{ label: 'Cadence', value: strava?.cadence && `${strava.cadence} spm` },
+		...['5K', '10K'].map((label) => {
+			const effort = efforts.find((effort) => effort.label === label);
+			return {
+				label: `Best ${label}`,
+				value:
+					effort && `${formatTime(effort.seconds)} (${formatPace(effort.seconds / effort.km)} /km)`
+			};
+		})
 	] satisfies Row[];
 
 	const link = (label: string, href?: string): Row => ({
