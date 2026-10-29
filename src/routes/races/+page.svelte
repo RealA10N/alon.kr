@@ -5,6 +5,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Metadata from '$lib/Metadata.svelte';
+	import PaceChart from '$lib/races/PaceChart.svelte';
 	import {
 		finishSeconds,
 		formatDate,
@@ -77,32 +78,38 @@
 	</div>
 {/if}
 
-{#if data.bests.length > 0}
+{#if data.efforts.length > 0}
 	<h2>Personal bests</h2>
-	<div class="overflow-x-auto">
-		<table class="w-full text-base tabular-nums whitespace-nowrap">
-			<thead>
-				<tr>
-					<th class="text-left">Distance</th>
-					<th class="text-right">Time</th>
-					<th class="text-right">Pace</th>
-					<th class="text-left">Race</th>
-					<th class="text-left">Source</th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each data.bests as best}
-					<tr>
-						<td>{best.label}</td>
-						<td class="text-right font-bold">{formatTime(best.seconds)}</td>
-						<td class="text-right">{pace(best.seconds, best.km)}</td>
-						<td><a href="/races/{best.slug}">{best.name}</a></td>
-						<td>{best.source}</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
+	<PaceChart points={data.efforts} />
+
+	{#each [{ title: 'Official', bests: data.officialBests }, { title: 'Unofficial (Strava)', bests: data.unofficialBests }] as group}
+		{#if group.bests.length > 0}
+			<h3>{group.title}</h3>
+			<div class="overflow-x-auto">
+				<!-- Fixed column widths so the official and unofficial tables line up. -->
+				<table class="w-full text-base tabular-nums whitespace-nowrap table-fixed min-w-[34rem]">
+					<thead>
+						<tr>
+							<th class="text-left w-1/5">Distance</th>
+							<th class="text-right w-1/6">Time</th>
+							<th class="text-right w-1/6">Pace</th>
+							<th class="text-left pl-4">Race</th>
+						</tr>
+					</thead>
+					<tbody>
+						{#each group.bests as best}
+							<tr>
+								<td>{best.label}</td>
+								<td class="text-right font-bold">{formatTime(best.seconds)}</td>
+								<td class="text-right">{pace(best.seconds, best.km)}</td>
+								<td class="pl-4 truncate"><a href="/races/{best.slug}">{best.name}</a></td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
+		{/if}
+	{/each}
 {/if}
 
 {#if results.length > 0}

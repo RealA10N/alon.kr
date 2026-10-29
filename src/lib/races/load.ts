@@ -45,18 +45,15 @@ export const loadRaces = (): Race[] => {
 		};
 	});
 
-	// Mark the official finishes that are still the fastest for their distance.
-	for (const effort of personalBests(races)) {
-		if (effort.source === 'Official') effort.race.isPersonalBest = true;
-	}
+	// Mark the races whose official time is the fastest for their distance.
+	for (const effort of personalBests(races, 'Official')) effort.race.isPersonalBest = true;
 
 	return races.sort((a, b) => b.date.localeCompare(a.date));
 };
 
-/** The fastest effort per distance, from official finishes and best efforts inside longer runs. */
-export const personalBests = (races: Race[]): Effort[] => {
-	const best = new Map<string, Effort>();
-	const efforts: Effort[] = races.flatMap((race) => [
+/** Every timed effort: official finishes, plus best efforts inside longer runs from Strava. */
+export const allEfforts = (races: Race[]): Effort[] =>
+	races.flatMap((race) => [
 		...(isFinished(race)
 			? [
 					{
@@ -70,7 +67,11 @@ export const personalBests = (races: Race[]): Effort[] => {
 			: []),
 		...bestEfforts(race)
 	]);
-	for (const effort of efforts) {
+
+/** The fastest effort per distance from one source, shortest distance first. */
+export const personalBests = (races: Race[], source: Effort['source']): Effort[] => {
+	const best = new Map<string, Effort>();
+	for (const effort of allEfforts(races).filter((effort) => effort.source === source)) {
 		const current = best.get(effort.label);
 		if (!current || effort.seconds < current.seconds) best.set(effort.label, effort);
 	}
