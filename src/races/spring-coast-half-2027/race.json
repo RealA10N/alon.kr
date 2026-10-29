@@ -1,0 +1,8 @@
+{
+	"name": "Spring Coast Half Marathon",
+	"date": "2027-03-21",
+	"location": "Spring Coast",
+	"distance": { "label": "Half Marathon", "km": 21.0975 },
+	"eventUrl": "https://example.com/spring-coast-half",
+	"target": { "pace": "4:30" }
+}

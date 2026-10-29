@@ -1,0 +1,11 @@
+{
+	"name": "Old Town 10K",
+	"date": "2025-11-16",
+	"location": "Old Town",
+	"distance": { "label": "10K", "km": 10 },
+	"official": {
+		"resultsUrl": "https://example.com/old-town-10k/results/2025",
+		"chipTime": "47:20",
+		"gunTime": "47:41"
+	}
+}
