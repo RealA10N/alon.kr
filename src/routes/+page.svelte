@@ -21,7 +21,7 @@
 <Metadata {description} />
 
 <h1>...Hello World! 👋</h1>
-<p>{description} I also <a href="/races">run</a>.</p>
+<p>{description} I also <a href="/running">run</a>.</p>
 
 {#each data.posts as post}
 	<PostCard

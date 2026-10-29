@@ -71,7 +71,7 @@
 								class="text-right whitespace-nowrap px-1.5 sm:px-2"
 								style={tint(row.color, cell.improvement)}
 							>
-								<a href="/races/{cell.best.slug}" class="font-bold no-underline block">
+								<a href="/running/{cell.best.slug}" class="font-bold no-underline block">
 									{formatTime(cell.best.seconds)}
 								</a>
 								<span class="block text-sm opacity-70">

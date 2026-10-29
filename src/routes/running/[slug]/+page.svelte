@@ -65,7 +65,7 @@
 
 <Metadata title={race.name} description="{race.distance.label} · {formatDate(race.date)}" />
 
-<p class="text-sm mb-0"><a href="/races" class="inline-block py-2">← All races</a></p>
+<p class="text-sm mb-0"><a href="/running" class="inline-block py-2">← Running</a></p>
 
 <Header title={race.name} />
 

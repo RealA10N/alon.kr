@@ -146,8 +146,8 @@
 							on:pointerleave={() => (hovered = null)}
 							on:focus={() => (hovered = point)}
 							on:blur={() => (hovered = null)}
-							on:click={() => goto(`/races/${point.slug}`)}
-							on:keydown={(event) => event.key === 'Enter' && goto(`/races/${point.slug}`)}
+							on:click={() => goto(`/running/${point.slug}`)}
+							on:keydown={(event) => event.key === 'Enter' && goto(`/running/${point.slug}`)}
 						>
 							<!-- Hit target larger than the mark -->
 							<circle cx={point.x} cy={point.y} r="12" fill="transparent" />
