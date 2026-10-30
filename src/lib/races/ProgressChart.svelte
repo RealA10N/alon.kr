@@ -55,7 +55,7 @@
 		pad.top +
 		((secondsPerKm - paceMin) / (paceMax - paceMin || 1)) * (height - pad.top - pad.bottom);
 
-	// The fastest result at each distance is drawn as a larger dot.
+	// The fastest result at each distance is drawn as a larger, hollow dot.
 	$: bests = new Set(
 		distances.map(
 			(d) => rows.filter((r) => r.label === d).sort((a, b) => a.seconds - b.seconds)[0]?.slug
@@ -158,14 +158,26 @@
 						>
 							<!-- Hit target larger than the mark -->
 							<circle cx={point.x} cy={point.y} r="12" fill="transparent" />
-							<circle
-								cx={point.x}
-								cy={point.y}
-								r={(bests.has(point.slug) ? 8 : 5) + (hovered?.slug === point.slug ? 1.5 : 0)}
-								stroke-width="2"
-								fill={color(line.label)}
-								class="stroke-zinc-100 dark:stroke-zinc-900"
-							/>
+							{#if bests.has(point.slug)}
+								<!-- Personal bests are a larger ring around a light center -->
+								<circle
+									cx={point.x}
+									cy={point.y}
+									r={6.5 + (hovered?.slug === point.slug ? 1.5 : 0)}
+									stroke-width="3"
+									stroke={color(line.label)}
+									class="fill-white dark:fill-zinc-900"
+								/>
+							{:else}
+								<circle
+									cx={point.x}
+									cy={point.y}
+									r={5 + (hovered?.slug === point.slug ? 1.5 : 0)}
+									stroke-width="2"
+									fill={color(line.label)}
+									class="stroke-zinc-100 dark:stroke-zinc-900"
+								/>
+							{/if}
 						</g>
 					{/each}
 				{/each}
