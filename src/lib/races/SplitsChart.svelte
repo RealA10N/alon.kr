@@ -115,6 +115,17 @@
 			on:keydown={step}
 			on:blur={() => (hovered = null)}
 		>
+			<!-- Hovered kilometer band, across all strips, drawn first so it stays behind the titles and marks -->
+			{#if active}
+				<rect
+					x={x(active.start)}
+					y={padTop}
+					width={Math.max(x(active.end) - x(active.start), 1)}
+					height={height - axisHeight - padTop}
+					class="fill-zinc-200 dark:fill-zinc-800"
+				/>
+			{/if}
+
 			{#each strips as strip}
 				{@const y0 = top(strip)}
 				<text x={left} y={y0 - 8} class="fill-zinc-700 dark:fill-zinc-300 text-[12px] font-bold">
@@ -136,17 +147,6 @@
 					class="stroke-zinc-300 dark:stroke-zinc-700"
 				/>
 			{/each}
-
-			<!-- Hovered kilometer band, across all strips -->
-			{#if active}
-				<rect
-					x={x(active.start)}
-					y={padTop}
-					width={Math.max(x(active.end) - x(active.start), 1)}
-					height={height - axisHeight - padTop}
-					class="fill-zinc-200 dark:fill-zinc-800"
-				/>
-			{/if}
 
 			<!-- Pace -->
 			<text x={left - 6} y={top('pace') + 4} text-anchor="end" class="tick"
