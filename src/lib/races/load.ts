@@ -1,7 +1,7 @@
-import { officialSeconds, type Effort, type Photo, type Race, type RaceData } from './race';
+import { finishSeconds, type Effort, type Photo, type Race, type RaceData } from './race';
 
 // Everything is bundled at build time: each race is a folder under src/races/
-//   src/races/<slug>/race.json     race details, results, splits, Strava stats
+//   src/races/<slug>/race.json     race details, official result and splits, Strava splits
 //   src/races/<slug>/official/*    official photos and finish-line videos (<name>.poster.jpg
 //                                  beside <name>.mp4 is that video's thumbnail)
 //   src/races/<slug>/photos/*      my own photos
@@ -59,7 +59,7 @@ export const loadRaces = (): Race[] => {
 export const personalBests = (races: Race[]): Effort[] => {
 	const best = new Map<string, Effort>();
 	for (const race of races) {
-		const seconds = officialSeconds(race);
+		const seconds = finishSeconds(race);
 		if (seconds === undefined) continue;
 		const current = best.get(race.distance.label);
 		if (!current || seconds < current.seconds) {

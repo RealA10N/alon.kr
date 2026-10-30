@@ -3,9 +3,6 @@
 	import DataTable, { type Row } from '$lib/races/DataTable.svelte';
 	import OfficialSplits from '$lib/races/OfficialSplits.svelte';
 	import SplitsChart from '$lib/races/SplitsChart.svelte';
-	import ElevationProfile from '$lib/races/ElevationProfile.svelte';
-	import RouteMap from '$lib/races/RouteMap.svelte';
-	import PacePlan from '$lib/races/PacePlan.svelte';
 	import Gallery from '$lib/races/Gallery.svelte';
 	import {
 		distanceColor,
@@ -15,8 +12,7 @@
 		formatPlacement,
 		formatTime,
 		linkLabel,
-		parseTime,
-		targetPace
+		parseTime
 	} from '$lib/races/race';
 
 	export let data;
@@ -25,7 +21,6 @@
 	// Every race page shows the same sections and rows; missing values are shown as "—".
 	// The result is kept raw: only what the timing company published, plus pace.
 	$: finish = finishSeconds(race);
-	$: goalPace = targetPace(race);
 	$: official = race.official;
 	$: strava = race.strava;
 	$: photos = [...race.officialPhotos, ...race.photos];
@@ -98,23 +93,6 @@
 	{#if strava.splits && strava.splits.length > 0}
 		<SplitsChart splits={strava.splits} />
 	{/if}
-	{#if strava.route || strava.profile}
-		<div class="grid sm:grid-cols-3 gap-4 items-center">
-			{#if strava.route}
-				<div class="sm:col-span-1"><RouteMap route={strava.route} /></div>
-			{/if}
-			{#if strava.profile}
-				<div class={strava.route ? 'sm:col-span-2' : 'sm:col-span-3'}>
-					<ElevationProfile profile={strava.profile} />
-				</div>
-			{/if}
-		</div>
-	{/if}
-{/if}
-
-{#if finish === undefined && goalPace !== undefined}
-	<h2>Pace plan</h2>
-	<PacePlan distanceKm={race.distance.km} pace={goalPace} />
 {/if}
 
 <h2>Photos</h2>

@@ -8,13 +8,6 @@ export interface Distance {
 	km: number;
 }
 
-export interface Target {
-	/** Target finish time, "h:mm:ss" or "mm:ss". */
-	time?: string;
-	/** Target pace per km, "m:ss". If only one of time/pace is set, the other is derived. */
-	pace?: string;
-}
-
 export interface OfficialSplit {
 	/** Checkpoint name, e.g. "5K" or "Halfway". */
 	label: string;
@@ -49,26 +42,12 @@ export interface StravaSplit {
 	elevGain?: number;
 	elevLoss?: number;
 	avgHr?: number;
-	cadence?: number;
 }
 
+/** Copied by hand from the Strava activity; only the per-km splits are shown. */
 export interface StravaActivity {
 	url?: string;
-	distanceKm?: number;
-	movingTime?: string;
-	elapsedTime?: string;
-	elevationGain?: number;
-	elevationLoss?: number;
-	minElevation?: number;
-	maxElevation?: number;
-	avgHr?: number;
-	maxHr?: number;
-	cadence?: number;
 	splits?: StravaSplit[];
-	/** [km, elevation in meters] samples, generated from a GPX file by `npm run race:gpx`. */
-	profile?: [number, number][];
-	/** [lat, lon] samples, generated from a GPX file by `npm run race:gpx`. */
-	route?: [number, number][];
 }
 
 export interface Photo {
@@ -87,9 +66,6 @@ export interface RaceData {
 	location?: string;
 	distance: Distance;
 	eventUrl?: string;
-	/** Upcoming races: show prominently at the top of the races page. */
-	featured?: boolean;
-	target?: Target;
 	official?: OfficialResult;
 	strava?: StravaActivity;
 	/** The event photographers' gallery for my bib. Its photos are for sale, so only the link is kept. */
@@ -131,38 +107,10 @@ export const formatTime = (seconds: number): string => {
 /** Formats a pace (seconds per km) as "m:ss". */
 export const formatPace = (secondsPerKm: number): string => formatTime(secondsPerKm);
 
-/** Formats a signed time difference, e.g. "−1:23" or "+0:12". */
-export const formatDelta = (seconds: number): string =>
-	`${seconds < 0 ? '−' : '+'}${formatTime(Math.abs(seconds))}`;
-
-/** The time that represents the race result: official chip time, then gun time, then Strava. */
+/** The official result: chip time, then gun time. */
 export const finishSeconds = (race: RaceData): number | undefined => {
-	const time =
-		race.official?.chipTime ??
-		race.official?.gunTime ??
-		race.strava?.elapsedTime ??
-		race.strava?.movingTime;
-	return time ? parseTime(time) : undefined;
-};
-
-export const isFinished = (race: RaceData) => finishSeconds(race) !== undefined;
-
-/** The official result only (chip time, then gun time), never a Strava time. */
-export const officialSeconds = (race: RaceData): number | undefined => {
 	const time = race.official?.chipTime ?? race.official?.gunTime;
 	return time ? parseTime(time) : undefined;
-};
-
-export const targetSeconds = (race: RaceData): number | undefined => {
-	if (race.target?.time) return parseTime(race.target.time);
-	if (race.target?.pace) return parseTime(race.target.pace) * race.distance.km;
-	return undefined;
-};
-
-export const targetPace = (race: RaceData): number | undefined => {
-	if (race.target?.pace) return parseTime(race.target.pace);
-	const seconds = targetSeconds(race);
-	return seconds ? seconds / race.distance.km : undefined;
 };
 
 export const formatDate = (date: string) =>
