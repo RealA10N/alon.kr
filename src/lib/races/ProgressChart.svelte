@@ -55,6 +55,13 @@
 		pad.top +
 		((secondsPerKm - paceMin) / (paceMax - paceMin || 1)) * (height - pad.top - pad.bottom);
 
+	// The fastest result at each distance is drawn as a larger dot.
+	$: bests = new Set(
+		distances.map(
+			(d) => rows.filter((r) => r.label === d).sort((a, b) => a.seconds - b.seconds)[0]?.slug
+		)
+	);
+
 	$: lines = distances
 		.filter((d) => !hidden.has(d))
 		.map((d) => ({
@@ -140,7 +147,7 @@
 							role="link"
 							aria-label="{point.name}: {formatTime(point.seconds)}, {formatPace(
 								pace(point)
-							)} per km"
+							)} per km{bests.has(point.slug) ? ', personal best' : ''}"
 							class="outline-none cursor-pointer"
 							on:pointerenter={() => (hovered = point)}
 							on:pointerleave={() => (hovered = null)}
@@ -154,7 +161,7 @@
 							<circle
 								cx={point.x}
 								cy={point.y}
-								r={hovered?.slug === point.slug ? 6.5 : 5}
+								r={(bests.has(point.slug) ? 8 : 5) + (hovered?.slug === point.slug ? 1.5 : 0)}
 								stroke-width="2"
 								fill={color(line.label)}
 								class="stroke-zinc-100 dark:stroke-zinc-900"
@@ -172,7 +179,9 @@
 				>
 					<div class="font-bold">{hovered.name}</div>
 					<div>{formatTime(hovered.seconds)} · {formatPace(pace(hovered))} /km</div>
-					<div class="text-zinc-500">{formatDate(hovered.date)}</div>
+					<div class="text-zinc-500">
+						{formatDate(hovered.date)}{bests.has(hovered.slug) ? ' · Personal best' : ''}
+					</div>
 				</div>
 			{/if}
 		{/if}

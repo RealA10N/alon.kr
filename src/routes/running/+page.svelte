@@ -8,6 +8,7 @@
 	import ProgressChart from '$lib/races/ProgressChart.svelte';
 	import RowList from '$lib/races/RowList.svelte';
 	import {
+		distanceColor,
 		finishSeconds,
 		formatDate,
 		formatPace,
@@ -103,10 +104,15 @@
 		};
 	});
 
+	// Distances keep the progress chart's colors in the lists and tables too.
+	$: distances = [...new Set(data.races.map((race) => race.distance.label))];
+	$: dotColor = (distance: string) => distanceColor(distance, distances);
+
 	const toItems = (rows: (Row & { days?: string })[]) =>
 		rows.map((row) => ({
 			href: row.href,
 			title: row.distance,
+			color: dotColor(row.distance),
 			value: row.time,
 			valueSub: row.pace,
 			meta: [row.race, row.date, ...(row.days ? [row.days] : [])]
@@ -135,7 +141,12 @@
 			<tbody>
 				{#each upcomingRows as row}
 					<tr>
-						<td class="font-bold">{row.distance}</td>
+						<td class="font-bold">
+							<span
+								class="inline-block w-2.5 h-2.5 rounded-full mr-1.5"
+								style="background: {dotColor(row.distance)}"
+							/>{row.distance}
+						</td>
 						<td><a href={row.href}>{row.race}</a></td>
 						<td>{row.date}</td>
 						<td class="text-right">{row.time}</td>
@@ -170,7 +181,12 @@
 				<tbody>
 					{#each section.rows as row}
 						<tr>
-							<td class="font-bold">{row.distance}</td>
+							<td class="font-bold">
+								<span
+									class="inline-block w-2.5 h-2.5 rounded-full mr-1.5"
+									style="background: {dotColor(row.distance)}"
+								/>{row.distance}
+							</td>
 							<td><a href={row.href}>{row.race}</a></td>
 							<td>{row.date}</td>
 							<td class="text-right">{row.time}</td>

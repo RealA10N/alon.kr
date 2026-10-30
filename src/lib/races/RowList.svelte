@@ -2,6 +2,8 @@
 	export type Item = {
 		href: string;
 		title: string;
+		/** A dot before the title, e.g. the distance's chart color. */
+		color?: string;
 		/** The headline number, shown on the right (e.g. the finish time). */
 		value?: string;
 		/** A smaller line under the value (e.g. the pace). */
@@ -26,10 +28,13 @@
 				class="flex items-baseline justify-between gap-3 px-3 py-2.5 no-underline active:bg-zinc-200 dark:active:bg-zinc-800"
 			>
 				<span class="min-w-0">
-					<span
-						class="block font-bold text-zinc-800 dark:text-zinc-200 underline underline-offset-[3px]"
-					>
-						{item.title}
+					<span class="block font-bold text-zinc-800 dark:text-zinc-200">
+						{#if item.color}
+							<span
+								class="inline-block w-2.5 h-2.5 rounded-full mr-1.5"
+								style="background: {item.color}"
+							/>
+						{/if}<span class="underline underline-offset-[3px]">{item.title}</span>
 					</span>
 					{#each item.meta as line}
 						<span class="block text-sm tabular-nums">{line}</span>
