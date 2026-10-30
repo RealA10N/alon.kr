@@ -9,5 +9,7 @@ export const entries = (() => loadRaces().map(({ slug }) => ({ slug }))) satisfi
 export const load = (async ({ params }) => {
 	const race = loadRace(params.slug);
 	if (!race) throw error(404, 'Race not found');
-	return { race };
+	// All distances, so the race keeps the same color as on the running page.
+	const distances = [...new Set(loadRaces().map((r) => r.distance.label))];
+	return { race, distances };
 }) satisfies PageServerLoad;

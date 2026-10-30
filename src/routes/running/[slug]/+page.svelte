@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Metadata from '$lib/Metadata.svelte';
-	import Header from '$lib/Header.svelte';
 	import DataTable, { type Row } from '$lib/races/DataTable.svelte';
 	import OfficialSplits from '$lib/races/OfficialSplits.svelte';
 	import SplitsChart from '$lib/races/SplitsChart.svelte';
@@ -9,6 +8,7 @@
 	import PacePlan from '$lib/races/PacePlan.svelte';
 	import Gallery from '$lib/races/Gallery.svelte';
 	import {
+		distanceColor,
 		finishSeconds,
 		formatDate,
 		formatPace,
@@ -67,7 +67,18 @@
 
 <p class="text-sm mb-0"><a href="/running" class="inline-block py-2">← Running</a></p>
 
-<Header title={race.name} />
+<header class="flex flex-col items-center mb-4 text-zinc-700 dark:text-zinc-300">
+	<h1 class="text-center mt-0">{race.name}</h1>
+	<div class="flex flex-wrap items-center justify-center gap-2 text-base">
+		<span class="tag inline-flex items-center gap-1.5">
+			<span
+				class="inline-block w-2.5 h-2.5 rounded-full"
+				style="background: {distanceColor(race.distance.label, data.distances)}"
+			/>{race.distance.label}
+		</span>
+		<span>{formatDate(race.date)}</span>
+	</div>
+</header>
 
 <h2>Result</h2>
 <DataTable rows={result} />
