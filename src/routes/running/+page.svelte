@@ -38,6 +38,7 @@
 	// Each section builds its rows once; the phone list and the desktop table both render
 	// these same fields, so the two views only differ in layout.
 	type Row = {
+		slug: string;
 		href: string;
 		distance: string;
 		race: string;
@@ -47,6 +48,7 @@
 	};
 
 	const toRow = (result: Result): Row => ({
+		slug: result.slug,
 		href: `/running/${result.slug}`,
 		distance: result.label,
 		race: result.name,
@@ -55,8 +57,43 @@
 		pace: pace(result.seconds, result.km)
 	});
 
-	$: bestRows = data.bests.map(toRow);
-	$: resultRows = results.map(toRow);
+	// Distances switched off in the chart, and the race highlighted in the chart or a table.
+	let hidden = new Set<string>();
+	let highlighted: string | null = null;
+
+	$: bestRows = data.bests.filter((best) => !hidden.has(best.label)).map(toRow);
+	$: resultRows = results
+		.filter((result) => !hidden.has(result.label))
+		.sort((a, b) => (sort.desc ? -1 : 1) * compare[sort.key](a, b))
+		.map(toRow);
+
+	// Results can be sorted by any column but the race name. Date starts newest first,
+	// the others shortest or fastest first; choosing the same column again reverses it.
+	type SortKey = 'distance' | 'date' | 'time' | 'pace';
+	const compare: Record<SortKey, (a: Result, b: Result) => number> = {
+		distance: (a, b) => a.km - b.km || b.date.localeCompare(a.date),
+		date: (a, b) => a.date.localeCompare(b.date),
+		time: (a, b) => a.seconds - b.seconds,
+		pace: (a, b) => a.seconds / a.km - b.seconds / b.km
+	};
+	const sortKeys: { key: SortKey; label: string }[] = [
+		{ key: 'distance', label: 'Distance' },
+		{ key: 'date', label: 'Date' },
+		{ key: 'time', label: 'Time' },
+		{ key: 'pace', label: 'Pace' }
+	];
+	const columns: { key: SortKey | null; label: string; align: string }[] = [
+		{ key: 'distance', label: 'Distance', align: 'text-left' },
+		{ key: null, label: 'Race', align: 'text-left' },
+		{ key: 'date', label: 'Date', align: 'text-left' },
+		{ key: 'time', label: 'Time', align: 'text-right' },
+		{ key: 'pace', label: 'Pace', align: 'text-right' }
+	];
+	let sort: { key: SortKey; desc: boolean } = { key: 'date', desc: true };
+	const sortBy = (key: SortKey) =>
+		(sort = { key, desc: sort.key === key ? !sort.desc : key === 'date' });
+	const arrow = (key: SortKey, current: typeof sort) =>
+		current.key === key ? (current.desc ? '↓' : '↑') : '';
 
 	// Distances keep the progress chart's colors in the lists and tables too.
 	$: distances = [...new Set(data.races.map((race) => race.distance.label))];
@@ -65,6 +102,7 @@
 	const toItems = (rows: Row[]) =>
 		rows.map((row) => ({
 			href: row.href,
+			highlighted: row.slug === highlighted,
 			title: row.distance,
 			color: dotColor(row.distance),
 			value: row.time,
@@ -78,27 +116,60 @@
 <h1>Running 🏃</h1>
 
 {#if results.length > 0}
-	<ProgressChart {results} />
+	<ProgressChart {results} bind:hidden bind:highlighted />
 {/if}
 
-{#each [{ title: 'Personal bests', rows: bestRows }, { title: 'Results', rows: resultRows }] as section}
+{#each [{ title: 'Personal bests', rows: bestRows, sortable: false }, { title: 'Results', rows: resultRows, sortable: true }] as section}
 	{#if section.rows.length > 0}
 		<h2>{section.title}</h2>
+		{#if section.sortable}
+			<div
+				class="sm:hidden flex flex-wrap items-center gap-1 mb-2"
+				role="group"
+				aria-label="Sort by"
+			>
+				<span class="text-sm mr-1">Sort by</span>
+				{#each sortKeys as { key, label }}
+					<button
+						class="m-0 py-1 px-3 rounded-full"
+						aria-pressed={sort.key === key}
+						class:font-bold={sort.key === key}
+						on:click={() => sortBy(key)}>{label} {arrow(key, sort)}</button
+					>
+				{/each}
+			</div>
+		{/if}
 		<div class="sm:hidden"><RowList items={toItems(section.rows)} /></div>
 		<div class="hidden sm:block overflow-x-auto">
 			<table class="w-full text-base tabular-nums whitespace-nowrap">
 				<thead>
 					<tr>
-						<th class="text-left">Distance</th>
-						<th class="text-left">Race</th>
-						<th class="text-left">Date</th>
-						<th class="text-right">Time</th>
-						<th class="text-right">Pace</th>
+						{#each columns as column}
+							{@const key = column.key}
+							{#if section.sortable && key}
+								<th
+									class={column.align}
+									aria-sort={sort.key === key ? (sort.desc ? 'descending' : 'ascending') : 'none'}
+								>
+									<button class="sort" on:click={() => sortBy(key)}
+										>{column.label}<span class="inline-block w-3">{arrow(key, sort)}</span></button
+									>
+								</th>
+							{:else}
+								<th class={column.align}>{column.label}</th>
+							{/if}
+						{/each}
 					</tr>
 				</thead>
 				<tbody>
 					{#each section.rows as row}
-						<tr>
+						<tr
+							class={row.slug === highlighted ? 'bg-zinc-200 dark:bg-zinc-800' : ''}
+							on:pointerenter={() => (highlighted = row.slug)}
+							on:pointerleave={() => (highlighted = null)}
+							on:focusin={() => (highlighted = row.slug)}
+							on:focusout={() => (highlighted = null)}
+						>
 							<td class="font-bold">
 								<span
 									class="inline-block w-2.5 h-2.5 rounded-full mr-1.5"
@@ -116,3 +187,21 @@
 		</div>
 	{/if}
 {/each}
+
+<style>
+	/* Column headers sort the table; they keep the header's look instead of the site's tag buttons. */
+	button.sort {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		border-radius: 0;
+		background: transparent;
+		font: inherit;
+		color: inherit;
+	}
+	button.sort:hover {
+		background: transparent;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+</style>

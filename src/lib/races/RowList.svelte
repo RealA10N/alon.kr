@@ -1,6 +1,8 @@
 <script lang="ts" context="module">
 	export type Item = {
 		href: string;
+		/** Shown with the same background as a pressed row, e.g. while its chart dot is hovered. */
+		highlighted?: boolean;
 		title: string;
 		/** A dot before the title, e.g. the distance's chart color. */
 		color?: string;
@@ -25,7 +27,8 @@
 		<li class="m-0 list-none">
 			<a
 				href={item.href}
-				class="flex items-baseline justify-between gap-3 px-3 py-2.5 no-underline active:bg-zinc-200 dark:active:bg-zinc-800"
+				class="flex items-baseline justify-between gap-3 px-3 py-2.5 no-underline active:bg-zinc-200 dark:active:bg-zinc-800
+					{item.highlighted ? 'bg-zinc-200 dark:bg-zinc-800' : ''}"
 			>
 				<span class="min-w-0">
 					<span class="block font-bold text-zinc-800 dark:text-zinc-200">

@@ -18,8 +18,20 @@
 	export let results: Result[];
 
 	let width = 0;
-	let hidden = new Set<string>();
+	/** Distances switched off with the chips; the page hides their rows too. */
+	export let hidden = new Set<string>();
+	/** The race highlighted here or in the page's tables, by slug. */
+	export let highlighted: string | null = null;
 	let hovered: (Result & { x: number; y: number }) | null = null;
+
+	const enter = (point: Result & { x: number; y: number }) => {
+		hovered = point;
+		highlighted = point.slug;
+	};
+	const leave = () => {
+		hovered = null;
+		highlighted = null;
+	};
 
 	const pad = { top: 24, right: 16, bottom: 30, left: 48 };
 	const height = 260;
@@ -72,7 +84,7 @@
 	const toggle = (label: string) => {
 		hidden.has(label) ? hidden.delete(label) : hidden.add(label);
 		hidden = hidden;
-		hovered = null;
+		leave();
 	};
 
 	$: tooltipLeft = hovered ? Math.min(Math.max(hovered.x, 120), width - 120) : 0;
@@ -151,21 +163,31 @@
 								pace(point)
 							)} per km{bests.has(point.slug) ? ', personal best' : ''}"
 							class="outline-none cursor-pointer"
-							on:pointerenter={() => (hovered = point)}
-							on:pointerleave={() => (hovered = null)}
-							on:focus={() => (hovered = point)}
-							on:blur={() => (hovered = null)}
+							on:pointerenter={() => enter(point)}
+							on:pointerleave={leave}
+							on:focus={() => enter(point)}
+							on:blur={leave}
 							on:click={() => goto(`/running/${point.slug}`)}
 							on:keydown={(event) => event.key === 'Enter' && goto(`/running/${point.slug}`)}
 						>
 							<!-- Hit target larger than the mark -->
 							<circle cx={point.x} cy={point.y} r="12" fill="transparent" />
+							{#if highlighted === point.slug}
+								<!-- A soft halo, so a race highlighted from the tables stands out -->
+								<circle
+									cx={point.x}
+									cy={point.y}
+									r="13"
+									fill={color(line.label)}
+									fill-opacity="0.25"
+								/>
+							{/if}
 							{#if bests.has(point.slug)}
 								<!-- Personal bests are a larger ring around a light center -->
 								<circle
 									cx={point.x}
 									cy={point.y}
-									r={6.5 + (hovered?.slug === point.slug ? 1.5 : 0)}
+									r={6.5 + (highlighted === point.slug ? 1.5 : 0)}
 									stroke-width="3"
 									stroke={color(line.label)}
 									class="fill-white dark:fill-zinc-900"
@@ -174,7 +196,7 @@
 								<circle
 									cx={point.x}
 									cy={point.y}
-									r={5 + (hovered?.slug === point.slug ? 1.5 : 0)}
+									r={5 + (highlighted === point.slug ? 1.5 : 0)}
 									stroke-width="2"
 									fill={color(line.label)}
 									class="stroke-zinc-100 dark:stroke-zinc-900"
