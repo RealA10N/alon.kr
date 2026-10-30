@@ -46,7 +46,6 @@
 			value: finish !== undefined ? `${formatPace(finish / race.distance.km)} /km` : undefined
 		},
 		{ label: 'Overall place', value: formatPlacement(official?.overall) },
-		{ label: 'Gender place', value: formatPlacement(official?.gender) },
 		{ label: 'Category place', value: formatPlacement(official?.categoryPlace) }
 	] satisfies Row[];
 

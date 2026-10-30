@@ -37,7 +37,6 @@ export interface OfficialResult {
 	bib?: string;
 	category?: string;
 	overall?: Placement;
-	gender?: Placement;
 	categoryPlace?: Placement;
 	splits?: OfficialSplit[];
 }
