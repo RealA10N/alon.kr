@@ -75,7 +75,9 @@
 		hovered = null;
 	};
 
-	$: tooltipLeft = hovered ? Math.min(Math.max(hovered.x, 100), width - 100) : 0;
+	$: tooltipLeft = hovered ? Math.min(Math.max(hovered.x, 120), width - 120) : 0;
+	// Points in the lower half get the card above them, so it stays over the chart.
+	$: tooltipAbove = hovered ? hovered.y > height / 2 : false;
 </script>
 
 <figure class="progress-chart my-4 select-none">
@@ -184,17 +186,40 @@
 			</svg>
 
 			{#if hovered}
-				<div
-					class="absolute -translate-x-1/2 pointer-events-none rounded-md border px-3 py-2 text-sm shadow-md tabular-nums whitespace-nowrap
-						bg-zinc-50 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-600 text-zinc-800 dark:text-zinc-200"
-					style="left: {tooltipLeft}px; top: {hovered.y + 14}px"
+				<!-- Laid out like the race page's Result table -->
+				<table
+					class="absolute -translate-x-1/2 pointer-events-none text-sm tabular-nums whitespace-nowrap shadow-md
+						bg-zinc-100 dark:bg-zinc-900"
+					class:-translate-y-full={tooltipAbove}
+					style="left: {tooltipLeft}px; top: {hovered.y + (tooltipAbove ? -14 : 14)}px"
 				>
-					<div class="font-bold">{hovered.name}</div>
-					<div>{formatTime(hovered.seconds)} · {formatPace(pace(hovered))} /km</div>
-					<div class="text-zinc-500">
-						{formatDate(hovered.date)}{bests.has(hovered.slug) ? ' · Personal best' : ''}
-					</div>
-				</div>
+					<thead>
+						<tr><th colspan="2" class="text-left">{hovered.name}</th></tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th class="text-left font-normal pr-4">Distance</th>
+							<td>
+								<span
+									class="inline-block w-2.5 h-2.5 rounded-full mr-1.5"
+									style="background: {color(hovered.label)}"
+								/>{hovered.label}
+							</td>
+						</tr>
+						<tr>
+							<th class="text-left font-normal pr-4">Date</th>
+							<td>{formatDate(hovered.date)}</td>
+						</tr>
+						<tr>
+							<th class="text-left font-normal pr-4">Time</th>
+							<td>{formatTime(hovered.seconds)}</td>
+						</tr>
+						<tr>
+							<th class="text-left font-normal pr-4">Pace</th>
+							<td>{formatPace(pace(hovered))} /km</td>
+						</tr>
+					</tbody>
+				</table>
 			{/if}
 		{/if}
 	</div>
