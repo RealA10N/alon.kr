@@ -1,0 +1,15 @@
+{
+	"name": "Haifa Night Run 2021",
+	"date": "2021-11-04",
+	"location": "Haifa",
+	"distance": { "label": "10K", "km": 10 },
+	"official": {
+		"resultsUrl": "https://my.raceresult.com/185521/",
+		"chipTime": "50:42",
+		"gunTime": "51:33",
+		"bib": "1117",
+		"category": "M 0-19",
+		"overall": { "place": 201, "of": 910 },
+		"categoryPlace": { "place": 9, "of": 22 }
+	}
+}

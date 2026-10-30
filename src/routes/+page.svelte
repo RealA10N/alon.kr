@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-	export const description = `My name is Alon Krymgand. This is my site. I write about stuff that I find interesting, and I hope you find it interesting too!`;
+	export const description = `My name is Alon Krymgand. This is my site. I write about stuff that I find interesting, and I hope you find it interesting too! I also run.`;
 </script>
 
 <script lang="ts">
@@ -21,7 +21,11 @@
 <Metadata {description} />
 
 <h1>...Hello World! 👋</h1>
-<p>{description}</p>
+<!-- Same text as the description, which stays plain for metadata and RSS -->
+<p>
+	My name is Alon Krymgand. This is my site. I write about stuff that I find interesting, and I hope
+	you find it interesting too! I also <a href="/running">run</a>.
+</p>
 
 {#each data.posts as post}
 	<PostCard

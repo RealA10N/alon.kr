@@ -120,3 +120,29 @@ code {
 hr {
 	@apply my-2 border-zinc-600 dark:border-zinc-400;
 }
+
+/* Race distance colors (dataviz reference categorical palette), used by the progress chart and the results lists.
+   A distance keeps its color however many races or distances are added. */
+:root {
+	--dist-0: #2a78d6;
+	--dist-1: #eb6834;
+	--dist-2: #1baf7a;
+	--dist-3: #eda100;
+	--dist-4: #e87ba4;
+	--dist-5: #008300;
+	--dist-6: #6250d6;
+	--dist-7: #e34948;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--dist-0: #3987e5;
+		--dist-1: #d95926;
+		--dist-2: #199e70;
+		--dist-3: #c98500;
+		--dist-4: #d55181;
+		--dist-5: #008300;
+		--dist-6: #9085e9;
+		--dist-7: #e66767;
+	}
+}

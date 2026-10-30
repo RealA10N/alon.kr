@@ -1,0 +1,42 @@
+{
+	"name": "Tel Aviv Night Run 2026",
+	"date": "2026-10-28",
+	"location": "Tel Aviv",
+	"distance": { "label": "15K", "km": 15 },
+	"eventUrl": "https://www.4sport-live.com/results/home2?event=4045&lan=H",
+	"official": {
+		"resultsUrl": "https://www.4sport-live.com/personal/home3?event=4045&bib=1357&lan=H",
+		"chipTime": "1:10:02",
+		"bib": "1357",
+		"category": "M 20-39",
+		"overall": { "place": 190, "of": 2361 },
+		"categoryPlace": { "place": 147, "of": 1434 },
+		"splits": [
+			{ "label": "Trust", "km": 7, "time": "33:27" },
+			{ "label": "Ben Gurion", "km": 8.9, "time": "42:48" },
+			{ "label": "Ibn Gabirol 37", "time": "47:21" },
+			{ "label": "Ibn Gabirol 65", "time": "49:05" }
+		]
+	},
+	"strava": {
+		"url": "https://www.strava.com/activities/20770212205",
+		"splits": [
+			{ "km": 1, "time": "5:02", "avgHr": 161 },
+			{ "km": 1, "time": "4:52", "elevLoss": 2, "avgHr": 169 },
+			{ "km": 1, "time": "4:46", "elevGain": 3, "avgHr": 170 },
+			{ "km": 1, "time": "4:31", "elevGain": 6, "avgHr": 172 },
+			{ "km": 1, "time": "4:27", "elevLoss": 4, "avgHr": 174 },
+			{ "km": 1, "time": "4:35", "elevGain": 4, "avgHr": 173 },
+			{ "km": 1, "time": "4:41", "elevGain": 12, "avgHr": 174 },
+			{ "km": 1, "time": "4:22", "elevLoss": 13, "avgHr": 174 },
+			{ "km": 1, "time": "4:31", "elevLoss": 3, "avgHr": 174 },
+			{ "km": 1, "time": "4:39", "elevGain": 7, "avgHr": 174 },
+			{ "km": 1, "time": "4:39", "elevLoss": 3, "avgHr": 174 },
+			{ "km": 1, "time": "4:29", "elevLoss": 5, "avgHr": 174 },
+			{ "km": 1, "time": "4:47", "elevLoss": 2, "avgHr": 173 },
+			{ "km": 1, "time": "4:50", "elevGain": 1, "avgHr": 172 },
+			{ "km": 1, "time": "4:29", "elevLoss": 2, "avgHr": 175 }
+		]
+	},
+	"officialPhotosUrl": "https://gallery.pixoner.com/he/Event/Search/4KQYVF?Bib=1357"
+}

@@ -1,0 +1,19 @@
+{
+	"name": "Tel Aviv Marathon 2023",
+	"date": "2023-02-24",
+	"location": "Tel Aviv",
+	"distance": { "label": "10K", "km": 10 },
+	"eventUrl": "https://www.4sport-live.com/results/home2?event=3620&lan=H",
+	"official": {
+		"resultsUrl": "https://www.4sport-live.com/personal/home3?event=3620&bib=33855&lan=H",
+		"chipTime": "49:15",
+		"bib": "33855",
+		"category": "M up to 19",
+		"overall": { "place": 899, "of": 9229 },
+		"categoryPlace": { "place": 159, "of": 604 },
+		"splits": [
+			{ "label": "Dizengoff / Expo", "time": "16:05" },
+			{ "label": "Ben Gurion North", "time": "24:10" }
+		]
+	}
+}
