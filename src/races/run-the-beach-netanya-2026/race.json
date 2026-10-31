@@ -1,6 +1,7 @@
 {
 	"name": "Run the Beach Netanya 2026",
-	"date": "2026-12-11",
+	"date": "2026-12-04",
 	"location": "Netanya",
-	"distance": { "label": "10K", "km": 10 }
+	"distance": { "label": "10K", "km": 10 },
+	"eventUrl": "https://runthebeach.shvoong.co.il/"
 }
