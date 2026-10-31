@@ -1,14 +1,17 @@
 <script lang="ts" context="module">
-	export const description = `Races I've run, with official results, splits and photos.`;
+	export const description = `Races I've run, with official results, splits and photos, and the ones coming up.`;
 </script>
 
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import Metadata from '$lib/Metadata.svelte';
 	import ProgressChart, { type Result } from '$lib/races/ProgressChart.svelte';
 	import RowList from '$lib/races/RowList.svelte';
 	import {
+		daysUntil,
 		distanceColor,
 		finishSeconds,
+		formatCountdown,
 		formatDate,
 		formatPace,
 		formatTime
@@ -57,6 +60,29 @@
 		pace: pace(result.seconds, result.km)
 	});
 
+	// Races I'm registered for: no official time yet, soonest first. Each shows a countdown and
+	// the personal best at its distance, if there is one, in the time and pace columns.
+	// The page is prerendered, so the countdown is recounted in the browser; the build-time
+	// count is only the first paint.
+	let now = new Date();
+	onMount(() => (now = new Date()));
+
+	$: upcomingRows = data.races
+		.filter((race) => finishSeconds(race) === undefined && !hidden.has(race.distance.label))
+		.sort((a, b) => a.date.localeCompare(b.date))
+		.map((race): Row => {
+			const best = data.bests.find((b) => b.label === race.distance.label);
+			return {
+				slug: race.slug,
+				href: `/running/${race.slug}`,
+				distance: race.distance.label,
+				race: race.name,
+				date: formatDate(race.date),
+				time: formatCountdown(daysUntil(race.date, now)),
+				pace: best ? `PB ${formatTime(best.seconds)}` : 'Debut'
+			};
+		});
+
 	// Distances switched off in the chart, and the race highlighted in the chart or a table.
 	let hidden = new Set<string>();
 	let highlighted: string | null = null;
@@ -82,12 +108,18 @@
 		{ key: 'time', label: 'Time' },
 		{ key: 'pace', label: 'Pace' }
 	];
-	const columns: { key: SortKey | null; label: string; align: string }[] = [
+	type Column = { key: SortKey | null; label: string; align: string };
+	const columns: Column[] = [
 		{ key: 'distance', label: 'Distance', align: 'text-left' },
 		{ key: null, label: 'Race', align: 'text-left' },
 		{ key: 'date', label: 'Date', align: 'text-left' },
 		{ key: 'time', label: 'Time', align: 'text-right' },
 		{ key: 'pace', label: 'Pace', align: 'text-right' }
+	];
+	const upcomingColumns: Column[] = [
+		...columns.slice(0, 3),
+		{ key: null, label: 'In', align: 'text-right' },
+		{ key: null, label: 'To beat', align: 'text-right' }
 	];
 	let sort: { key: SortKey; desc: boolean } = { key: 'date', desc: true };
 	const sortBy = (key: SortKey) =>
@@ -119,7 +151,7 @@
 	<ProgressChart {results} bind:hidden bind:highlighted />
 {/if}
 
-{#each [{ title: 'Personal bests', rows: bestRows, sortable: false }, { title: 'Results', rows: resultRows, sortable: true }] as section}
+{#each [{ title: 'Personal bests', rows: bestRows, columns, sortable: false }, { title: 'Upcoming', rows: upcomingRows, columns: upcomingColumns, sortable: false }, { title: 'Results', rows: resultRows, columns, sortable: true }] as section}
 	{#if section.rows.length > 0}
 		<h2>{section.title}</h2>
 		{#if section.sortable}
@@ -144,7 +176,7 @@
 			<table class="w-full text-base tabular-nums whitespace-nowrap">
 				<thead>
 					<tr>
-						{#each columns as column}
+						{#each section.columns as column}
 							{@const key = column.key}
 							{#if section.sortable && key}
 								<th
