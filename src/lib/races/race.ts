@@ -120,6 +120,17 @@ export const formatDate = (date: string) =>
 		year: 'numeric'
 	});
 
+/** Days from `now` (local midnight) to a race date: 0 on race day, negative once it has passed. */
+export const daysUntil = (date: string, now: Date) => {
+	const start = new Date(now);
+	start.setHours(0, 0, 0, 0);
+	return Math.round((new Date(`${date}T00:00:00`).getTime() - start.getTime()) / 86_400_000);
+};
+
+/** "41 days", "Tomorrow", "Today", or "Result pending" for a race that passed without a result yet. */
+export const formatCountdown = (days: number) =>
+	days > 1 ? `${days} days` : days === 1 ? 'Tomorrow' : days === 0 ? 'Today' : 'Result pending';
+
 export const formatPlacement = (p?: Placement) =>
 	p ? (p.of ? `${p.place} / ${p.of}` : `${p.place}`) : undefined;
 

@@ -20,7 +20,10 @@
 
 	// Every race page shows the same sections and rows; missing values are shown as "—".
 	// The result is kept raw: only what the timing company published, plus pace.
+	// A race I'm registered for but haven't run yet has no result at all: its page shows only
+	// the race details and links until the result is added.
 	$: finish = finishSeconds(race);
+	$: upcoming = !race.official && !race.strava;
 	$: official = race.official;
 	$: strava = race.strava;
 	$: photos = [...race.officialPhotos, ...race.photos];
@@ -28,10 +31,14 @@
 	const time = (value?: string) => (value ? formatTime(parseTime(value)) : undefined);
 	const km = (value: number) => `${Number.isInteger(value) ? value : value.toFixed(1)} km`;
 
-	$: result = [
+	$: details = [
 		{ label: 'Date', value: formatDate(race.date) },
 		{ label: 'Distance', value: km(race.distance.km) },
-		{ label: 'Location', value: race.location },
+		{ label: 'Location', value: race.location }
+	] satisfies Row[];
+
+	$: result = [
+		...details,
 		{ label: 'Bib', value: official?.bib },
 		{ label: 'Category', value: official?.category },
 		{ label: 'Chip time', value: time(official?.chipTime) },
@@ -74,32 +81,38 @@
 	</div>
 </header>
 
-<h2>Result</h2>
-<DataTable rows={result} />
-
-<h2>Official splits</h2>
-<OfficialSplits
-	splits={official?.splits ?? []}
-	finishKm={race.distance.km}
-	finishTime={official?.chipTime ?? official?.gunTime}
-/>
-
-<!-- Per-km details from Strava; races without Strava data skip the section entirely. -->
-{#if strava}
-	<div class="flex items-baseline justify-between gap-4">
-		<h2>By kilometer</h2>
-		{#if strava.url}<a href={strava.url} class="inline-block py-1 text-base">View on Strava</a>{/if}
-	</div>
-	{#if strava.splits && strava.splits.length > 0}
-		<SplitsChart splits={strava.splits} />
-	{/if}
-{/if}
-
-<h2>Photos</h2>
-{#if photos.length > 0}
-	<Gallery {photos} alt={race.name} />
+{#if upcoming}
+	<h2>Race</h2>
+	<DataTable rows={details} />
 {:else}
-	<p>—</p>
+	<h2>Result</h2>
+	<DataTable rows={result} />
+
+	<h2>Official splits</h2>
+	<OfficialSplits
+		splits={official?.splits ?? []}
+		finishKm={race.distance.km}
+		finishTime={official?.chipTime ?? official?.gunTime}
+	/>
+
+	<!-- Per-km details from Strava; races without Strava data skip the section entirely. -->
+	{#if strava}
+		<div class="flex items-baseline justify-between gap-4">
+			<h2>By kilometer</h2>
+			{#if strava.url}<a href={strava.url} class="inline-block py-1 text-base">View on Strava</a
+				>{/if}
+		</div>
+		{#if strava.splits && strava.splits.length > 0}
+			<SplitsChart splits={strava.splits} />
+		{/if}
+	{/if}
+
+	<h2>Photos</h2>
+	{#if photos.length > 0}
+		<Gallery {photos} alt={race.name} />
+	{:else}
+		<p>—</p>
+	{/if}
 {/if}
 
 <h2>Links</h2>
