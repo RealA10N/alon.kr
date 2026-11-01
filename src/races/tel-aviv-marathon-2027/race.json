@@ -2,5 +2,6 @@
 	"name": "Tel Aviv Marathon 2027",
 	"date": "2027-02-26",
 	"location": "Tel Aviv",
-	"distance": { "label": "Marathon", "km": 42.195 }
+	"distance": { "label": "Marathon", "km": 42.195 },
+	"eventUrl": "https://www.tlvmarathon.co.il/"
 }
