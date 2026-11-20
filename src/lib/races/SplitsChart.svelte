@@ -5,7 +5,10 @@
 	// Each strip has its own y-scale (never two scales on one plot); one crosshair reads all three.
 	export let splits: StravaSplit[];
 
+	// Measured in the browser. Until then (and in server rendering) the chart is drawn at a
+	// nominal width and the viewBox scales it to the container, so it never waits on JavaScript.
 	let width = 0;
+	$: w = width || 480;
 	let hovered: number | null = null;
 
 	const left = 48;
@@ -38,7 +41,7 @@
 	let strips: Strip[] = [];
 	$: strips = ['pace', ...(hasHr ? ['hr' as const] : []), ...(hasElev ? ['elev' as const] : [])];
 	$: height = padTop + strips.length * (stripHeight + gap) - gap + axisHeight;
-	$: plotWidth = Math.max(width - left - right, 1);
+	$: plotWidth = Math.max(w - left - right, 1);
 
 	$: x = (km: number) => left + (km / total) * plotWidth;
 	$: top = (strip: Strip) => padTop + strips.indexOf(strip) * (stripHeight + gap);
@@ -93,23 +96,49 @@
 	$: active = hovered !== null ? rows[hovered] : null;
 	// The tooltip sits beside the hovered band, on whichever side has room, so it never covers it.
 	const tooltipWidth = 170;
-	$: tooltipOnRight = active ? x(active.end) + 8 + tooltipWidth <= width : true;
+	$: tooltipOnRight = active ? x(active.end) + 8 + tooltipWidth <= w : true;
 	$: tooltipLeft = active ? (tooltipOnRight ? x(active.end) + 8 : x(active.start) - 8) : 0;
 	const kmLabel = (row: { start: number; end: number }) =>
 		row.end - row.start === 1 ? `Km ${row.end}` : `Km ${row.end.toFixed(2)}`;
-	const signed = (value: number) => `${value > 0 ? '+' : value < 0 ? '−' : ''}${Math.abs(value)}`;
+
+	// One formatting of a kilometer's values, shared by the hover tooltip and the per-km
+	// description inside the SVG (read by screen readers and by tools that fetch the HTML).
+	const facts = (row: (typeof rows)[number]) => [
+		{ label: 'Pace', value: `${formatPace(row.pace)} /km`, swatch: 'rounded-full bg-red-500' },
+		...(row.hr !== undefined
+			? [
+					{
+						label: 'HR',
+						value: `${row.hr} bpm`,
+						swatch: 'rounded-full bg-zinc-600 dark:bg-zinc-300'
+					}
+			  ]
+			: []),
+		...(row.elev !== undefined
+			? [
+					{
+						label: 'Elevation',
+						value: `${row.elev > 0 ? '+' : row.elev < 0 ? '−' : ''}${Math.abs(row.elev)} m`,
+						swatch: 'rounded-sm bg-zinc-400 dark:bg-zinc-500'
+					}
+			  ]
+			: [])
+	];
+	const describe = (row: (typeof rows)[number]) =>
+		`${kmLabel(row)}: ${facts(row)
+			.map((fact) => `${fact.label} ${fact.value}`)
+			.join(', ')}.`;
 </script>
 
-<figure class="relative my-4" bind:clientWidth={width}>
-	{#if width > 0 && rows.length > 0}
+<figure class="relative my-4 select-none" bind:clientWidth={width}>
+	{#if rows.length > 0}
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex a11y-no-noninteractive-element-interactions -->
 		<svg
-			{width}
-			{height}
-			role="img"
+			viewBox="0 0 {w} {height}"
+			role="group"
 			aria-label="Pace, heart rate and elevation for each kilometer. Use the arrow keys to read each kilometer."
 			tabindex="0"
-			class="block select-none touch-pan-y outline-none focus-visible:ring-2 focus-visible:ring-red-500 rounded"
+			class="block w-full h-auto touch-pan-y outline-none focus-visible:ring-2 focus-visible:ring-red-500 rounded"
 			on:pointermove={pick}
 			on:pointerdown={pick}
 			on:pointerleave={() => (hovered = null)}
@@ -164,14 +193,18 @@
 				stroke-linecap="round"
 				class="stroke-red-500"
 			/>
+			<!-- Each kilometer's mark carries its values as text, so the data is in the HTML itself. -->
 			{#each rows as row}
-				<circle
-					cx={center(row)}
-					cy={yPace(row.pace)}
-					r={hovered === row.index ? 5 : 4}
-					stroke-width="2"
-					class="fill-red-500 stroke-zinc-100 dark:stroke-zinc-900"
-				/>
+				<g role="img" aria-label={describe(row)}>
+					<desc>{describe(row)}</desc>
+					<circle
+						cx={center(row)}
+						cy={yPace(row.pace)}
+						r={hovered === row.index ? 5 : 4}
+						stroke-width="2"
+						class="fill-red-500 stroke-zinc-100 dark:stroke-zinc-900"
+					/>
+				</g>
 			{/each}
 
 			<!-- Heart rate -->
@@ -244,68 +277,15 @@
 				style="left: {tooltipLeft}px; top: {padTop}px"
 			>
 				<div class="font-bold">{kmLabel(active)}</div>
-				<div>
-					<span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1" />Pace {formatPace(
-						active.pace
-					)} /km
-				</div>
-				{#if active.hr !== undefined}
+				{#each facts(active) as fact}
 					<div>
-						<span class="inline-block w-2 h-2 rounded-full bg-zinc-600 dark:bg-zinc-300 mr-1" />HR {active.hr}
-						bpm
+						<span class="inline-block w-2 h-2 mr-1 {fact.swatch}" />{fact.label}
+						{fact.value}
 					</div>
-				{/if}
-				{#if active.elev !== undefined}
-					<div>
-						<span
-							class="inline-block w-2 h-2 rounded-sm bg-zinc-400 dark:bg-zinc-500 mr-1"
-						/>Elevation
-						{active.elev > 0 ? '+' : active.elev < 0 ? '−' : ''}{Math.abs(active.elev)} m
-					</div>
-				{/if}
+				{/each}
 			</div>
 		{/if}
 	{/if}
-
-	<!-- The same numbers as a table. The chart only draws once the browser measures its width,
-	     so this table is what the server renders: it reaches readers without JavaScript,
-	     screen readers and agents that fetch the page as plain HTML. -->
-	<details class="mt-2">
-		<summary class="cursor-pointer text-base text-zinc-600 dark:text-zinc-400">Show table</summary>
-		<div class="overflow-x-auto">
-			<table class="w-full text-base tabular-nums">
-				<thead>
-					<tr>
-						<th class="text-left">Km</th>
-						<th class="text-right">Time</th>
-						<th class="text-right">Pace</th>
-						{#if hasHr}<th class="text-right whitespace-nowrap">Heart rate</th>{/if}
-						{#if hasElev}<th class="text-right">Elevation</th>{/if}
-					</tr>
-				</thead>
-				<tbody>
-					{#each rows as row}
-						{@const split = splits[row.index]}
-						<tr>
-							<td>{kmLabel(row).slice(3)}</td>
-							<td class="text-right whitespace-nowrap">{split.time}</td>
-							<td class="text-right whitespace-nowrap">{formatPace(row.pace)} /km</td>
-							{#if hasHr}
-								<td class="text-right whitespace-nowrap"
-									>{row.hr !== undefined ? `${row.hr} bpm` : '—'}</td
-								>
-							{/if}
-							{#if hasElev}
-								<td class="text-right whitespace-nowrap"
-									>{row.elev !== undefined ? `${signed(row.elev)} m` : '—'}</td
-								>
-							{/if}
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
-	</details>
 </figure>
 
 <style>
