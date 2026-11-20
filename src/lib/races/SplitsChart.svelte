@@ -5,10 +5,8 @@
 	// Each strip has its own y-scale (never two scales on one plot); one crosshair reads all three.
 	export let splits: StravaSplit[];
 
-	// Measured in the browser. Until then (and in server rendering) the chart is drawn at a
-	// nominal width and the viewBox scales it to the container, so it never waits on JavaScript.
-	let width = 0;
-	$: w = width || 480;
+	// A nominal width for server rendering; bind:clientWidth replaces it in the browser.
+	let width = 480;
 	let hovered: number | null = null;
 
 	const left = 48;
@@ -41,7 +39,7 @@
 	let strips: Strip[] = [];
 	$: strips = ['pace', ...(hasHr ? ['hr' as const] : []), ...(hasElev ? ['elev' as const] : [])];
 	$: height = padTop + strips.length * (stripHeight + gap) - gap + axisHeight;
-	$: plotWidth = Math.max(w - left - right, 1);
+	$: plotWidth = Math.max(width - left - right, 1);
 
 	$: x = (km: number) => left + (km / total) * plotWidth;
 	$: top = (strip: Strip) => padTop + strips.indexOf(strip) * (stripHeight + gap);
@@ -96,7 +94,7 @@
 	$: active = hovered !== null ? rows[hovered] : null;
 	// The tooltip sits beside the hovered band, on whichever side has room, so it never covers it.
 	const tooltipWidth = 170;
-	$: tooltipOnRight = active ? x(active.end) + 8 + tooltipWidth <= w : true;
+	$: tooltipOnRight = active ? x(active.end) + 8 + tooltipWidth <= width : true;
 	$: tooltipLeft = active ? (tooltipOnRight ? x(active.end) + 8 : x(active.start) - 8) : 0;
 	const kmLabel = (row: { start: number; end: number }) =>
 		row.end - row.start === 1 ? `Km ${row.end}` : `Km ${row.end.toFixed(2)}`;
@@ -131,14 +129,16 @@
 </script>
 
 <figure class="relative my-4 select-none" bind:clientWidth={width}>
-	{#if rows.length > 0}
+	{#if width > 0 && rows.length > 0}
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex a11y-no-noninteractive-element-interactions -->
 		<svg
-			viewBox="0 0 {w} {height}"
+			{width}
+			{height}
+			viewBox="0 0 {width} {height}"
 			role="group"
 			aria-label="Pace, heart rate and elevation for each kilometer. Use the arrow keys to read each kilometer."
 			tabindex="0"
-			class="block w-full h-auto touch-pan-y outline-none focus-visible:ring-2 focus-visible:ring-red-500 rounded"
+			class="block max-w-full h-auto touch-pan-y outline-none focus-visible:ring-2 focus-visible:ring-red-500 rounded"
 			on:pointermove={pick}
 			on:pointerdown={pick}
 			on:pointerleave={() => (hovered = null)}
