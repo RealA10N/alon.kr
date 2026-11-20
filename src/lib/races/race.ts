@@ -59,6 +59,36 @@ export interface Photo {
 	poster?: string;
 }
 
+/**
+ * The photo-tagging marker printed beside the bib number: a grid of colored cells
+ * inside a black frame, with the gallery code underneath.
+ */
+export interface BibMarker {
+	/** One string per row, one letter per cell; each letter is a key of `palette`. */
+	grid: string[];
+	palette: Record<string, string>;
+	/** The small print under the marker, e.g. "4KQYVF - 1357". */
+	code?: string;
+}
+
+/** A digital copy of the paper bib. Sponsor logos are left out. */
+export interface BibDesign {
+	/** The band behind the number. */
+	color: string;
+	/** The event title above the band, one string per line. */
+	title: string[];
+	/** Text direction of the title. */
+	titleDir?: 'ltr' | 'rtl';
+	titleColor?: string;
+	/** Draws a crescent moon beside the title (night runs). */
+	moon?: boolean;
+	/** The name field printed under the band. */
+	name?: string;
+	/** Large distance in the corner; defaults to the race distance in km. */
+	distance?: string;
+	marker?: BibMarker;
+}
+
 export interface RaceData {
 	name: string;
 	/** "YYYY-MM-DD" */
@@ -70,6 +100,8 @@ export interface RaceData {
 	strava?: StravaActivity;
 	/** The event photographers' gallery for my bib. Its photos are for sale, so only the link is kept. */
 	officialPhotosUrl?: string;
+	/** How my paper bib looked. Races without one show a placeholder bib. */
+	bibDesign?: BibDesign;
 }
 
 export interface Race extends RaceData {
