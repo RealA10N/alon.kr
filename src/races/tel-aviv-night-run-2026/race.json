@@ -38,19 +38,5 @@
 			{ "km": 1, "time": "4:29", "elevLoss": 2, "avgHr": 175 }
 		]
 	},
-	"officialPhotosUrl": "https://gallery.pixoner.com/he/Event/Search/4KQYVF?Bib=1357",
-	"bibDesign": {
-		"color": "#4f2d7f",
-		"title": ["מרוץ הלילה", "תל־אביב", "2026"],
-		"titleDir": "rtl",
-		"titleColor": "#5b2d84",
-		"moon": true,
-		"name": "(^:",
-		"distance": "15",
-		"marker": {
-			"grid": ["WKWB", "WWMB", "MBWW", "KWBB", "MMKK"],
-			"palette": { "W": "#f4f4f1", "K": "#232326", "M": "#a7336f", "B": "#7db4cf" },
-			"code": "4KQYVF - 1357"
-		}
-	}
+	"officialPhotosUrl": "https://gallery.pixoner.com/he/Event/Search/4KQYVF?Bib=1357"
 }

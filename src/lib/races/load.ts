@@ -5,6 +5,7 @@ import { finishSeconds, type Effort, type Photo, type Race, type RaceData } from
 //   src/races/<slug>/official/*    official photos and finish-line videos (<name>.poster.jpg
 //                                  beside <name>.mp4 is that video's thumbnail)
 //   src/races/<slug>/photos/*      my own photos
+//   src/races/<slug>/bib.svg       a digital copy of my bib (A5, in millimetres)
 const dataGlobs = import.meta.glob<RaceData>('/src/races/*/race.json', {
 	eager: true,
 	import: 'default'
@@ -14,6 +15,8 @@ const imageGlobs = import.meta.glob<string>(
 	'/src/races/*/{official,photos}/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,mp4,webm,MP4}',
 	{ eager: true, as: 'url' }
 );
+
+const bibGlobs = import.meta.glob<string>('/src/races/*/bib.svg', { eager: true, as: 'url' });
 
 const slugOf = (path: string) => path.split('/')[3];
 
@@ -48,7 +51,8 @@ export const loadRaces = (): Race[] => {
 			...data,
 			slug,
 			officialPhotos: photosOf(slug, 'official'),
-			photos: photosOf(slug, 'photos')
+			photos: photosOf(slug, 'photos'),
+			bibImage: bibGlobs[`/src/races/${slug}/bib.svg`]
 		};
 	});
 
