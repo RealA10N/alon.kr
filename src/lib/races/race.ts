@@ -76,6 +76,8 @@ export interface Race extends RaceData {
 	slug: string;
 	officialPhotos: Photo[];
 	photos: Photo[];
+	/** A digital copy of my paper bib, from src/races/<slug>/bib.svg. */
+	bibImage?: string;
 }
 
 /** An official finish time at one distance, used for personal bests. */

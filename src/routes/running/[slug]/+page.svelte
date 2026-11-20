@@ -4,6 +4,7 @@
 	import OfficialSplits from '$lib/races/OfficialSplits.svelte';
 	import SplitsChart from '$lib/races/SplitsChart.svelte';
 	import Gallery from '$lib/races/Gallery.svelte';
+	import Bib from '$lib/races/Bib.svelte';
 	import {
 		distanceColor,
 		finishSeconds,
@@ -73,6 +74,9 @@
 		<span>{formatDate(race.date)}</span>
 	</div>
 </header>
+
+<h2>Bib</h2>
+<Bib {race} />
 
 <h2>Result</h2>
 <DataTable rows={result} />
