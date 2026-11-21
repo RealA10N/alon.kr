@@ -25,6 +25,8 @@
 	$: official = race.official;
 	$: strava = race.strava;
 	$: photos = [...race.officialPhotos, ...race.photos];
+	// The page opens with one photo (the first still, official ones first) and the bib beside it.
+	$: highlight = photos.find((photo) => !photo.video);
 
 	const time = (value?: string) => (value ? formatTime(parseTime(value)) : undefined);
 	const km = (value: number) => `${Number.isInteger(value) ? value : value.toFixed(1)} km`;
@@ -75,8 +77,16 @@
 	</div>
 </header>
 
-<h2>Bib</h2>
-<Bib {race} />
+<div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 my-6">
+	{#if highlight}
+		<img
+			src={highlight.url}
+			alt={race.name}
+			class="w-full sm:w-2/3 aspect-[4/3] object-cover rounded-md shadow-sm"
+		/>
+	{/if}
+	<Bib {race} class="w-48 shrink-0 {highlight ? 'sm:w-1/4' : 'sm:w-60 mx-auto'}" />
+</div>
 
 <h2>Result</h2>
 <DataTable rows={result} />

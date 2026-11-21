@@ -5,6 +5,8 @@
 	// (210 × 148, 1 unit = 1 mm). Races without one get a grey placeholder with the same
 	// layout, filled in with the bib number and distance.
 	export let race: Race;
+	let className = '';
+	export { className as class };
 
 	$: number = race.official?.bib ?? '—';
 	$: km = race.distance.km;
@@ -27,7 +29,7 @@
 	const frames = [6.5, 154.5];
 </script>
 
-<figure class="my-4 mx-auto max-w-xl">
+<figure class="m-0 {className}">
 	{#if race.bibImage}
 		<img
 			src={race.bibImage}
@@ -101,8 +103,6 @@
 				>KM</text
 			>
 		</svg>
-		<figcaption class="text-sm text-center mt-2">
-			Placeholder: no digital copy of this bib yet.
-		</figcaption>
+		<figcaption class="text-xs text-center mt-1">No digital copy of this bib yet</figcaption>
 	{/if}
 </figure>
