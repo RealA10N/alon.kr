@@ -17,13 +17,14 @@
 		Math.min(text.length * perChar, max);
 
 	const maskId = `bib-holes-${Math.random().toString(36).slice(2)}`;
+	// The same grid as the real bib: A5, a 202 × 59 band, 49 × 48 frames and 36 mm markers.
 	const holes = [
-		[10.2, 9.2],
-		[198.2, 8.2],
-		[12.3, 137.9],
-		[199.5, 136.3]
+		[11, 10],
+		[199, 10],
+		[11, 138],
+		[199, 138]
 	];
-	const frames = [6.4, 153.8];
+	const frames = [6.5, 154.5];
 </script>
 
 <figure class="my-4 mx-auto max-w-xl">
@@ -46,7 +47,7 @@
 			<defs>
 				<mask id={maskId}>
 					<rect width="210" height="148" fill="white" />
-					{#each holes as [cx, cy]}<circle {cx} {cy} r="1.95" fill="black" />{/each}
+					{#each holes as [cx, cy]}<circle {cx} {cy} r="2" fill="black" />{/each}
 				</mask>
 			</defs>
 			<rect
@@ -58,17 +59,17 @@
 				stroke-width="0.6"
 				stroke-dasharray="3 2"
 			/>
-			<text x="105" y="25" font-size="9" font-weight="700" fill="#52525b" text-anchor="middle"
+			<text x="105" y="27" font-size="9" font-weight="700" fill="#52525b" text-anchor="middle"
 				>{race.name}</text
 			>
-			<rect x="3.05" y="39.8" width="202" height="59.2" fill="#a1a1aa" />
+			<rect x="4" y="40" width="202" height="59" fill="#a1a1aa" />
 			{#each frames as x}
-				<rect {x} y="44.6" width="49.2" height="48.1" fill="#fbfbf8" />
+				<rect {x} y="45.5" width="49" height="48" fill="#fbfbf8" />
 				<rect
-					x={x + 6.6}
-					y="50.6"
+					x={x + 6.5}
+					y="51.5"
 					width="36"
-					height="36.4"
+					height="36"
 					fill="none"
 					stroke="#a1a1aa"
 					stroke-width="0.6"
@@ -77,7 +78,7 @@
 			{/each}
 			<text
 				x="105"
-				y="88"
+				y="89"
 				font-size="54"
 				font-weight="700"
 				fill="#fbfbf8"
